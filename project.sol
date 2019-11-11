@@ -26,7 +26,6 @@ contract BlockChainProject{
         _;
     }
     
-    mapping(bytes32 => Record[]) idRecordMap;
     mapping(address => bool) verifiedDealers;
     
     function getId(string memory id) public pure returns (bytes32){
