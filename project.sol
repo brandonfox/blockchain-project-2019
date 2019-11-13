@@ -20,6 +20,15 @@ contract BlockChainProject{
     
     uint8 noOfServices;
     
+    modifier serviceExists(string memory serviceName){
+        require(containsService(serviceName),"That service does not exist");
+        _;
+    }
+    modifier servicesNotFull{
+        require(noOfServices < 32,"There are the maximum number of services");
+        _;
+    }
+    
     mapping(uint8 => string) private services;
     
     function getIndexOfService(string memory serviceName) internal view returns (uint8) {
@@ -36,35 +45,24 @@ contract BlockChainProject{
         return getIndexOfService(serviceName) < 32;
     }
     
-    function addService(string memory serviceName) public payable ownerOnly returns (bool) {
+    function addService(string memory serviceName) public payable ownerOnly serviceExists(serviceName) servicesNotFull {
         //Returns true if service was successfully added
         //False if service already exists
-        if(noOfServices >= 31 || containsService(serviceName)){
-            return false;
-        }
-        else{
-            for(uint8 i = 0; i < 31; i++){
-                if(bytes(services[i]).length <= 0){
-                    services[i] = serviceName;
-                    noOfServices++;
-                    return true;
-                }
+        for(uint8 i = 0; i < 32; i++){
+            if(bytes(services[i]).length <= 0){
+                services[i] = serviceName;
+                noOfServices++;
             }
         }
-        return false;
     }
     
     function editServiceName(uint8 serviceId, string memory newName) public payable ownerOnly returns (bool) {
         services[serviceId] = newName;
     }
     
-    function deleteService(string memory serviceName) public payable ownerOnly returns (bool) {
-        if(containsService(serviceName)){
-            services[getIndexOfService(serviceName)] = "";
-            noOfServices--;
-            return true;
-        }
-        return false;
+    function deleteService(string memory serviceName) public payable ownerOnly serviceExists(serviceName) {
+        services[getIndexOfService(serviceName)] = "";
+        noOfServices--;
     }
     
     function getServices() public view returns (string[] memory) {
@@ -82,6 +80,15 @@ contract BlockChainProject{
     
     mapping(uint8 => string[]) private subServices;
     
+    modifier subServiceExists(uint8 serviceId, string memory serviceName){
+        require(containsSubService(serviceId,serviceName),"That subservice doesnt exist in this context");
+        _;
+    }
+    modifier subservicesNotFull(uint8 serviceId){
+        require(subServices[serviceId].length < 255,"Maximum subservice amount reached");
+        _;
+    }
+    
     function getIndexOfSubService(uint8 serviceId, string memory serviceName) internal view returns (uint) {
         for(uint8 i = 0; i < subServices[serviceId].length; i++){
             if(encode(subServices[serviceId][i]) == encode(serviceName)){
@@ -95,34 +102,17 @@ contract BlockChainProject{
         return getIndexOfSubService(serviceId,serviceName) < 255;
     }
     
-    function addSubService(uint8 serviceId, string memory newService) public payable ownerOnly returns (bool){
+    function addSubService(uint8 serviceId, string memory newService) public payable subservicesNotFull(serviceId) subServiceExists(serviceId,newService) ownerOnly {
         //Returns true if service does not already exist
-        if(subServices[serviceId].length >= 254 || containsSubService(serviceId,newService)){
-            return false;
-        }
         subServices[serviceId].push(newService);
-        return true;
     }
     
-    function editSubServiceName(uint8 serviceId, string memory oldName, string memory newName) public payable ownerOnly returns (bool) {
-        if(!containsSubService(serviceId,oldName)){
-            return false;
-        }
-        else{
-            subServices[serviceId][getIndexOfSubService(serviceId,oldName)] = newName;
-            return true;
-        }
+    function editSubServiceName(uint8 serviceId, string memory oldName, string memory newName) public payable subServiceExists(serviceId,oldName) ownerOnly {
+        subServices[serviceId][getIndexOfSubService(serviceId,oldName)] = newName;
     }
     
-    function deleteSubService(uint8 serviceId, string memory serviceName) public payable ownerOnly returns (bool) {
-        bytes32 service = encode(serviceName);
-        for(uint i = 0; i < subServices[serviceId].length; i++){
-            if(encode(subServices[serviceId][i]) == service){
-                delete subServices[serviceId][i];
-                return true;
-            }
-        }
-        return false;
+    function deleteSubService(uint8 serviceId, string memory serviceName) public payable ownerOnly subServiceExists(serviceId,serviceName) returns (bool) {
+        delete subServices[serviceId][getIndexOfSubService(serviceId,serviceName)];
     }
     
     function getSubService(uint8 serviceId) public view returns (string[] memory) {
@@ -139,11 +129,11 @@ contract BlockChainProject{
     }
         
     modifier ownerOnly{
-        require(msg.sender == owner);
+        require(msg.sender == owner,"You are not the owner");
         _;
     }
     modifier verified(bytes32 dealerId) {
-        require(verifiedDealers[dealerId]);
+        require(verifiedDealers[dealerId],"You must be a verified dealer to do this");
         _;
     }
     function transferOwner(address newOwner) external payable ownerOnly{
