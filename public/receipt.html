@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Sarabun&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>การซื้อขาย</title>
+  </head>
+
+  <body>
+    <div class="container">
+      <header>
+        <div class="logo">
+          <img src="images/logo.svg" alt="Oranoss Logo" />
+        </div>
+      </header>
+      <form action="#" method="post">
+        <label for="checkbox">บริการ</label>
+        <div id="checkbox" class="checkbox-container">
+          <div class="checkbox-row">
+            <input
+              id="tire-service"
+              type="checkbox"
+              name="tire-service"
+              value="Bike"
+            />
+            <label for="tire-service">ยาง</label>
+          </div>
+          <div class="checkbox-row">
+            <input
+              id="oil-service"
+              type="checkbox"
+              name="oil-service"
+              value="Car"
+            />
+            <label for="oil-service">น้ำมัน</label>
+          </div>
+          <div class="checkbox-row">
+            <input
+              id="fluid-service"
+              type="checkbox"
+              name="fluid-service"
+              value="Boat"
+              checked
+            />
+            <label for="fluid-service">น้ำมันเครื่อง</label>
+          </div>
+        </div>
+        <div class="form-row">
+          <label for="tire">ยาง</label>
+          <select id="tire" name="tire" required>
+            <option value="australia">ฮีโน่</option>
+            <option value="canada">อิสุสุ</option>
+            <option value="usa">มิตซูบิชิ</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="oil">น้ำมัน</label>
+          <select id="oil" name="oil" required>
+            <option value="australia">ฮีโน่</option>
+            <option value="canada">อิสุสุ</option>
+            <option value="usa">มิตซูบิชิ</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="fluid">น้ำมันเครื่อง</label>
+          <select id="fluid" name="fluid" required>
+            <option value="australia">ฮีโน่</option>
+            <option value="canada">อิสุสุ</option>
+            <option value="usa">มิตซูบิชิ</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="other-services">บริการอื่น ๆ ที่ทางร้านทำ</label>
+          <textarea
+            id="other-services"
+            name="other-services"
+            required
+          ></textarea>
+        </div>
+        <div class="submit-row"><button>บันทึก</button></div>
+      </form>
+    </div>
+  </body>
+</html>

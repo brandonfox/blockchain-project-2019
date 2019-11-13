@@ -2,22 +2,22 @@ pragma solidity ^0.5.11;
 pragma experimental ABIEncoderV2;
 
 contract BlockChainProject{
-    
+
     struct Record {
         uint32 services;
         string comment;
     }
-    
+
     address owner;
-    
+
     //---------------------------------_Meta-Functions_---------------------------------------
-    
+
     function encode(string memory str) internal pure returns (bytes32) {
         return keccak256(abi.encodePacked(str));
     }
-    
+
     //---------------------------------_Services_------------------------------------
-    
+
     uint8 noOfServices;
     
     modifier serviceExists(string memory serviceName){
@@ -28,9 +28,9 @@ contract BlockChainProject{
         require(noOfServices < 32,"There are the maximum number of services");
         _;
     }
-    
+
     mapping(uint8 => string) private services;
-    
+
     function getIndexOfService(string memory serviceName) internal view returns (uint8) {
         bytes32 service = encode(serviceName);
         for(uint8 i = 0; i < 32; i++){
@@ -40,7 +40,7 @@ contract BlockChainProject{
         }
         return 32;
     }
-    
+
     function containsService(string memory serviceName) internal view returns (bool){
         return getIndexOfService(serviceName) < 32;
     }
@@ -55,7 +55,7 @@ contract BlockChainProject{
             }
         }
     }
-    
+
     function editServiceName(uint8 serviceId, string memory newName) public payable ownerOnly returns (bool) {
         services[serviceId] = newName;
     }
@@ -64,7 +64,7 @@ contract BlockChainProject{
         services[getIndexOfService(serviceName)] = "";
         noOfServices--;
     }
-    
+
     function getServices() public view returns (string[] memory) {
         string[] memory existingServices = new string[](noOfServices);
         uint8 serviceIndex = 0;
@@ -75,11 +75,11 @@ contract BlockChainProject{
         }
         return existingServices;
     }
-    
+
     //-----------------------------_Subservices_----------------------------
-    
+
     mapping(uint8 => string[]) private subServices;
-    
+
     modifier subServiceExists(uint8 serviceId, string memory serviceName){
         require(containsSubService(serviceId,serviceName),"That subservice doesnt exist in this context");
         _;
@@ -88,7 +88,7 @@ contract BlockChainProject{
         require(subServices[serviceId].length < 255,"Maximum subservice amount reached");
         _;
     }
-    
+
     function getIndexOfSubService(uint8 serviceId, string memory serviceName) internal view returns (uint) {
         for(uint8 i = 0; i < subServices[serviceId].length; i++){
             if(encode(subServices[serviceId][i]) == encode(serviceName)){
@@ -97,7 +97,7 @@ contract BlockChainProject{
         }
         return 255;
     }
-    
+
     function containsSubService(uint8 serviceId, string memory serviceName) internal view returns (bool) {
         return getIndexOfSubService(serviceId,serviceName) < 255;
     }
@@ -114,20 +114,20 @@ contract BlockChainProject{
     function deleteSubService(uint8 serviceId, string memory serviceName) public payable ownerOnly subServiceExists(serviceId,serviceName) returns (bool) {
         delete subServices[serviceId][getIndexOfSubService(serviceId,serviceName)];
     }
-    
+
     function getSubService(uint8 serviceId) public view returns (string[] memory) {
         return subServices[serviceId];
     }
-    
+
     //---------------------------------------------------------_End-Services_---------------------------------------------------
-    
+
     mapping(bytes32 => Record[]) private userRecords;
     mapping(bytes32 => bool) private verifiedDealers;
-    
+
     constructor() public {
         owner = msg.sender;
     }
-        
+
     modifier ownerOnly{
         require(msg.sender == owner,"You are not the owner");
         _;
@@ -143,25 +143,25 @@ contract BlockChainProject{
     function verifyAddress(bytes32 adr) public payable ownerOnly{
         verifiedDealers[adr] = true;
     }
-    
+
     function isVerified(bytes32 adr) public view returns (bool) {
         return verifiedDealers[adr];
     }
-    
+
     function getId(string memory id) public pure returns (bytes32){
         return sha256(abi.encodePacked(id));
     }
-    
+
     //------------------------------------------------------------_Records_---------------------------------------------
 
-    
+
     function insertRecord(bytes32 dealerId, bytes32 id, uint32 servicesDone, string memory comment) public payable verified(dealerId){
         userRecords[id].push(Record(servicesDone,comment));
     }
-    
+
     function getRecords(bytes32 dealerId, bytes32 id) public view verified(dealerId) returns (Record[] memory){
         return userRecords[id];
     }
-    
+
 
 }
