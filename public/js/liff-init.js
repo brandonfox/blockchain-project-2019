@@ -1,20 +1,18 @@
-const App = {
-  initialiseLiff: liffID => {
-    return liff.init({ liffId: liffID });
-  },
+function successCallback() {
+  liff.getProfile().then(profile => {
+    const val =
+      'https://user-oranoss-chjtic.firebaseapp.com/receipt.html?userId=' +
+      profile.userId;
+    generateQr(val);
+  });
+}
 
-  getProfile: () => {
-    liff.getProfile().then(profile => {
-      generateBarCode(
-        'https://user-oranoss-chjtic.firebaseapp.com/receipt.html?userId=' +
-          profile.userId
-      );
-      $('#profile').text(profile.displayName);
-    });
-  }
-};
+function generateQr(val) {
+  const url =
+    'https://api.qrserver.com/v1/create-qr-code/?data=' +
+    val +
+    '&amp;size=600x600';
+  document.getElementById('barcode').setAttribute('src', url);
+}
 
-App.initialiseLiff('1653518966-zg6XY7LD').then(() => {
-  $('#demo').text("It's ready");
-  App.getProfile();
-});
+liff.init({ liffId: '1653518966-zg6XY7LD' }, successCallback);
