@@ -18,7 +18,7 @@ contract Ownable {
         return sha256(abi.encodePacked(id));
     }
 
-    function transferOwner(address newOwner) external payable ownerOnly{
+    function transferOwner(address newOwner) external ownerOnly{
         owner = newOwner;
     }
 
