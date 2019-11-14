@@ -1,16 +1,22 @@
 pragma solidity ^0.5.11;
 pragma experimental ABIEncoderV2;
 
-import ./ownable.sol;
+import "./ownable.sol";
 
 contract DealerContract is Ownable {
     
     mapping(bytes32 => bool) verifiedDealers;
-    mapping(bytes32 => bytes32) private dealerEmployees;
+    mapping(bytes32 => bytes32[]) private dealerToEmployees;
+    mapping(bytes32 => bytes32) private employeeToDealer;
 
 
     modifier verified(bytes32 dealerId) {
-        require(verifiedDealers[dealerId],You must be a verified dealer to do this);
+        require(isVerified(dealerId),"You must be a verified dealer to do this");
+        _;
+    }
+    
+    modifier dealershipOwner(bytes32 dealerId){
+        require(verifiedDealers[dealerId],"You must be a dealership owner to do this");
         _;
     }
 
@@ -22,24 +28,50 @@ contract DealerContract is Ownable {
     bytes32[] dealerApplications;
     
     function dealerApplication(DealerInfo memory info, bytes32 id) public payable{
+        require(!verifiedDealers[id],"That address is already registered");
         dealerInfoMap[id] = info;
         dealerApplications.push(id);
+    }
+    
+    function transferDealershipOwner(bytes32 dealershipId, bytes32 otherId) public dealershipOwner(dealershipId){
+        verifiedDealers[otherId] = true;
+        verifiedDealers[dealershipId] = false;
+        employeeToDealer[otherId] = 0;
+        dealerToEmployees[otherId] = dealerToEmployees[dealershipId];
+        delete dealerToEmployees[dealershipId];
+        for(uint i = 0; i < dealerToEmployees[otherId].length; i++){
+            employeeToDealer[dealerToEmployees[otherId][i]] = otherId;
+        }
     }
     
     function getAllDealerApplications() public view ownerOnly returns (bytes32[] memory){
         return dealerApplications;
     }
+    
+    function getApplicationIndex(bytes32 id) internal view returns (int) {
+        for(uint i = 0; i < dealerApplications.length; i++){
+            if(dealerApplications[i] == id){
+                return int(i);
+            }
+        }
+        return -1;
+    }
 
     function verifyAddress(bytes32 adr) public payable ownerOnly{
+        int i = getApplicationIndex(adr);
+        require(i >= 0,"No application exists for that id");
         verifiedDealers[adr] = true;
+        delete dealerApplications[uint(i)];
     }
 
     function isVerified(bytes32 adr) public view returns (bool) {
-        return verifiedDealers[adr] || verifiedDealers[dealerEmployees[adr]];
+        return verifiedDealers[adr] || employeeToDealer[adr] != 0;
     }
     
-    function addDealerEmployee(bytes32 dealerId ,bytes32 adr) public payable verified(dealerId) {
-        dealerEmployees[adr] = dealerId;
+    function addDealerEmployee(bytes32 dealerId ,bytes32 adr) public payable dealershipOwner(dealerId) {
+        require(employeeToDealer[adr] != 0,"That employee already works there");
+        dealerToEmployees[dealerId].push(adr);
+        employeeToDealer[adr] = dealerId;
     }
 
 }
