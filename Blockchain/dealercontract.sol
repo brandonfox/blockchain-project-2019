@@ -27,12 +27,14 @@ contract DealerContract is Ownable {
     mapping(bytes32 => DealerInfo) private dealerInfoMap;
     bytes32[] dealerApplications;
     
+    //Function for dealer to create new application
     function dealerApplication(DealerInfo memory info, bytes32 id) public payable{
         require(!verifiedDealers[id],"That address is already registered");
         dealerInfoMap[id] = info;
         dealerApplications.push(id);
     }
     
+    //Transfer dealership owner to another id
     function transferDealershipOwner(bytes32 dealershipId, bytes32 otherId) public dealershipOwner(dealershipId){
         verifiedDealers[otherId] = true;
         verifiedDealers[dealershipId] = false;
@@ -44,6 +46,7 @@ contract DealerContract is Ownable {
         }
     }
     
+    //Get all current dealer applications
     function getAllDealerApplications() public view ownerOnly returns (bytes32[] memory){
         return dealerApplications;
     }
@@ -57,17 +60,20 @@ contract DealerContract is Ownable {
         return -1;
     }
 
-    function verifyAddress(bytes32 adr) public payable ownerOnly{
+    //Approve a dealer application. Rejected if no application exists
+    function approveApplication(bytes32 adr) public payable ownerOnly{
         int i = getApplicationIndex(adr);
         require(i >= 0,"No application exists for that id");
         verifiedDealers[adr] = true;
         delete dealerApplications[uint(i)];
     }
 
+    //Function to see if a dealer is verified or works for a dealership
     function isVerified(bytes32 adr) public view returns (bool) {
         return verifiedDealers[adr] || employeeToDealer[adr] != 0;
     }
     
+    //Add employee to dealership who will have access to verified() functions
     function addDealerEmployee(bytes32 dealerId ,bytes32 adr) public payable dealershipOwner(dealerId) {
         require(employeeToDealer[adr] != 0,"That employee already works there");
         dealerToEmployees[dealerId].push(adr);
