@@ -4,7 +4,7 @@ pragma experimental ABIEncoderV2;
 import "./ownable.sol";
 
 contract DealerContract is Ownable {
-    
+
     mapping(bytes32 => bool) verifiedDealers;
     mapping(bytes32 => bytes32[]) private dealerToEmployees;
     mapping(bytes32 => bytes32) private employeeToDealer;
@@ -14,7 +14,7 @@ contract DealerContract is Ownable {
         require(isVerified(dealerId),"You must be a verified dealer to do this");
         _;
     }
-    
+
     modifier dealershipOwner(bytes32 dealerId){
         require(verifiedDealers[dealerId],"You must be a dealership owner to do this");
         _;
@@ -50,7 +50,7 @@ contract DealerContract is Ownable {
     function getAllDealerApplications() public view ownerOnly returns (bytes32[] memory){
         return dealerApplications;
     }
-    
+
     function getApplicationIndex(bytes32 id) internal view returns (int) {
         for(uint i = 0; i < dealerApplications.length; i++){
             if(dealerApplications[i] == id){
@@ -72,7 +72,7 @@ contract DealerContract is Ownable {
     function isVerified(bytes32 adr) public view returns (bool) {
         return verifiedDealers[adr] || employeeToDealer[adr] != 0;
     }
-    
+
     //Add employee to dealership who will have access to verified() functions
     function addDealerEmployee(bytes32 dealerId ,bytes32 adr) public payable dealershipOwner(dealerId) {
         require(employeeToDealer[adr] != 0,"That employee already works there");
