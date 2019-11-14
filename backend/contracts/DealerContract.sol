@@ -26,14 +26,14 @@ contract DealerContract is Ownable {
 
     mapping(bytes32 => DealerInfo) private dealerInfoMap;
     bytes32[] dealerApplications;
-    
+
     //Function for dealer to create new application
     function dealerApplication(DealerInfo memory info, bytes32 id) public{
         require(!verifiedDealers[id],"That address is already registered");
         dealerInfoMap[id] = info;
         dealerApplications.push(id);
     }
-    
+
     //Transfer dealership owner to another id
     function transferDealershipOwner(bytes32 dealershipId, bytes32 otherId) public dealershipOwner(dealershipId){
         verifiedDealers[otherId] = true;
@@ -45,7 +45,7 @@ contract DealerContract is Ownable {
             employeeToDealer[dealerToEmployees[otherId][i]] = otherId;
         }
     }
-    
+
     //Get all current dealer applications
     function getAllDealerApplications() public view ownerOnly returns (bytes32[] memory){
         return dealerApplications;
