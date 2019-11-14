@@ -98,3 +98,23 @@ select {
 .checkbox-container label {
   font-size: 14px;
 }
+
+table {
+  width: 90%;
+  text-align: center;
+  border: 1px solid grey;
+  border-radius: 13px;
+  border-spacing: 0;
+}
+
+table, th, td {
+}
+
+th, td {
+  border-bottom: 1px solid black;
+  padding: 10px;
+}
+
+tr:last-child > td {
+  border-bottom: none;
+}
