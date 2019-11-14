@@ -6,7 +6,7 @@
 
 body {
   background-color: #bcccdc;
-  font-family: "Sarabun", sans-serif;
+  font-family: 'Sarabun', sans-serif;
 }
 
 .container {
@@ -28,9 +28,9 @@ label {
   margin-bottom: 6px;
 }
 
-input[type="text"],
-input[type="tel"],
-input[type="email"] {
+input[type='text'],
+input[type='tel'],
+input[type='email'] {
   border: 0;
   margin-top: 6px;
   display: block;
@@ -84,7 +84,8 @@ select {
   -moz-appearance: none; /* Firefox */
   -webkit-appearance: none; /* Safari and Chrome */
   appearance: none;
-  background: url(images/arrow_drop_down.svg) no-repeat right white;
+  background: url(../images/arrow_drop_down.svg) no-repeat right white;
+  padding-left: 8px;
 }
 
 .checkbox-container {
@@ -97,4 +98,18 @@ select {
 
 .checkbox-container label {
   font-size: 14px;
+  margin-left: 4px;
+  margin-bottom: 3px;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+}
+
+.qr-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

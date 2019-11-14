@@ -4,34 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>QR CODE</title>
     <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script type="text/javascript">
-      function generateBarCode(val) {
-        var url =
-          'https://api.qrserver.com/v1/create-qr-code/?data=' +
-          val +
-          '&amp;size=600x600';
-        $('#barcode').attr('src', url);
-      }
-    </script>
+    <link rel="stylesheet" href="css/style.css" />
+    <title>QR CODE</title>
   </head>
   <body>
-    <!--     
-    <input
-      id="text"
-      type="text"
-      value="NRIC or Work Permit"
-      style="Width:20%"
-      onblur="generateBarCode();"
-    /> -->
-    <div id="something"></div>
-    <div style="text-align: center;">
+    <div class="qr-container">
       <img id="barcode" />
     </div>
-    <div id="demo"></div>
-    <div id="profile"></div>
-    <script src="./js/liff-init.js"></script>
+    <script src="js/liff-init.js"></script>
   </body>
 </html>
