@@ -1,10 +1,10 @@
 pragma solidity ^0.5.11;
 pragma experimental ABIEncoderV2;
 
-import ./ServiceHandler.sol;
+import ./servicehandler.sol;
 
-contract BlockChainProject is ServiceHandler{
-
+contract UserContract is ServiceHandler {
+    
     struct RecordInternal {
         uint32 services;
         uint256[] subservices;
@@ -31,4 +31,5 @@ contract BlockChainProject is ServiceHandler{
     function getRecords(bytes32 dealerId, bytes32 id) public view verified(dealerId) returns (RecordInternal[] memory){
         return userRecords[id];
     }
+    
 }

@@ -1,9 +1,9 @@
 pragma solidity ^0.5.11;
 pragma experimental ABIEncoderV2;
 
-import ./Verifier.sol;
+import ./dealercontract.sol;
 
-contract ServiceHandler is Verifier {
+contract ServiceHandler is DealerContract {
     
     function encode(string memory str) internal pure returns (bytes32) {
         return keccak256(abi.encodePacked(str));
