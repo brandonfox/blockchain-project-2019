@@ -11,8 +11,12 @@ contract('DealerContract', () => {
       errorMsg = error.reason;
     });
     assert(errorMsg === 'You must be a dealership owner to do this');
+  });
+  it('Should not let owner transfer ownership', async () => {
+    const dealerContract = await DealerContract.deployed();
     const reply = await dealerContract.transferOwner('0x0000000000000000000000000000000000000000');
-    console.log(reply);
+    console.log('replied' + reply);
+    assert (reply === "no");
   });
 
 });

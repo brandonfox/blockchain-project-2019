@@ -10,10 +10,15 @@ contract ServiceHandler is DealerContract {
     }
 
     uint8 noOfServices;
-    uint8 totalNoServices = 32;
+    uint8 totalNoServices = 254;
 
     modifier serviceExists(string memory serviceName){
         require(containsService(serviceName),"That service does not exist");
+        _;
+    }
+    
+    modifier serviceNotExists(string memory serviceName){
+        require(!containsService(serviceName),"That service already exists");
         _;
     }
 
@@ -38,13 +43,14 @@ contract ServiceHandler is DealerContract {
         return getIndexOfService(serviceName) < totalNoServices;
     }
 
-    function addService(string memory serviceName) public ownerOnly serviceExists(serviceName) servicesNotFull {
+    function addService(string memory serviceName) public ownerOnly serviceNotExists(serviceName) servicesNotFull {
         //Returns true if service was successfully added
         //False if service already exists
         for(uint8 i = 0; i < totalNoServices; i++){
             if(bytes(services[i]).length <= 0){
                 services[i] = serviceName;
                 noOfServices++;
+                return;
             }
         }
     }
@@ -106,6 +112,7 @@ contract ServiceHandler is DealerContract {
     }
 
     function deleteSubService(uint8 serviceId, string memory serviceName) public ownerOnly subServiceExists(serviceId,serviceName) {
+        //TODO Shift elements manually
         delete subServices[serviceId][getIndexOfSubService(serviceId,serviceName)];
     }
 
