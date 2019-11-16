@@ -15,4 +15,21 @@ contract('DealerContract', () => {
     });
     assert(errorMsg === 'You must be a dealership owner to do this');
   });
+
+  it('Should create an application', async () => {
+    const dealerId = await dealerContract.getHash('32');
+    const dealerInfo = { dealerName: 'test' };
+    await dealerContract.createDealerApplication(dealerInfo, dealerId);
+    const application = await dealerContract.getAllDealerApplications();
+    assert(application.includes(dealerId));
+  });
+
+  it('Should approve an applicaiton', async () => {
+    const dealerId = await dealerContract.getHash('32');
+    await dealerContract.approveApplication(dealerId);
+    const application = await dealerContract.getAllDealerApplications();
+    const verified = await dealerContract.isVerified(dealerId);
+    assert(!application.includes(dealerId));
+    assert(verified);
+  });
 });

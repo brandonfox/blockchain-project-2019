@@ -28,7 +28,7 @@ contract DealerContract is Ownable {
     bytes32[] dealerApplications;
 
     //Function for dealer to create new application
-    function dealerApplication(DealerInfo memory info, bytes32 id) public{
+    function createDealerApplication(DealerInfo memory info, bytes32 id) public{
         require(!verifiedDealers[id],"That address is already registered");
         dealerInfoMap[id] = info;
         dealerApplications.push(id);

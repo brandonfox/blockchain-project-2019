@@ -23,4 +23,23 @@ contract('ServiceHandler', () => {
     const services = await serviceHandler.getServices();
     assert(!services.includes('tire'));
   });
+
+  it('Should add a subservice', async () => {
+    await serviceHandler.addService('fluid');
+    await serviceHandler.addSubService('fluid', 'toyota');
+    const subServices = await serviceHandler.getSubServices('fluid');
+    assert(subServices[0] === 'toyota');
+  });
+
+  it('Should edit a subservice', async () => {
+    await serviceHandler.editSubServiceName('fluid', 'toyota', 'honda');
+    const subServices = await serviceHandler.getSubServices('fluid');
+    assert(subServices[0] === 'honda');
+  });
+
+  it('Should delete a subservice', async () => {
+    await serviceHandler.deleteSubService('fluid', 'honda');
+    const subServices = await serviceHandler.getSubServices('fluid');
+    assert(!subServices.includes('honda'));
+  });
 });

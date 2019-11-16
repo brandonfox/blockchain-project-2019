@@ -77,53 +77,53 @@ contract ServiceHandler is DealerContract {
 
     //-----------------------------_Subservices_----------------------------
 
-    mapping(uint8 => string[]) private subServices;
+    mapping(string => string[]) private subServices;
 
-    modifier subServiceExists(uint8 serviceId, string memory serviceName){
-        require(containsSubService(serviceId,serviceName),"That subservice doesnt exist in this context");
+    modifier subServiceExists(string memory serviceName, string memory subServiceName){
+        require(containsSubService(serviceName,subServiceName),"That subservice doesnt exist in this context");
         _;
     }
-    modifier subServiceNotExists(uint8 serviceId, string memory serviceName){
-        require(!containsSubService(serviceId,serviceName),"That subservice already exists");
-        _;
-    }
-
-    modifier subservicesNotFull(uint8 serviceId){
-        require(subServices[serviceId].length < 255,"Maximum subservice amount reached");
+    modifier subServiceNotExists(string memory serviceName, string memory subServiceName){
+        require(!containsSubService(serviceName,subServiceName),"That subservice already exists");
         _;
     }
 
-    function getIndexOfSubService(uint8 serviceId, string memory serviceName) internal view returns (uint) {
-        for(uint8 i = 0; i < subServices[serviceId].length; i++){
-            if(encode(subServices[serviceId][i]) == encode(serviceName)){
+    modifier subservicesNotFull(string memory serviceName){
+        require(subServices[serviceName].length < 255,"Maximum subservice amount reached");
+        _;
+    }
+
+    function getIndexOfSubService(string memory serviceName, string memory subServiceName) internal view returns (uint) {
+        for(uint8 i = 0; i < subServices[serviceName].length; i++){
+            if(encode(subServices[serviceName][i]) == encode(subServiceName)){
                 return i;
             }
         }
         return 255;
     }
 
-    function containsSubService(uint8 serviceId, string memory serviceName) internal view returns (bool) {
-        return getIndexOfSubService(serviceId,serviceName) < 255;
+    function containsSubService(string memory serviceName, string memory subServiceName) internal view returns (bool) {
+        return getIndexOfSubService(serviceName,subServiceName) < 255;
     }
 
-    function addSubService(uint8 serviceId, string memory newService)
-     public subservicesNotFull(serviceId) subServiceNotExists(serviceId,newService) ownerOnly {
+    function addSubService(string memory serviceName, string memory subServiceName)
+     public subservicesNotFull(serviceName) subServiceNotExists(serviceName,subServiceName) ownerOnly {
         //Returns true if service does not already exist
-        subServices[serviceId].push(newService);
+        subServices[serviceName].push(subServiceName);
     }
 
-    function editSubServiceName(uint8 serviceId, string memory oldName, string memory newName)
-     public subServiceExists(serviceId,oldName) ownerOnly {
-        subServices[serviceId][getIndexOfSubService(serviceId,oldName)] = newName;
+    function editSubServiceName(string memory serviceName, string memory oldName, string memory newName)
+     public subServiceExists(serviceName,oldName) ownerOnly {
+        subServices[serviceName][getIndexOfSubService(serviceName,oldName)] = newName;
     }
 
-    function deleteSubService(uint8 serviceId, string memory serviceName)
-     public ownerOnly subServiceExists(serviceId,serviceName) {
+    function deleteSubService(string memory serviceName, string memory subServiceName)
+     public ownerOnly subServiceExists(serviceName,subServiceName) {
         //TODO Shift elements manually
-        delete subServices[serviceId][getIndexOfSubService(serviceId,serviceName)];
+        delete subServices[serviceName][getIndexOfSubService(serviceName,subServiceName)];
     }
 
-    function getSubService(uint8 serviceId) public view returns (string[] memory) {
-        return subServices[serviceId];
+    function getSubServices(string memory serviceName) public view returns (string[] memory) {
+        return subServices[serviceName];
     }
 }
