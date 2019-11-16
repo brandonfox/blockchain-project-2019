@@ -32,4 +32,12 @@ contract('DealerContract', () => {
     assert(!application.includes(dealerId));
     assert(verified);
   });
+
+  it('Should add an employee', async () => {
+    const dealerId = await dealerContract.getHash('32');
+    const employeeId = await dealerContract.getHash('30');
+    await dealerContract.addDealerEmployee(dealerId, employeeId);
+    const verified = await dealerContract.isVerified(employeeId);
+    assert(verified);
+  });
 });

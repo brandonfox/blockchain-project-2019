@@ -75,7 +75,7 @@ contract DealerContract is Ownable {
 
     //Add employee to dealership who will have access to verified() functions
     function addDealerEmployee(bytes32 dealerId, bytes32 adr) public dealershipOwner(dealerId) {
-        require(employeeToDealer[adr] != 0,"That employee already works there");
+        require(employeeToDealer[adr] == 0,"That employee already works there");
         dealerToEmployees[dealerId].push(adr);
         employeeToDealer[adr] = dealerId;
     }
