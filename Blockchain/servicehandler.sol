@@ -1,7 +1,7 @@
 pragma solidity ^0.5.11;
 pragma experimental ABIEncoderV2;
 
-import "./DealerContract.sol";
+import "./dealercontract.sol";
 
 contract ServiceHandler is DealerContract {
 
@@ -83,10 +83,6 @@ contract ServiceHandler is DealerContract {
         require(containsSubService(serviceId,serviceName),"That subservice doesnt exist in this context");
         _;
     }
-    modifier subServiceNotExists(uint serviceId, string memory serviceName){
-        require(!containsSubService(serviceId,serviceName),"That subservice already exists");
-        _;
-    }
 
     modifier subservicesNotFull(uint8 serviceId){
         require(subServices[serviceId].length < 255,"Maximum subservice amount reached");
@@ -106,7 +102,7 @@ contract ServiceHandler is DealerContract {
         return getIndexOfSubService(serviceId,serviceName) < 255;
     }
 
-    function addSubService(uint8 serviceId, string memory newService) public subservicesNotFull(serviceId) subServiceNotExists(serviceId,newService) ownerOnly {
+    function addSubService(uint8 serviceId, string memory newService) public subservicesNotFull(serviceId) subServiceExists(serviceId,newService) ownerOnly {
         //Returns true if service does not already exist
         subServices[serviceId].push(newService);
     }
