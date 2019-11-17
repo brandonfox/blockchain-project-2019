@@ -5,6 +5,15 @@ import "./Ownable.sol";
 
 contract DealerContract is Ownable {
 
+    struct DealerInfo{
+        string dealerName;
+        string addr;
+        string location;
+        string phoneNo;
+        string[] availableServices;
+        string[][] availableSubServices;
+    }
+
     mapping(bytes32 => bool) verifiedDealers;
     mapping(bytes32 => bytes32[]) private dealerToEmployees;
     mapping(bytes32 => bytes32) private employeeToDealer;
@@ -20,10 +29,6 @@ contract DealerContract is Ownable {
         _;
     }
 
-    struct DealerInfo{
-        string dealerName;
-    }
-
     mapping(bytes32 => DealerInfo) private dealerInfoMap;
     bytes32[] dealerApplications;
 
@@ -32,6 +37,14 @@ contract DealerContract is Ownable {
         require(!verifiedDealers[id],"That address is already registered");
         dealerInfoMap[id] = info;
         dealerApplications.push(id);
+    }
+
+    function editDealerInfo(DealerInfo memory info, bytes32 id) public dealershipOwner(id){
+        dealerInfoMap[id] = info;
+    }
+
+    function getDealerInfo(bytes32 id) public view returns(DealerInfo memory){
+        return dealerInfoMap[id];
     }
 
     //Transfer dealership owner to another id
