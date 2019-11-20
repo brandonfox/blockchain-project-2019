@@ -1,6 +1,6 @@
 const DealerContract = artifacts.require('DealerContract');
 
-contract('DealerContract', () => {
+contract('DealerContract', accounts => {
   let dealerContract = null;
   before(async () => {
     dealerContract = await DealerContract.deployed();
@@ -18,25 +18,31 @@ contract('DealerContract', () => {
 
   it('Should create an application', async () => {
     const dealerId = await dealerContract.getHash('32');
-    const dealerInfo = { 
-      dealerName:'test'
-      ,addr:'mahidol'
-      ,location:'192.12312,24.12'
-      ,phoneNo:'081+++++++'
-      ,availableServices:[]
-      ,availableSubServices:[]
-     };
+    const dealerInfo = {
+      dealerName: 'test',
+      addr: 'mahidol',
+      location: '192.12312,24.12',
+      phoneNo: '081+++++++',
+      availableServices: [],
+      availableSubServices: []
+    };
     await dealerContract.createDealerApplication(dealerInfo, dealerId);
     const application = await dealerContract.getAllDealerApplications();
     assert(application.includes(dealerId));
   });
 
-  it('Should approve an applicaiton', async () => {
+  it('Should approve an application', async () => {
     const dealerId = await dealerContract.getHash('32');
     await dealerContract.approveApplication(dealerId);
     const application = await dealerContract.getAllDealerApplications();
     const verified = await dealerContract.isVerified(dealerId);
     assert(!application.includes(dealerId));
     assert(verified);
+  });
+
+  it('should return the correct owner', async () => {
+    const _ownerToBe = accounts[0];
+    const ownerFromContract = await dealerContract.owner();
+    assert.equal(_ownerToBe, ownerFromContract, 'owner must be the same');
   });
 });
