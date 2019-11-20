@@ -9,7 +9,7 @@ contract('DealerContract', () => {
     assert(dealerContract.address !== '');
     const dealerId = await dealerContract.getHash('32');
     const otherId = await dealerContract.getHash('34');
-    let errorMsg;
+    let errorMsg = '';
     await dealerContract.addDealerEmployee(dealerId, otherId).catch(error => {
       errorMsg = error.reason;
     });
@@ -18,7 +18,14 @@ contract('DealerContract', () => {
 
   it('Should create an application', async () => {
     const dealerId = await dealerContract.getHash('32');
-    const dealerInfo = { dealerName: 'test' };
+    const dealerInfo = { 
+      dealerName:'test'
+      ,addr:'mahidol'
+      ,location:'192.12312,24.12'
+      ,phoneNo:'081+++++++'
+      ,availableServices:[]
+      ,availableSubServices:[]
+     };
     await dealerContract.createDealerApplication(dealerInfo, dealerId);
     const application = await dealerContract.getAllDealerApplications();
     assert(application.includes(dealerId));
