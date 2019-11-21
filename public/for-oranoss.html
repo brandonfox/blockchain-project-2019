@@ -1,121 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link
-            href="https://fonts.googleapis.com/css?family=Sarabun&display=swap"
-            rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Sarabun&display=swap"
+      rel="stylesheet"
     />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href=".\css\style.css" />
     <title>Verify Dealer</title>
-</head>
-<body>
-<div class="container">
-    <header>
+  </head>
+  <body>
+    <div class="container">
+      <header>
         <div class="logo">
-            <img src="images/logo.svg" alt="Oranoss Logo" />
+          <img src="images/logo.svg" alt="Oranoss Logo" />
         </div>
-    </header>
-    <div class="tab" style="width: 90%; ">
-        <button class="tablinks" onclick="openCity(event, 'London')" id="defaultOpen">Dealers Verification</button>
-        <button class="tablinks" onclick="openCity(event, 'Paris')">Paris</button>
-    </div>
-    <div id="London" class="tabcontent">
+      </header>
+      <div class="tab" style="width: 90%; ">
+        <button
+          class="tablinks"
+          onclick="openCity(event, 'London')"
+          id="defaultOpen"
+        >
+          Dealers Verification
+        </button>
+        <button class="tablinks" onclick="openCity(event, 'Paris')">
+          Paris
+        </button>
+      </div>
+      <div id="London" class="tabcontent">
         <table class="dealers-table">
-            <tr>
-                <th>ชื่อบริษัท</th>
-                <th>ชื่อจริง</th>
-                <th>นามสกุล</th>
-                <th>ที่อยู่</th>
-                <th>สถานะการยืนยันตัวตน</th>
-            </tr>
-            <tr>
-                <td>ธนาคารเกียรตินาคิน</td>
-                <td>ธัญทิพย์</td>
-                <td>มีสกุลตั้งมั่น</td>
-                <td>Address 1</td>
-                <td>
-                    <button type="button">ยืนยันตัวตน</button>
-                </td>
-            </tr>
-            <tr>
-                <td>ธนาคารซีไอเอ็มบี ไทย</td>
-                <td>นรุตมา</td>
-                <td>ผู้ให้กำเนิด</td>
-                <td>Address 2</td>
-                <td>
-                    <button type="button">ยืนยันตัวตน</button>
-                </td>
-            </tr>
-            <tr>
-                <td>ธนาคารไทยพาณิชย์</td>
-                <td>ไปรยา</td>
-                <td>แต่งแต้มด้วยเครื่องหอม</td>
-                <td>Address 3</td>
-                <td>
-                    <button type="button">ยืนยันตัวตน</button>
-                </td>
-            </tr>
-            <tr>
-                <td>ธนาคารกรุงเทพ</td>
-                <td>พรพินิต</td>
-                <td>เปรียบประดุจน้ำ</td>
-                <td>Address 4</td>
-                <td>
-                    <button type="button">ยืนยันตัวตน</button>
-                </td>
-            </tr>
-            <tr>
-                <td>ธนาคารกรุงไทย</td>
-                <td>แววปราชญ์</td>
-                <td>ความสาวที่น่ารัก</td>
-                <td>Address 5</td>
-                <td>
-                    <button type="button">ยืนยันตัวตน</button>
-                </td>
-            </tr>
-            <tr>
-                <td>ธนาคารกรุงศรีอยุธยา</td>
-                <td>ชลนิภา</td>
-                <td>พระจันทร์เต็มดวง</td>
-                <td>Address 6</td>
-                <td>
-                    <button type="button">ยืนยันตัวตน</button>
-                </td>
-            </tr>
+          <tr>
+            <th>ชื่อบริษัท</th>
+            <th>ชื่อจริง</th>
+            <th>นามสกุล</th>
+            <th>ที่อยู่</th>
+            <th>สถานะการยืนยันตัวตน</th>
+          </tr>
+          <tr>
+            <td>ธนาคารเกียรตินาคิน</td>
+            <td>ธัญทิพย์</td>
+            <td>มีสกุลตั้งมั่น</td>
+            <td>Address 1</td>
+            <td>
+              <button type="button">ยืนยันตัวตน</button>
+            </td>
+          </tr>
+          <tr>
+            <td>ธนาคารซีไอเอ็มบี ไทย</td>
+            <td>นรุตมา</td>
+            <td>ผู้ให้กำเนิด</td>
+            <td>Address 2</td>
+            <td>
+              <button type="button">ยืนยันตัวตน</button>
+            </td>
+          </tr>
+          <tr>
+            <td>ธนาคารไทยพาณิชย์</td>
+            <td>ไปรยา</td>
+            <td>แต่งแต้มด้วยเครื่องหอม</td>
+            <td>Address 3</td>
+            <td>
+              <button type="button">ยืนยันตัวตน</button>
+            </td>
+          </tr>
+          <tr>
+            <td>ธนาคารกรุงเทพ</td>
+            <td>พรพินิต</td>
+            <td>เปรียบประดุจน้ำ</td>
+            <td>Address 4</td>
+            <td>
+              <button type="button">ยืนยันตัวตน</button>
+            </td>
+          </tr>
+          <tr>
+            <td>ธนาคารกรุงไทย</td>
+            <td>แววปราชญ์</td>
+            <td>ความสาวที่น่ารัก</td>
+            <td>Address 5</td>
+            <td>
+              <button type="button">ยืนยันตัวตน</button>
+            </td>
+          </tr>
+          <tr>
+            <td>ธนาคารกรุงศรีอยุธยา</td>
+            <td>ชลนิภา</td>
+            <td>พระจันทร์เต็มดวง</td>
+            <td>Address 6</td>
+            <td>
+              <button type="button">ยืนยันตัวตน</button>
+            </td>
+          </tr>
         </table>
-    </div>
-    <div id="Paris" class="tabcontent">
+      </div>
+      <div id="Paris" class="tabcontent">
         <h3>Paris</h3>
         <p>Paris is the capital of France.</p>
+      </div>
     </div>
-</div>
-<script>
-  // Get the element with id="defaultOpen" and click on it
-  document.getElementById("defaultOpen").click();
+    <script>
+      // Get the element with id="defaultOpen" and click on it
+      document.getElementById('defaultOpen').click();
 
-  function openCity(evt, cityName) {
-    // Declare all variables
-    var i, tabcontent, tablinks;
+      function openCity(evt, cityName) {
+        // Declare all variables
+        var i, tabcontent, tablinks;
 
-    // Get all elements with class="tabcontent" and hide them
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-      tabcontent[i].style.display = "none";
-    }
+        // Get all elements with class="tabcontent" and hide them
+        tabcontent = document.getElementsByClassName('tabcontent');
+        for (i = 0; i < tabcontent.length; i++) {
+          tabcontent[i].style.display = 'none';
+        }
 
-    // Get all elements with class="tablinks" and remove the class "active"
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-      tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
+        // Get all elements with class="tablinks" and remove the class "active"
+        tablinks = document.getElementsByClassName('tablinks');
+        for (i = 0; i < tablinks.length; i++) {
+          tablinks[i].className = tablinks[i].className.replace(' active', '');
+        }
 
-    // Show the current tab, and add an "active" class to the button that opened the tab
-    document.getElementById(cityName).style.display = "block";
-    evt.currentTarget.className += " active";
-  }
-</script>
-</body>
+        // Show the current tab, and add an "active" class to the button that opened the tab
+        document.getElementById(cityName).style.display = 'block';
+        evt.currentTarget.className += ' active';
+      }
+    </script>
+  </body>
 </html>
