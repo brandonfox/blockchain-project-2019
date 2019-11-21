@@ -19,22 +19,22 @@
           <img src="images/logo.svg" alt="Oranoss Logo" />
         </div>
       </header>
-      <form onsubmit="return submitForm()">
+      <form id="registration-form">
         <div class="form-row">
           <label for="company-name">ชื่อบริษัท</label>
-          <input id="company-name" name="company-name" type="text" required />
+          <input id="company-name" name="company-name" type="text" />
         </div>
         <div class="form-row">
           <label for="first-name">ชื่อจริง</label>
-          <input id="first-name" name="first-name" type="text" required />
+          <input id="first-name" name="first-name" type="text" />
         </div>
         <div class="form-row">
           <label for="last-name">นามสกุล</label>
-          <input id="last-name" name="last-name" type="text" required />
+          <input id="last-name" name="last-name" type="text" />
         </div>
         <div class="form-row">
           <label for="address">ที่อยู่</label>
-          <input id="address" name="address" type="text" required />
+          <input id="address" name="address" type="text" />
         </div>
         <div class="form-row">
           <label for="phone-number">เบอร์โทร</label>
@@ -43,12 +43,11 @@
             name="phone-number"
             type="tel"
             pattern="0[0-9]{9}"
-            required
           />
         </div>
         <div class="form-row">
           <label for="best-seller">สินค้าขายดีประจำร้าน</label>
-          <input id="best-seller" name="best-seller" type="text" required />
+          <input id="best-seller" name="best-seller" type="text" />
         </div>
         <div class="form-row">
           <label for="promotion">โปรโมชั่นที่ทางร้านจัดเป็นประจำ</label>
@@ -56,25 +55,19 @@
             id="promotion"
             name="promotion"
             placeholder="ถ้าโปรโมชั่นของท่านสอดคล้องกับนโยบายของบริษัท ทางบริษัทอาจมีการส่งสินค้าเพื่อไปสนับสนุนโปรโมชั่นของท่าน"
-            required
           ></textarea>
         </div>
         <div class="form-row">
           <label for="other-services">บริการอื่น ๆ ของทางร้าน</label>
-          <input
-            id="other-services"
-            name="other-services"
-            type="text"
-            required
-          />
+          <input id="other-services" name="other-services" type="text" />
         </div>
         <div class="submit-row"><button>ลงทะเบียน</button></div>
       </form>
     </div>
     <div id="result"></div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
     <script src="../node_modules/truffle-contract/dist/truffle-contract.js"></script>
+    <script src="./js/web3.min.js"></script>
     <script src="./js/dealerRegistrationHandler.js"></script>
   </body>
 </html>

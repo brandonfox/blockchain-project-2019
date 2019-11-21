@@ -11,41 +11,58 @@ async function successCallback() {
 
 function submitForm(e) {
   event.preventDefault();
-  var thisForm = $(e).find('[name="company-name"]');
-  console.log(thisForm.val());
 
-  $.getJSON('./build/contracts/DealerContract.json', async data => {
-    var DealerContract = TruffleContract(data);
+  const companyName = e.target[0].value;
+  const firstName = e.target[1].value;
+  const lastName = e.target[2].value;
+  const address = e.target[3].value;
+  const tel = e.target[4].value;
+  const bestSeller = e.target[5].value;
+  const promotions = e.target[6].value;
+  const mic = e.target[7].value;
+
+  fetch('./build/contracts/DealerContract.json').then(async data => {
+    const dataJSON = await data.json();
+    console.log('data', dataJSON);
+    var DealerContract = TruffleContract(dataJSON);
+    var provider;
     ethereum.autoRefreshOnNetworkChange = false;
-    if (typeof web3 !== 'undefined') {
-      var provider = new Web3(ethereum);
+
+    if (typeof ethereum !== 'undefined') {
+      provider = new Web3(ethereum);
       var accounts = await ethereum.enable();
       console.log(accounts);
       DealerContract.setProvider(web3.currentProvider);
     } else {
-      var provider = new Web3.providers.HttpProvider('http://localhost:7545');
+      provider = new Web3.providers.HttpProvider('http://localhost:7545');
       DealerContract.setProvider(provider);
     }
+    console.log('provider', provider);
 
     const instance = await DealerContract.deployed();
     const contractInstance = instance;
     const owner = await contractInstance.owner();
     console.log('owner', owner);
     const dealerInfo = {
-      dealerName: 'test',
-      addr: 'mahidol',
+      dealerName: `${firstName} ${lastName}`,
+      addr: `${address}`,
       location: '192.12312,24.12',
-      phoneNo: '081+++++++',
+      phoneNo: `${tel}`,
       availableServices: [],
       availableSubServices: []
     };
+    console.log('data', dealerInfo);
     const hash = await contractInstance.getHash('32');
     console.log(hash);
-    // await contractInstance.createDealerApplication(dealerInfo, hash, {
-    //   from: accounts[0]
-    // });
-    const application = await contractInstance.getAllDealerApplications();
-    console.log(application);
+    await contractInstance.createDealerApplication(dealerInfo, hash, {
+      from: accounts[0]
+    });
+    await contractInstance.getAllDealerApplications();
+    // console.log(application);
   });
 }
+
+document
+  .getElementById('registration-form')
+  .addEventListener('submit', submitForm);
 // initialise Web3 to do smart contract

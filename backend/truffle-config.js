@@ -28,7 +28,7 @@ const HDWalletProvider = require('truffle-hdwallet-provider');
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
 
 module.exports = {
-  contracts_build_directory: '../public/build/contracts',
+  contracts_build_directory: './../public/build/contracts',
   /**
    * Networks define how you connect to your ethereum client and let you set the
    * defaults web3 uses to send transactions. If you don't specify one truffle
@@ -70,8 +70,7 @@ module.exports = {
           process.env.MNEMONIC,
           `https://rinkeby.infura.io/v3/${process.env.INFURA_ENDPOINT}`
         ),
-      network_id: 4,
-      gasPrice: 5500000000
+      network_id: 4
     }
 
     // Useful for private networks
@@ -82,10 +81,10 @@ module.exports = {
     // }
   },
 
-  // Set default mocha options here, use special reporters etc.
-  mocha: {
-    // timeout: 100000
-  },
+  // // Set default mocha options here, use special reporters etc.
+  // mocha: {
+  //   // timeout: 100000
+  // },
 
   // Configure your compilers
   compilers: {
