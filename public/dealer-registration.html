@@ -19,7 +19,7 @@
           <img src="images/logo.svg" alt="Oranoss Logo" />
         </div>
       </header>
-      <form action="#" method="post">
+      <form onsubmit="return submitForm()">
         <div class="form-row">
           <label for="company-name">ชื่อบริษัท</label>
           <input id="company-name" name="company-name" type="text" required />
@@ -72,7 +72,9 @@
       </form>
     </div>
     <div id="result"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
-    <script src="js/dealerRegistrationHandler.js"></script>
+    <script src="../node_modules/truffle-contract/dist/truffle-contract.js"></script>
+    <script src="./js/dealerRegistrationHandler.js"></script>
   </body>
 </html>
