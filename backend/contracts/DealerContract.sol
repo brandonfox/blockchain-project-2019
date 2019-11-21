@@ -5,6 +5,15 @@ import "./Ownable.sol";
 
 contract DealerContract is Ownable {
 
+    struct DealerInfo{
+        string dealerName;
+        string addr;
+        string location;
+        string phoneNo;
+        string[] availableServices;
+        string[][] availableSubServices;
+    }
+
     mapping(bytes32 => bool) verifiedDealers;
     mapping(bytes32 => bytes32[]) private dealerToEmployees;
     mapping(bytes32 => bytes32) private employeeToDealer;
@@ -20,18 +29,22 @@ contract DealerContract is Ownable {
         _;
     }
 
-    struct DealerInfo{
-        string dealerName;
-    }
-
     mapping(bytes32 => DealerInfo) private dealerInfoMap;
     bytes32[] dealerApplications;
 
     //Function for dealer to create new application
-    function dealerApplication(DealerInfo memory info, bytes32 id) public{
+    function createDealerApplication(DealerInfo memory info, bytes32 id) public{
         require(!verifiedDealers[id],"That address is already registered");
         dealerInfoMap[id] = info;
         dealerApplications.push(id);
+    }
+
+    function editDealerInfo(DealerInfo memory info, bytes32 id) public dealershipOwner(id){
+        dealerInfoMap[id] = info;
+    }
+
+    function getDealerInfo(bytes32 id) public view returns(DealerInfo memory){
+        return dealerInfoMap[id];
     }
 
     //Transfer dealership owner to another id
@@ -75,7 +88,7 @@ contract DealerContract is Ownable {
 
     //Add employee to dealership who will have access to verified() functions
     function addDealerEmployee(bytes32 dealerId, bytes32 adr) public dealershipOwner(dealerId) {
-        require(employeeToDealer[adr] != 0,"That employee already works there");
+        require(employeeToDealer[adr] == 0,"That employee already works there");
         dealerToEmployees[dealerId].push(adr);
         employeeToDealer[adr] = dealerId;
     }
