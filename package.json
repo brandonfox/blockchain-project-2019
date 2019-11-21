@@ -7,7 +7,8 @@
   "license": "MIT",
   "devDependencies": {
     "dotenv": "^8.2.0",
-    "truffle-hdwallet-provider": "^1.0.17"
+    "truffle-hdwallet-provider": "^1.0.17",
+    "webpack": "^4.41.2"
   },
   "dependencies": {
     "ganache-cli": "^6.7.0"
