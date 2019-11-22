@@ -4,13 +4,23 @@ import "./Ownable.sol";
 contract DealerContract is Ownable {
 
     struct DealerInfo{
+        string addr;
         string dealerName;
+        string tel;
+        string bestProd;
+        string promotion;
+        string services;
         
     }
+    mapping(bytes32 => DealerInfo) public dealerInfoMap;
+    bytes32[] public dealerList; // For enumerate key to mapping above.
+    
+    bytes32[] public dealerApplicationsId;
+    
 
     mapping(bytes32 => bool) verifiedDealers;
-    mapping(bytes32 => bytes32[]) private dealerToEmployees;
-    mapping(bytes32 => bytes32) private employeeToDealer;
+    mapping(bytes32 => bytes32[]) private _dealerToEmployees;
+    mapping(bytes32 => bytes32) private _employeeToDealer;
 
 
     modifier verified(bytes32 dealerId) {
@@ -23,42 +33,57 @@ contract DealerContract is Ownable {
         _;
     }
 
-    mapping(bytes32 => DealerInfo) private dealerInfoMap;
-    bytes32[] dealerApplications;
+    
+    
 
     //Function for dealer to create new application
-    function createDealerApplication(string memory _dealerName, bytes32 id) public{
-        require(!verifiedDealers[id],"That address is already registered");
-        dealerInfoMap[id] = DealerInfo(_dealerName);
-        dealerApplications.push(id);
+    function createDealerApplication( string memory _addr,
+        string memory _dealerName,
+        string memory _tel,
+        string memory _bestProd,
+        string memory _promotion,
+        string memory _services, bytes32 _id) public{
+        require(!verifiedDealers[_id],"That address is already registered");
+        dealerInfoMap[_id] = DealerInfo(_addr, _dealerName, _tel, _bestProd, _promotion, _services);
+        if (getApplicationIndex(_id) == -1) {
+        dealerApplicationsId.push(_id);
+            
+        }
     }
 
    
 
-    function getDealerInfo(bytes32 id) public view returns(string memory _dealerName){
-        _dealerName = dealerInfoMap[id].dealerName;
+    function getDealerInfo(bytes32 id) public view returns(
+    string memory addr,
+    string memory dealerName,
+        string memory tel,
+        string memory bestProd,
+        string memory promotion,
+        string memory services){
+        DealerInfo memory information = dealerInfoMap[id];
+        addr = information.addr;
+        dealerName = information.dealerName;
+        tel = information.tel;
+        bestProd = information.bestProd;
+        promotion = information.promotion;
+        services = information.services;
     }
 
     //Transfer dealership owner to another id
     function transferDealershipOwner(bytes32 dealershipId, bytes32 otherId) public dealershipOwner(dealershipId){
         verifiedDealers[otherId] = true;
         verifiedDealers[dealershipId] = false;
-        employeeToDealer[otherId] = 0;
-        dealerToEmployees[otherId] = dealerToEmployees[dealershipId];
-        delete dealerToEmployees[dealershipId];
-        for(uint i = 0; i < dealerToEmployees[otherId].length; i++){
-            employeeToDealer[dealerToEmployees[otherId][i]] = otherId;
+        _employeeToDealer[otherId] = 0;
+        _dealerToEmployees[otherId] = _dealerToEmployees[dealershipId];
+        delete _dealerToEmployees[dealershipId];
+        for(uint i = 0; i < _dealerToEmployees[otherId].length; i++){
+            _employeeToDealer[_dealerToEmployees[otherId][i]] = otherId;
         }
     }
 
-    //Get all current dealer applications
-    function getAllDealerApplications() public view ownerOnly returns (bytes32[] memory){
-        return dealerApplications;
-    }
-
     function getApplicationIndex(bytes32 id) internal view returns (int) {
-        for(uint i = 0; i < dealerApplications.length; i++){
-            if(dealerApplications[i] == id){
+        for(uint i = 0; i < dealerApplicationsId.length; i++){
+            if(dealerApplicationsId[i] == id){
                 return int(i);
             }
         }
@@ -70,19 +95,19 @@ contract DealerContract is Ownable {
         int i = getApplicationIndex(adr);
         require(i >= 0,"No application exists for that id");
         verifiedDealers[adr] = true;
-        delete dealerApplications[uint(i)];
+        delete dealerApplicationsId[uint(i)];
     }
 
     //Function to see if a dealer is verified or works for a dealership
     function isVerified(bytes32 adr) public view returns (bool) {
-        return verifiedDealers[adr] || employeeToDealer[adr] != 0;
+        return verifiedDealers[adr] || _employeeToDealer[adr] != 0;
     }
 
     //Add employee to dealership who will have access to verified() functions
     function addDealerEmployee(bytes32 dealerId, bytes32 adr) public dealershipOwner(dealerId) {
-        require(employeeToDealer[adr] != 0,"That employee already works there");
-        dealerToEmployees[dealerId].push(adr);
-        employeeToDealer[adr] = dealerId;
+        require(_employeeToDealer[adr] != 0,"That employee already works there");
+        _dealerToEmployees[dealerId].push(adr);
+        _employeeToDealer[adr] = dealerId;
     }
 
 }
