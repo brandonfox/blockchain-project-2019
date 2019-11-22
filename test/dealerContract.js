@@ -18,14 +18,14 @@ contract('DealerContract', () => {
 
   it('Should create an application', async () => {
     const dealerId = await dealerContract.getHash('32');
-    const dealerInfo = { 
-      dealerName:'test'
-      ,addr:'mahidol'
-      ,location:'192.12312,24.12'
-      ,phoneNo:'081+++++++'
-      ,availableServices:[]
-      ,availableSubServices:[]
-     };
+    const dealerInfo = {
+      dealerName: 'test',
+      addr: 'mahidol',
+      location: '192.12312,24.12',
+      phoneNo: '081+++++++',
+      availableServices: [],
+      availableSubServices: [],
+    };
     await dealerContract.createDealerApplication(dealerInfo, dealerId);
     const application = await dealerContract.getAllDealerApplications();
     assert(application.includes(dealerId));

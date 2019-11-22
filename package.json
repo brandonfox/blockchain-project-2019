@@ -1,0 +1,28 @@
+{
+  "name": "blockchain-project-2019",
+  "version": "1.0.0",
+  "main": "truffle-config.js",
+  "repository": "https://github.com/brandonfox/blockchain-project-2019.git",
+  "author": "",
+  "license": "MIT",
+  "scripts": {
+    "dev": "parcel public/receipt.html",
+    "build": "parcel build public/js/* --out-dir public/build"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4"
+  },
+  "dependencies": {
+    "@truffle/contract": "^4.1.0",
+    "@truffle/hdwallet-provider": "^1.0.25",
+    "t": "^0.5.1",
+    "tr": "^1.1.2",
+    "tru": "^1.0.0",
+    "truffle-contract": "^4.0.31",
+    "truffle-hdwallet-provider": "^1.0.17",
+    "web3": "^1.2.4"
+  },
+  "browserslist": [
+    "last 1 Chrome versions"
+  ]
+}

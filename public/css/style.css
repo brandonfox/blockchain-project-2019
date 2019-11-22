@@ -88,25 +88,6 @@ select {
   padding-left: 8px;
 }
 
-.checkbox-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 18px;
-  margin-top: 6px;
-}
-
-.checkbox-container label {
-  font-size: 14px;
-  margin-left: 4px;
-  margin-bottom: 3px;
-}
-
-.checkbox-row {
-  display: flex;
-  align-items: center;
-}
-
 .qr-container {
   height: 100vh;
   display: flex;
