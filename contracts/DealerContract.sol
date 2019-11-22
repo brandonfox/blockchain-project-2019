@@ -7,9 +7,14 @@ contract DealerContract is Ownable {
 
     struct DealerInfo{
         string dealerName;
+        string firstName;
+        string lastName;
         string addr;
         string location;
         string phoneNo;
+        string bestSeller;
+        string promotion;
+        string otherServices;
         string[] availableServices;
         string[][] availableSubServices;
     }

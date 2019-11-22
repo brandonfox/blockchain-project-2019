@@ -20,9 +20,14 @@ contract('DealerContract', () => {
     const dealerId = await dealerContract.getHash('32');
     const dealerInfo = {
       dealerName: 'test',
+      firstName: 'test',
+      lastName: 'test',
       addr: 'mahidol',
       location: '192.12312,24.12',
       phoneNo: '081+++++++',
+      bestSeller: 'test',
+      promotion: 'test',
+      otherServices: 'test',
       availableServices: [],
       availableSubServices: [],
     };

@@ -6,8 +6,8 @@
   "author": "",
   "license": "MIT",
   "scripts": {
-    "dev": "parcel public/receipt.html",
-    "build": "parcel build public/js/* --out-dir public/build"
+    "dev": "parcel public/*.html",
+    "build": "parcel build public/*.html"
   },
   "devDependencies": {
     "parcel-bundler": "^1.12.4"

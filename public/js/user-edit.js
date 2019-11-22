@@ -1,4 +1,4 @@
-import {web3, userContract, init} from './userContract';
+import { web3, userContract, init } from './userContract';
 
 const initApp = async () => {
   const firstName = document.getElementById('first-name').value;
@@ -10,7 +10,8 @@ const initApp = async () => {
   const model = document.getElementById('car-model').value;
   const _userContract = await userContract.deployed();
   const accounts = await web3.eth.getAccounts();
-  const userId = await _userContract.getHash('user');
+  const lineDetail = await liff.getProfile();
+  const userId = await _userContract.getHash(lineDetail.userId);
   await _userContract.editUserInfo(
     userId,
     {
@@ -33,10 +34,15 @@ const initApp = async () => {
     { from: accounts[0] }
   );
   const infoReply = await _userContract.getUserInfo(userId);
-  const carDetails = await _userContract.getCars(userId);
-  console.log('infoReply', infoReply);
-  console.log('carDetails', carDetails);
+  const node = document.createElement('p');
+  const textNode = document.createTextNode(infoReply.toString())
+  node.appendChild(textNode);
+  document.getElementById('container').appendChild(node);
 };
+
+window.addEventListener('DOMContentLoaded', async () => {
+  await liff.init({ liffId: '1653518966-9P8gP0JY' });
+});
 
 document.getElementById('user-edit').addEventListener('submit', async e => {
   e.preventDefault();
