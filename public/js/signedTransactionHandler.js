@@ -286,7 +286,7 @@ const abi = [
 ];
 
 var web3 
-const contractAddr = '0xb9ada20322382052C38acf3dBCd1E18e06369531';
+const contractAddr = '0x3D9b4bc8aFc58a0328D05178d8Ded075009c3eC9';
 var deployedContract;
 const pk = '7380AAE53DC2A7A53E147C4DE1DAF1578A2AC85034CDF39BE69D609AAE844835';
 var account;

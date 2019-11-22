@@ -7,7 +7,7 @@ contract UserContract is ServiceHandler {
 
     struct RecordInternal {
         string[] services;
-        string[][] subservices;
+        string[] subservices;
         string comment;
     }
     struct UserInfo {
@@ -64,7 +64,7 @@ contract UserContract is ServiceHandler {
         return cars;
     }
 
-    function insertRecord(bytes32 dealerId, bytes32 id, string memory noPlate, string[] memory services, string[][] memory subservices,string memory comment) public verified(dealerId){
+    function insertRecord(bytes32 dealerId, bytes32 id, string memory noPlate, string[] memory services, string[] memory subservices,string memory comment) public verified(dealerId){
         require(subservices.length <= services.length,"Number of subservices does not match service length");
         userRecords[id].push(RecordInternal(services,subservices,comment));
     }
