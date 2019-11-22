@@ -50,7 +50,7 @@ function submitForm(e) {
       from: accounts[0]
     });
 
-    const application = await contractInstance.getAllDealerApplications();
+    const application = await contractInstance.dealerApplications(0);
     console.log(application);
 
     const getDealerName = await contractInstance.getDealerInfo(hash);
