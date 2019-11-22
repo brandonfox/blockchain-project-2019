@@ -65,6 +65,5 @@ node_modules/
 .env
 
 .vscode
-backend/build
 .cache
 dist
