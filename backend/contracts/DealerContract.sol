@@ -36,7 +36,9 @@ contract DealerContract is Ownable {
     function createDealerApplication(DealerInfo memory info, bytes32 id) public{
         require(!verifiedDealers[id],"That address is already registered");
         dealerInfoMap[id] = info;
-        dealerApplications.push(id);
+        if(getApplicationIndex(id) == -1){
+            dealerApplications.push(id);
+        }
     }
 
     function editDealerInfo(DealerInfo memory info, bytes32 id) public dealershipOwner(id){
