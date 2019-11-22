@@ -1,6 +1,7 @@
 const DealerContract = artifacts.require('DealerContract');
 
 contract('DealerContract', accounts => {
+  console.log('accounts', accounts);
   let dealerContract = null;
   before(async () => {
     dealerContract = await DealerContract.deployed();

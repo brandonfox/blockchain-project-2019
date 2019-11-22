@@ -1,17 +1,11 @@
-pragma solidity >=0.4.21 <0.6.0;
-pragma experimental ABIEncoderV2;
-
+pragma solidity ^0.5.11;
 import "./Ownable.sol";
 
 contract DealerContract is Ownable {
 
     struct DealerInfo{
         string dealerName;
-        string addr;
-        string location;
-        string phoneNo;
-        string[] availableServices;
-        string[][] availableSubServices;
+        
     }
 
     mapping(bytes32 => bool) verifiedDealers;
@@ -33,18 +27,16 @@ contract DealerContract is Ownable {
     bytes32[] dealerApplications;
 
     //Function for dealer to create new application
-    function createDealerApplication(DealerInfo memory info, bytes32 id) public{
+    function createDealerApplication(string memory _dealerName, bytes32 id) public{
         require(!verifiedDealers[id],"That address is already registered");
-        dealerInfoMap[id] = info;
+        dealerInfoMap[id] = DealerInfo(_dealerName);
         dealerApplications.push(id);
     }
 
-    function editDealerInfo(DealerInfo memory info, bytes32 id) public dealershipOwner(id){
-        dealerInfoMap[id] = info;
-    }
+   
 
-    function getDealerInfo(bytes32 id) public view returns(DealerInfo memory){
-        return dealerInfoMap[id];
+    function getDealerInfo(bytes32 id) public view returns(string memory _dealerName){
+        _dealerName = dealerInfoMap[id].dealerName;
     }
 
     //Transfer dealership owner to another id

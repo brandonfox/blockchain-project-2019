@@ -28,7 +28,6 @@ const HDWalletProvider = require('truffle-hdwallet-provider');
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
 
 module.exports = {
-  contracts_build_directory: './../public/build/contracts',
   /**
    * Networks define how you connect to your ethereum client and let you set the
    * defaults web3 uses to send transactions. If you don't specify one truffle
@@ -46,12 +45,18 @@ module.exports = {
     // tab if you use this network and you must also set the `host`, `port` and `network_id`
     // options below to some value.
     //
-    development: {
+
+    develop: {
       host: '127.0.0.1', // Localhost (default: none)
-      port: 7545, // Standard Ethereum port (default: none)
+      port: 9545, // Standard Ethereum port (default: none)
       network_id: '*' // Any network (default: none)
     },
 
+    // development: {
+    //   host: '127.0.0.1', // Localhost (default: none)
+    //   port: 7545, // Standard Ethereum port (default: none)
+    //   network_id: '*' // Any network (default: none)
+    // },
     // Another network with more advanced options...
     // advanced: {
     // port: 8777,             // Custom port
@@ -61,7 +66,6 @@ module.exports = {
     // from: <address>,        // Account to send txs from (default: accounts[0])
     // websockets: true        // Enable EventEmitter interface for web3 (default: false)
     // },
-
     // Useful for deploying to a public network.
     // NB: It's important to wrap the provider as a function.
     rinkeby: {
@@ -72,7 +76,6 @@ module.exports = {
         ),
       network_id: 4
     }
-
     // Useful for private networks
     // private: {
     // provider: () => new HDWalletProvider(mnemonic, `https://network.io`),

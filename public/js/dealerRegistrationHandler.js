@@ -43,22 +43,18 @@ function submitForm(e) {
     const contractInstance = instance;
     const owner = await contractInstance.owner();
     console.log('owner', owner);
-    const dealerInfo = {
-      dealerName: `${firstName} ${lastName}`,
-      addr: `${address}`,
-      location: '192.12312,24.12',
-      phoneNo: `${tel}`,
-      availableServices: [],
-      availableSubServices: []
-    };
-    console.log('data', dealerInfo);
-    const hash = await contractInstance.getHash('32');
+    const dealerName = `${firstName}`;
+    const hash = await contractInstance.getHash(`${firstName}`);
     console.log(hash);
-    await contractInstance.createDealerApplication(dealerInfo, hash, {
+    await contractInstance.createDealerApplication(dealerName, hash, {
       from: accounts[0]
     });
-    await contractInstance.getAllDealerApplications();
-    // console.log(application);
+
+    const application = await contractInstance.getAllDealerApplications();
+    console.log(application);
+
+    const getDealerName = await contractInstance.getDealerInfo(hash);
+    console.log(getDealerName);
   });
 }
 
