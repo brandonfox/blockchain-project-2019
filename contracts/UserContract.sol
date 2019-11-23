@@ -64,13 +64,9 @@ contract UserContract is ServiceHandler {
         return cars;
     }
 
-<<<<<<< HEAD:backend/contracts/UserContract.sol
-    function insertRecord(bytes32 dealerId, bytes32 id, string memory noPlate, string[] memory services, string[] memory subservices,string memory comment) public verified(dealerId){
-=======
     function insertRecord(bytes32 dealerId, bytes32 id, string memory noPlate,
-     string[] memory services, string[][] memory subservices, string memory comment)
+     string[] memory services, string[] memory subservices, string memory comment)
         public verified(dealerId) {
->>>>>>> refs/heads/receipt:contracts/UserContract.sol
         require(subservices.length <= services.length,"Number of subservices does not match service length");
         userRecords[id].push(RecordInternal(services,subservices,comment));
     }

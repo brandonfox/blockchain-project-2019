@@ -62,12 +62,6 @@ const initApp = async () => {
     alert('การทำรายการสำเร็จ');
     liff.closeWindow();
   }
-
-  const infoReply = await _userContract.getUserInfo(userId);
-  const node = document.createElement('p');
-  const textNode = document.createTextNode(infoReply.toString());
-  node.appendChild(textNode);
-  document.getElementById('container').appendChild(node);
 };
 
 window.addEventListener('DOMContentLoaded', async () => {
