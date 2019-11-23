@@ -68,9 +68,5 @@ node_modules/
 .env
 
 .vscode
-<<<<<<< HEAD
-backend/build
-=======
->>>>>>> refs/heads/receipt
 .cache
 dist
