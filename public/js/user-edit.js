@@ -1,4 +1,7 @@
 import { web3, userContract, init } from './userContract';
+import firebase from './firebase-init';
+import 'firebase/firebase-firestore';
+const db = firebase.firestore();
 
 const initApp = async () => {
   const buttonElement = document.getElementById('button-submit');
@@ -38,6 +41,26 @@ const initApp = async () => {
   );
 
   if (result.receipt.status) {
+    await db
+      .collection('UserSettings')
+      .doc(`testId`)
+      .set({
+        generalProfile: {
+          firstName,
+          lastName,
+          adr,
+          phNo,
+          email
+        },
+        carDetail: {
+          brand,
+          model,
+          year: '1997'
+        }
+      });
+    alert('การทำรายการสำเร็จ');
+    liff.closeWindow();
+
     liff.closeWindow();
   }
 
