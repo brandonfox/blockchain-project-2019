@@ -1,4 +1,7 @@
+import firebase from './firebase-init';
+import 'firebase/firebase-firestore';
 import { web3, userContract, init } from './userContract';
+const db = firebase.firestore();
 
 const initApp = async () => {
   const buttonElement = document.getElementById('button-submit');
@@ -39,6 +42,11 @@ const initApp = async () => {
   );
 
   if (result.receipt.status) {
+    await db
+      .collection('Application')
+      .doc(`${lineDetail.userId}`)
+      .set(dealerInfo);
+    alert('ขอบคุณสำหรับการลงทะเบียน');
     liff.closeWindow();
   }
   const application = await _userContract.getAllDealerApplications({

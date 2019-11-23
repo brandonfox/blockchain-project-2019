@@ -1,5 +1,5 @@
 import UserContract from '../../build/contracts/UserContract.json';
-var contract = require("truffle-contract");
+var contract = require('truffle-contract');
 import HDWalletProvider from '@truffle/hdwallet-provider';
 import Web3 from 'web3';
 
@@ -22,4 +22,4 @@ const initWeb3 = async () => {
 export const init = async () => {
   await initContract();
   await initWeb3();
-}
+};

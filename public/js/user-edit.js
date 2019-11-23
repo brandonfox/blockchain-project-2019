@@ -1,6 +1,9 @@
 import { web3, userContract, init } from './userContract';
 
 const initApp = async () => {
+  const buttonElement = document.getElementById('button-submit');
+  buttonElement.disabled = true;
+  buttonElement.innerText = 'กำลังดำเนินการ โปรดรอซักครู่...';
   const firstName = document.getElementById('first-name').value;
   const lastName = document.getElementById('last-name').value;
   const adr = document.getElementById('address').value;
@@ -19,23 +22,28 @@ const initApp = async () => {
       lastName,
       adr,
       phNo,
-      email,
+      email
     },
     { from: accounts[0] }
   );
-  await _userContract.editCarDetails(
+  const result = await _userContract.editCarDetails(
     userId,
     'NA34 87',
     {
       brand,
       model,
-      year: '1997',
+      year: '1997'
     },
     { from: accounts[0] }
   );
+
+  if (result.receipt.status) {
+    liff.closeWindow();
+  }
+
   const infoReply = await _userContract.getUserInfo(userId);
   const node = document.createElement('p');
-  const textNode = document.createTextNode(infoReply.toString())
+  const textNode = document.createTextNode(infoReply.toString());
   node.appendChild(textNode);
   document.getElementById('container').appendChild(node);
 };

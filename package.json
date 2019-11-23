@@ -14,7 +14,9 @@
   },
   "dependencies": {
     "@truffle/contract": "^4.1.0",
-    "@truffle/hdwallet-provider": "^1.0.25",
+    "@truffle/hdwallet-provider": "^1.0.26",
+    "firebase": "^7.5.0",
+    "truffle-contract": "^4.0.31",
     "truffle-hdwallet-provider": "^1.0.17",
     "web3": "^1.2.4"
   },
