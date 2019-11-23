@@ -1,5 +1,7 @@
 import { web3, userContract, init } from './userContract';
 
+const { liff } = window;
+
 const initApp = async () => {
   const companyName = document.getElementById('company-name').value;
   const firstName = document.getElementById('first-name').value;

@@ -3,6 +3,7 @@ import firebase from './firebase-init';
 import 'firebase/firebase-firestore';
 
 const db = firebase.firestore();
+const { liff } = window;
 
 const initApp = async () => {
   const buttonElement = document.getElementById('button-submit');

@@ -1,3 +1,5 @@
+const { liff } = window;
+
 function successCallback() {
   liff.scanCode().then(result => {
     window.location.href = result.value;

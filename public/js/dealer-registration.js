@@ -3,6 +3,7 @@ import 'firebase/firebase-firestore';
 import { web3, userContract, init } from './userContract';
 
 const db = firebase.firestore();
+const { liff } = window;
 
 const initApp = async () => {
   const buttonElement = document.getElementById('button-submit');
@@ -54,6 +55,13 @@ const initApp = async () => {
 
 window.addEventListener('DOMContentLoaded', async () => {
   await liff.init({ liffId: '1653520229-EMmQJJQe' });
+  const lineDetail = await liff.getProfile();
+  const node = document.createElement('p');
+  const _textNode = document.createTextNode(
+    `lineDetail.userId: ${lineDetail.userId}}`
+  );
+  node.appendChild(_textNode);
+  document.getElementById('container').appendChild(node);
 });
 
 document
