@@ -65,7 +65,7 @@ contract UserContract is ServiceHandler {
     }
 
     function insertRecord(bytes32 dealerId, bytes32 id, string memory noPlate,
-     string[] memory services, string[][] memory subservices, string memory comment)
+     string[] memory services, string[] memory subservices, string memory comment)
         public verified(dealerId) {
         require(subservices.length <= services.length,"Number of subservices does not match service length");
         userRecords[id].push(RecordInternal(services,subservices,comment));
