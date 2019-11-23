@@ -45,20 +45,11 @@ const initApp = async () => {
   if (result.receipt.status) {
     await db
       .collection('Application')
-      .doc(`${lineDetail.userId}`)
+      .doc(lineDetail.userId)
       .set(dealerInfo);
     alert('ขอบคุณสำหรับการลงทะเบียน');
     liff.closeWindow();
   }
-  const application = await _userContract.getAllDealerApplications({
-    from: accounts[0],
-  });
-  const node = document.createElement('p');
-  const textNode = document.createTextNode(
-    `'application.includes(dealerId)' ${application.includes(dealerId)}`
-  );
-  node.appendChild(textNode);
-  document.getElementById('container').appendChild(node);
 };
 
 window.addEventListener('DOMContentLoaded', async () => {
