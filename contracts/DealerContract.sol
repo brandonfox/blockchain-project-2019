@@ -44,14 +44,8 @@ contract DealerContract is Ownable {
     function createDealerApplication(DealerInfo memory info, bytes32 id) public {
         require(!verifiedDealers[id],"That address is already registered");
         dealerInfoMap[id] = info;
-<<<<<<< HEAD:backend/contracts/DealerContract.sol
-        if(getApplicationIndex(id) == -1){
-            dealerApplications.push(id);
-        }
-=======
         dealerApplications.push(id);
         emit CreateDealerApplication(info, id);
->>>>>>> refs/heads/receipt:contracts/DealerContract.sol
     }
 
     function editDealerInfo(DealerInfo memory info, bytes32 id) public dealershipOwner(id) {
