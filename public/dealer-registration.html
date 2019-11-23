@@ -4,12 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
     <link
       href="https://fonts.googleapis.com/css?family=Sarabun&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/style.css" />
     <title>สมัครเป็นดีลเลอร์</title>
+    <script src="./js/web3.min.js"></script>
+    <script src="./js/signedTransactionHandler.js"></script>
   </head>
   <body>
     <div class="container">
@@ -18,7 +21,7 @@
           <img src="images/logo.svg" alt="Oranoss Logo" />
         </div>
       </header>
-      <form action="#" method="post">
+      <form onsubmit="return submitForm()">
         <div class="form-row">
           <label for="company-name">ชื่อบริษัท</label>
           <input id="company-name" name="company-name" type="text" required />
@@ -70,5 +73,10 @@
         <div class="submit-row"><button>ลงทะเบียน</button></div>
       </form>
     </div>
+    <div id="result"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+    <script src="../node_modules/truffle-contract/dist/truffle-contract.js"></script>
+    <script src="./js/dealerRegistrationHandler.js"></script>
   </body>
 </html>
