@@ -44,7 +44,7 @@ const initApp = async () => {
   if (result.receipt.status) {
     await db
       .collection('UserSettings')
-      .doc(`testId`)
+      .doc(lineDetail.userId)
       .set({
         generalProfile: {
           firstName,
