@@ -1,6 +1,9 @@
 import { web3, userContract, init } from './userContract';
 
 const initApp = async () => {
+  const buttonElement = document.getElementById('button-submit');
+  buttonElement.disabled = true;
+  buttonElement.innerText = 'กำลังดำเนินการ โปรดรอซักครู่...';
   const companyName = document.getElementById('company-name').value;
   const firstName = document.getElementById('first-name').value;
   const lastName = document.getElementById('last-name').value;
@@ -25,22 +28,38 @@ const initApp = async () => {
     promotion,
     otherServices,
     availableServices: [],
-    availableSubServices: [],
+    availableSubServices: []
   };
-  await _userContract.createDealerApplication(dealerInfo, dealerId, { from: accounts[0] });
-  const application = await _userContract.getAllDealerApplications({ from: accounts[0] });
+  const result = await _userContract.createDealerApplication(
+    dealerInfo,
+    dealerId,
+    {
+      from: accounts[0]
+    }
+  );
+
+  if (result.receipt.status) {
+    liff.closeWindow();
+  }
+  const application = await _userContract.getAllDealerApplications({
+    from: accounts[0]
+  });
   const node = document.createElement('p');
-  const textNode = document.createTextNode(`'application.includes(dealerId)' ${application.includes(dealerId)}`);
+  const textNode = document.createTextNode(
+    `'application.includes(dealerId)' ${application.includes(dealerId)}`
+  );
   node.appendChild(textNode);
   document.getElementById('container').appendChild(node);
-}
+};
 
 window.addEventListener('DOMContentLoaded', async () => {
   await liff.init({ liffId: '1653520229-EMmQJJQe' });
 });
 
-document.getElementById('dealer-registration').addEventListener('submit', async e => {
-  e.preventDefault();
-  await init();
-  initApp();
-});
+document
+  .getElementById('dealer-registration')
+  .addEventListener('submit', async e => {
+    e.preventDefault();
+    await init();
+    initApp();
+  });

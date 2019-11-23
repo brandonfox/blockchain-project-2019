@@ -51,6 +51,16 @@ button {
   box-shadow: 0 4px 6px hsla(0, 0%, 0%, 0.2);
 }
 
+button:disabled {
+  border: 0;
+  background-color: #fbffbb;
+  width: 260px;
+  height: 50px;
+  color: black;
+  font-size: 16px;
+  box-shadow: 0 4px 6px hsla(0, 0%, 0%, 0.2);
+}
+
 textarea {
   padding: 8px;
   border: 0;
