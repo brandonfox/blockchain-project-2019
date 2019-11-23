@@ -1,21 +1,6 @@
 {
   "name": "blockchain-project-2019",
   "version": "1.0.0",
-<<<<<<< HEAD
-  "main": "index.js",
-  "repository": "https://github.com/brandonfox/blockchain-project-2019.git",
-  "author": "Natthawit JANJAROAN <natwit442@gmail.com>",
-  "license": "MIT",
-  "devDependencies": {
-    "dotenv": "^8.2.0",
-    "truffle-hdwallet-provider": "^1.0.17",
-    "webpack": "^4.41.2"
-  },
-  "dependencies": {
-    "ganache-cli": "^6.7.0",
-    "truffle-contract": "^4.0.31"
-  }
-=======
   "main": "truffle-config.js",
   "repository": "https://github.com/brandonfox/blockchain-project-2019.git",
   "author": "",
@@ -37,5 +22,4 @@
   "browserslist": [
     "last 1 Chrome versions"
   ]
->>>>>>> refs/heads/receipt
 }

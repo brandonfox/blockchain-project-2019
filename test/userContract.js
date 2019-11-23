@@ -4,7 +4,7 @@ const testCar = { brand: 'BMW', model: 'Series 3', year: '1997' };
 
 contract('UserContract', () => {
   let userContract = null;
-  userId = '';
+  let userId = '';
   before(async () => {
     userContract = await UserContract.deployed();
     userId = await userContract.getHash('TestUser');
