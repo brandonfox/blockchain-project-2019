@@ -5,11 +5,19 @@ import "./Ownable.sol";
 
 contract DealerContract is Ownable {
 
+
+    event CreateDealerApplication(DealerInfo info, bytes32 id);
+
     struct DealerInfo{
         string dealerName;
+        string firstName;
+        string lastName;
         string addr;
         string location;
         string phoneNo;
+        string bestSeller;
+        string promotion;
+        string otherServices;
         string[] availableServices;
         string[][] availableSubServices;
     }
@@ -33,19 +41,24 @@ contract DealerContract is Ownable {
     bytes32[] dealerApplications;
 
     //Function for dealer to create new application
-    function createDealerApplication(DealerInfo memory info, bytes32 id) public{
+    function createDealerApplication(DealerInfo memory info, bytes32 id) public {
         require(!verifiedDealers[id],"That address is already registered");
         dealerInfoMap[id] = info;
+<<<<<<< HEAD:backend/contracts/DealerContract.sol
         if(getApplicationIndex(id) == -1){
             dealerApplications.push(id);
         }
+=======
+        dealerApplications.push(id);
+        emit CreateDealerApplication(info, id);
+>>>>>>> refs/heads/receipt:contracts/DealerContract.sol
     }
 
-    function editDealerInfo(DealerInfo memory info, bytes32 id) public dealershipOwner(id){
+    function editDealerInfo(DealerInfo memory info, bytes32 id) public dealershipOwner(id) {
         dealerInfoMap[id] = info;
     }
 
-    function getDealerInfo(bytes32 id) public view returns(DealerInfo memory){
+    function getDealerInfo(bytes32 id) public view returns(DealerInfo memory) {
         return dealerInfoMap[id];
     }
 
@@ -67,7 +80,7 @@ contract DealerContract is Ownable {
     }
 
     function getApplicationIndex(bytes32 id) internal view returns (int) {
-        for(uint i = 0; i < dealerApplications.length; i++){
+        for(uint i = 0; i < dealerApplications.length; i++) {
             if(dealerApplications[i] == id){
                 return int(i);
             }
@@ -76,7 +89,7 @@ contract DealerContract is Ownable {
     }
 
     //Approve a dealer application. Rejected if no application exists
-    function approveApplication(bytes32 adr) public ownerOnly{
+    function approveApplication(bytes32 adr) public ownerOnly {
         int i = getApplicationIndex(adr);
         require(i >= 0,"No application exists for that id");
         verifiedDealers[adr] = true;
@@ -90,7 +103,7 @@ contract DealerContract is Ownable {
 
     //Add employee to dealership who will have access to verified() functions
     function addDealerEmployee(bytes32 dealerId, bytes32 adr) public dealershipOwner(dealerId) {
-        require(employeeToDealer[adr] != 0,"That employee already works there");
+        require(employeeToDealer[adr] == 0,"That employee already works there");
         dealerToEmployees[dealerId].push(adr);
         employeeToDealer[adr] = dealerId;
     }

@@ -50,7 +50,7 @@ contract UserContract is ServiceHandler {
     }
 
     function getCarIndex(bytes32 userId, string memory noPlate) internal view returns (int){
-        for(uint128 i = 0; i < userCars[userId].length; i++){
+        for(uint128 i = 0; i < userCars[userId].length; i++) {
             if(encode(userCars[userId][i]) == encode(noPlate)) return i;
         }
         return -1;
@@ -64,14 +64,20 @@ contract UserContract is ServiceHandler {
         return cars;
     }
 
+<<<<<<< HEAD:backend/contracts/UserContract.sol
     function insertRecord(bytes32 dealerId, bytes32 id, string memory noPlate, string[] memory services, string[] memory subservices,string memory comment) public verified(dealerId){
+=======
+    function insertRecord(bytes32 dealerId, bytes32 id, string memory noPlate,
+     string[] memory services, string[][] memory subservices, string memory comment)
+        public verified(dealerId) {
+>>>>>>> refs/heads/receipt:contracts/UserContract.sol
         require(subservices.length <= services.length,"Number of subservices does not match service length");
         userRecords[id].push(RecordInternal(services,subservices,comment));
     }
 
     //TODO Change records to be car specific and not user specific
 
-    function getRecords(bytes32 id, string memory noPlate) public view returns (RecordInternal[] memory){
+    function getRecords(bytes32 id, string memory noPlate) public view returns (RecordInternal[] memory) {
         return userRecords[id];
     }
 

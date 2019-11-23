@@ -9,79 +9,52 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/style.css" />
+    <script
+      defer
+      src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"
+    ></script>
+    <script defer src="js/receipt.js"></script>
     <title>การซื้อขาย</title>
   </head>
 
   <body>
-    <div class="container">
+    <div id="container" class="container">
       <header>
         <div class="logo">
           <img src="images/logo.svg" alt="Oranoss Logo" />
         </div>
       </header>
-      <form action="#" method="post">
-        <label for="checkbox">บริการ</label>
-        <div id="checkbox" class="checkbox-container">
-          <div class="checkbox-row">
-            <input
-              id="tire-service"
-              type="checkbox"
-              name="tire-service"
-              value="Bike"
-            />
-            <label for="tire-service">ยาง</label>
-          </div>
-          <div class="checkbox-row">
-            <input
-              id="oil-service"
-              type="checkbox"
-              name="oil-service"
-              value="Car"
-            />
-            <label for="oil-service">น้ำมัน</label>
-          </div>
-          <div class="checkbox-row">
-            <input
-              id="fluid-service"
-              type="checkbox"
-              name="fluid-service"
-              value="Boat"
-              checked
-            />
-            <label for="fluid-service">น้ำมันเครื่อง</label>
-          </div>
-        </div>
+      <form id="receipt">
         <div class="form-row">
           <label for="tire">ยาง</label>
-          <select id="tire" name="tire" required>
-            <option value="australia">ฮีโน่</option>
-            <option value="canada">อิสุสุ</option>
-            <option value="usa">มิตซูบิชิ</option>
+          <select class="select" id="tire" name="tire">
+            <option selected value=""></option>
+            <option value="hino">ฮีโน่</option>
+            <option value="isuzu">อิสุสุ</option>
+            <option value="mitsu">มิตซูบิชิ</option>
           </select>
         </div>
         <div class="form-row">
           <label for="oil">น้ำมัน</label>
-          <select id="oil" name="oil" required>
-            <option value="australia">ฮีโน่</option>
-            <option value="canada">อิสุสุ</option>
-            <option value="usa">มิตซูบิชิ</option>
+          <select class="select" id="oil" name="oil">
+            <option selected value=""></option>
+            <option value="hino">ฮีโน่</option>
+            <option value="isuzu">อิสุสุ</option>
+            <option value="mitsu">มิตซูบิชิ</option>
           </select>
         </div>
         <div class="form-row">
           <label for="fluid">น้ำมันเครื่อง</label>
-          <select id="fluid" name="fluid" required>
-            <option value="australia">ฮีโน่</option>
-            <option value="canada">อิสุสุ</option>
-            <option value="usa">มิตซูบิชิ</option>
+          <select class="select" id="fluid" name="fluid">
+            <option selected value=""></option>
+            <option value="hino">ฮีโน่</option>
+            <option value="isuzu">อิสุสุ</option>
+            <option value="mitsu">มิตซูบิชิ</option>
           </select>
         </div>
         <div class="form-row">
           <label for="other-services">บริการอื่น ๆ ที่ทางร้านทำ</label>
-          <textarea
-            id="other-services"
-            name="other-services"
-            required
-          ></textarea>
+          <textarea id="other-services" name="other-services"></textarea>
         </div>
         <div class="submit-row"><button>บันทึก</button></div>
       </form>
