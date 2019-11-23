@@ -13,7 +13,6 @@
     "parcel-bundler": "^1.12.4"
   },
   "dependencies": {
-    "@truffle/contract": "^4.1.0",
     "@truffle/hdwallet-provider": "^1.0.26",
     "firebase": "^7.5.0",
     "truffle-contract": "^4.0.31",
