@@ -35,7 +35,7 @@ const initApp = async () => {
   );
   const infoReply = await _userContract.getUserInfo(userId);
   const node = document.createElement('p');
-  const textNode = document.createTextNode(infoReply.toString())
+  const textNode = document.createTextNode(infoReply.toString());
   node.appendChild(textNode);
   document.getElementById('container').appendChild(node);
 };

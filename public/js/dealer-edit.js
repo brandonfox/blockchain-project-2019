@@ -28,12 +28,19 @@ const initApp = async () => {
     availableSubServices: [],
   };
   await _userContract.approveApplication(dealerId, { from: accounts[0] });
-  await _userContract.editDealerInfo(dealerInfo, dealerId, { from: accounts[0] });
+  await _userContract.editDealerInfo(dealerInfo, dealerId, {
+    from: accounts[0],
+  });
   const node = document.createElement('p');
-  const textNode = document.createTextNode(`await _userContract.getDealerInfo(dealerId), ${await _userContract.getDealerInfo(dealerId, { from: accounts[0] })}`);
+  const textNode = document.createTextNode(
+    `await _userContract.getDealerInfo(dealerId), ${await _userContract.getDealerInfo(
+      dealerId,
+      { from: accounts[0] }
+    )}`
+  );
   node.appendChild(textNode);
   document.getElementById('container').appendChild(node);
-}
+};
 
 window.addEventListener('DOMContentLoaded', async () => {
   await liff.init({ liffId: '1653520229-9ZPxqqxQ' });

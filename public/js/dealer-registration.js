@@ -27,20 +27,28 @@ const initApp = async () => {
     availableServices: [],
     availableSubServices: [],
   };
-  await _userContract.createDealerApplication(dealerInfo, dealerId, { from: accounts[0] });
-  const application = await _userContract.getAllDealerApplications({ from: accounts[0] });
+  await _userContract.createDealerApplication(dealerInfo, dealerId, {
+    from: accounts[0],
+  });
+  const application = await _userContract.getAllDealerApplications({
+    from: accounts[0],
+  });
   const node = document.createElement('p');
-  const textNode = document.createTextNode(`'application.includes(dealerId)' ${application.includes(dealerId)}`);
+  const textNode = document.createTextNode(
+    `'application.includes(dealerId)' ${application.includes(dealerId)}`
+  );
   node.appendChild(textNode);
   document.getElementById('container').appendChild(node);
-}
+};
 
 window.addEventListener('DOMContentLoaded', async () => {
   await liff.init({ liffId: '1653520229-EMmQJJQe' });
 });
 
-document.getElementById('dealer-registration').addEventListener('submit', async e => {
-  e.preventDefault();
-  await init();
-  initApp();
-});
+document
+  .getElementById('dealer-registration')
+  .addEventListener('submit', async e => {
+    e.preventDefault();
+    await init();
+    initApp();
+  });

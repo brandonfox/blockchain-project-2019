@@ -2,8 +2,12 @@ import { web3, userContract, init } from './userContract';
 
 const initApp = async () => {
   const select = document.getElementsByClassName('select');
-  const services = Array.from(select).filter(el => el.value !== '').map(el => el.name);
-  const subServices = Array.from(select).filter(el => el.value !== '').map(el => [el.value]);
+  const services = Array.from(select)
+    .filter(el => el.value !== '')
+    .map(el => el.name);
+  const subServices = Array.from(select)
+    .filter(el => el.value !== '')
+    .map(el => [el.value]);
   const comment = document.getElementById('other-services').value;
   const _userContract = await userContract.deployed();
   const accounts = await web3.eth.getAccounts();
@@ -20,12 +24,15 @@ const initApp = async () => {
       testCarPlate,
       services,
       subServices,
-      comment, { from: accounts[0] }
+      comment,
+      { from: accounts[0] }
     );
   }
-  const records = await _userContract.getRecords(userId, testCarPlate, { from: accounts[0] });
+  const records = await _userContract.getRecords(userId, testCarPlate, {
+    from: accounts[0],
+  });
   const node = document.createElement('p');
-  const textNode = document.createTextNode(records[1].toString())
+  const textNode = document.createTextNode(records[1].toString());
   node.appendChild(textNode);
   document.getElementById('container').appendChild(node);
 };
@@ -39,5 +46,3 @@ document.getElementById('receipt').addEventListener('submit', async e => {
   await init();
   initApp();
 });
-
-
