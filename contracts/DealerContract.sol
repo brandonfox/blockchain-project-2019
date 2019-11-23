@@ -5,6 +5,9 @@ import "./Ownable.sol";
 
 contract DealerContract is Ownable {
 
+
+    event CreateDealerApplication(DealerInfo info, bytes32 id);
+
     struct DealerInfo{
         string dealerName;
         string firstName;
@@ -42,6 +45,7 @@ contract DealerContract is Ownable {
         require(!verifiedDealers[id],"That address is already registered");
         dealerInfoMap[id] = info;
         dealerApplications.push(id);
+        emit CreateDealerApplication(info, id);
     }
 
     function editDealerInfo(DealerInfo memory info, bytes32 id) public dealershipOwner(id) {

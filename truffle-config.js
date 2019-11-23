@@ -1,5 +1,5 @@
 const fs = require('fs');
-const HDWalletProvider = require('truffle-hdwallet-provider');
+const HDWalletProvider = require('@truffle/hdwallet-provider');
 
 const secrets = JSON.parse(
   fs

@@ -104,3 +104,36 @@ select {
   justify-content: center;
   align-items: center;
 }
+
+.table-content {
+  width: 90%;
+}
+
+table {
+  box-shadow: 0 5px 20px 0px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  border: 4px solid #627d98;
+  border-radius: 13px;
+  border-spacing: 0;
+  width: 100%;
+}
+
+th {
+  color: #0e7c86;
+}
+
+th,
+td {
+  border-bottom: 4px solid #bcccdc;
+  padding: 20px 10px;
+}
+
+tr:last-child > td {
+  border-bottom: none;
+}
+
+.verify-button {
+  font-size: 0.75rem;
+  width: 180px;
+  border-radius: 5%;
+}

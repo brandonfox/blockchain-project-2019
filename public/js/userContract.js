@@ -2,6 +2,9 @@ import UserContract from '../../build/contracts/UserContract.json';
 var contract = require('truffle-contract');
 import HDWalletProvider from '@truffle/hdwallet-provider';
 import Web3 from 'web3';
+import UserContract from '../../build/contracts/UserContract.json';
+
+const contract = require('truffle-contract');
 
 export let web3;
 export let userContract;
