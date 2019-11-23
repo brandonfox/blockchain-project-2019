@@ -1,6 +1,7 @@
 import { web3, userContract, init } from './userContract';
 import firebase from './firebase-init';
 import 'firebase/firebase-firestore';
+
 const db = firebase.firestore();
 
 const initApp = async () => {
@@ -25,7 +26,7 @@ const initApp = async () => {
       lastName,
       adr,
       phNo,
-      email
+      email,
     },
     { from: accounts[0] }
   );
@@ -35,7 +36,7 @@ const initApp = async () => {
     {
       brand,
       model,
-      year: '1997'
+      year: '1997',
     },
     { from: accounts[0] }
   );
@@ -50,17 +51,15 @@ const initApp = async () => {
           lastName,
           adr,
           phNo,
-          email
+          email,
         },
         carDetail: {
           brand,
           model,
-          year: '1997'
-        }
+          year: '1997',
+        },
       });
     alert('การทำรายการสำเร็จ');
-    liff.closeWindow();
-
     liff.closeWindow();
   }
 

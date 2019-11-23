@@ -30,7 +30,7 @@ const initApp = async () => {
     );
   }
   const records = await _userContract.getRecords(userId, testCarPlate, {
-    from: accounts[0]
+    from: accounts[0],
   });
   const node = document.createElement('p');
   const textNode = document.createTextNode(records[1].toString());

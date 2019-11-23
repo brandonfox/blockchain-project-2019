@@ -1,6 +1,7 @@
 import firebase from './firebase-init';
 import 'firebase/firebase-firestore';
 import { web3, userContract, init } from './userContract';
+
 const db = firebase.firestore();
 
 const initApp = async () => {
@@ -31,13 +32,13 @@ const initApp = async () => {
     promotion,
     otherServices,
     availableServices: [],
-    availableSubServices: []
+    availableSubServices: [],
   };
   const result = await _userContract.createDealerApplication(
     dealerInfo,
     dealerId,
     {
-      from: accounts[0]
+      from: accounts[0],
     }
   );
 
@@ -50,7 +51,7 @@ const initApp = async () => {
     liff.closeWindow();
   }
   const application = await _userContract.getAllDealerApplications({
-    from: accounts[0]
+    from: accounts[0],
   });
   const node = document.createElement('p');
   const textNode = document.createTextNode(
