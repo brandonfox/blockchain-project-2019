@@ -159,3 +159,15 @@ tr:last-child > td {
   height: 22px;
   width: 22px;
 }
+
+.modal-text {
+  margin: 10px 0;
+}
+
+.modal-text:first-child {
+  margin: 0;
+}
+
+.modal-text:last-child {
+  margin: 0;
+}

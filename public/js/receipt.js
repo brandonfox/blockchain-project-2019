@@ -6,6 +6,7 @@ const db = firebase.firestore();
 const { liff } = window;
 
 const initApp = async () => {
+  const carPlate = document.getElementById('car-plate').value;
   const buttonElement = document.getElementById('button-submit');
   buttonElement.disabled = true;
   buttonElement.innerText = 'กำลังดำเนินการ โปรดรอซักครู่...';
@@ -23,7 +24,6 @@ const initApp = async () => {
   const dealerId = await _userContract.getHash(lineDetail.userId);
   const searchParams = new URLSearchParams(window.location.search);
   const userId = await _userContract.getHash(searchParams.get('userId'));
-  const testCarPlate = 'NA34 87';
   const dealerInfo = await _userContract.getDealerInfo(dealerId);
   const userInfo = await _userContract.getUserInfo(userId);
   const { firstName, lastName } = userInfo;
@@ -35,7 +35,7 @@ const initApp = async () => {
     const result = await _userContract.insertRecord(
       dealerId,
       userId,
-      testCarPlate,
+      carPlate,
       services,
       subServices,
       comment,
@@ -50,7 +50,7 @@ const initApp = async () => {
           recordInternal: {
             dealerName: dealerInfo.dealerName,
             userName: `${firstName} ${lastName}`,
-            testCarPlate,
+            carPlate,
             services,
             subServices,
             comment,
