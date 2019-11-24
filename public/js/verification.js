@@ -110,7 +110,6 @@ let listener = DB_REF.onSnapshot(snapshot => {
     const { type } = eachDoc;
     const doc = eachDoc.doc;
     const dealerInfo = doc.data();
-    console.log(eachDoc);
     if (type === 'modified') {
       changeStatus(dealerInfo.verified, doc.id);
     } else if (type === 'added') {
