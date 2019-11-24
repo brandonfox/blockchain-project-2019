@@ -32,21 +32,21 @@ const initApp = async () => {
     promotion,
     otherServices,
     availableServices: [],
-    availableSubServices: [],
+    availableSubServices: []
   };
   const result = await _userContract.createDealerApplication(
     dealerInfo,
     dealerId,
     {
-      from: accounts[0],
+      from: accounts[0]
     }
   );
 
   if (result.receipt.status) {
     await db
-      .collection('Application')
+      .collection('Applications')
       .doc(lineDetail.userId)
-      .set(dealerInfo);
+      .set({ ...dealerInfo, verified: false });
     alert('ขอบคุณสำหรับการลงทะเบียน');
     liff.closeWindow();
   }
