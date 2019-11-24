@@ -55,15 +55,28 @@ const queryStringMaker = params =>
     .join('&');
 window.addEventListener('DOMContentLoaded', async () => {
   await liff.init({ liffId: '1653518966-bDJ7MRwO' });
+  await init();
   const lineDetail = await liff.getProfile();
   const doc = await DB_REF.doc(lineDetail.userId).get();
-  const data = doc.data();
-  const { verified } = data;
-  if (verified) {
-    const queryString = queryStringMaker(data);
-    console.log(queryString);
+
+  if (doc.exists) {
+    const data = doc.data();
+    const { verified } = data;
+    if (verified) {
+      const queryString = queryStringMaker(data);
+      console.log(queryString);
+      return window.location.replace(
+        `https://liff.line.me/1653518966-m50e4GyQ?${queryString}`
+      );
+    }
+  }
+  // I want to confirm on chain as well below this just in case
+
+  const hash = await userContract.getHash(lineDetail.userId);
+  const isVerifiedOnChain = await userContract.isVerified(hash);
+  if (isVerifiedOnChain) {
     return window.location.replace(
-      `https://liff.line.me/1653518966-m50e4GyQ?${queryString}`
+      `https://liff.line.me/1653518966-m50e4GyQ?getDataOnChain=true`
     );
   }
 
@@ -79,6 +92,5 @@ document
   .getElementById('dealer-registration')
   .addEventListener('submit', async e => {
     e.preventDefault();
-    await init();
     initApp();
   });
