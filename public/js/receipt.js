@@ -46,15 +46,14 @@ const initApp = async () => {
       await db
         .collection('Records')
         .doc(searchParams.get('userId'))
-        .set({
-          recordInternal: {
-            dealerName: dealerInfo.dealerName,
-            userName: `${firstName} ${lastName}`,
-            carPlate,
-            services,
-            subServices,
-            comment,
-          },
+        .collection('Entries')
+        .add({
+          dealerName: dealerInfo.dealerName,
+          userName: `${firstName} ${lastName}`,
+          carPlate,
+          services,
+          subServices,
+          comment,
         });
       alert('การทำรายการสำเร็จ');
       liff.closeWindow();

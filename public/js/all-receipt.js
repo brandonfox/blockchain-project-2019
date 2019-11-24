@@ -4,27 +4,26 @@ import 'firebase/firebase-firestore';
 const db = firebase.firestore();
 
 const initApp = async () => {
-  const recordInternals = [];
-  await db
-    .collection('Records')
-    .get()
-    .then(function(querySnapshot) {
-      querySnapshot.forEach(function(doc) {
-        recordInternals.push(doc.data().recordInternal);
-      });
-    })
-    .catch(function(error) {
-      console.log('Error getting documents: ', error);
-    });
-  recordInternals.forEach((record, index) => {
+  const res = [];
+  const recordsRef = await db.collection('Records').get();
+  for (const record of recordsRef.docs) {
+    const entriesRef = await db
+      .collection('Records')
+      .doc(record.id)
+      .collection('Entries')
+      .get();
+    for (const entry of entriesRef.docs) {
+      res.push(entry.data());
+    }
+  }
+  res.forEach((record, index) => {
     const modal = document.createElement('div');
     modal.id = `ex${index}`;
     modal.className = 'modal';
     const modalP = document.createElement('p');
     const modalPText = document.createTextNode(
-      `บริการอื่น ๆ ที่ทางร้านทำ: ${record.comment}`
+      `บริการอื่นๆ ที่ทางร้านทำ: ${record.comment}`
     );
-
     record.services.forEach((service, _index) => {
       const modalP0 = document.createElement('p');
       modalP0.className = 'modal-text';
@@ -37,7 +36,6 @@ const initApp = async () => {
     modalP.appendChild(modalPText);
     modal.appendChild(modalP);
     document.body.appendChild(modal);
-
     const tr = document.createElement('tr');
     const td0 = document.createElement('td');
     const text0 = document.createTextNode(record.dealerName);
