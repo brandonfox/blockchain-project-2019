@@ -54,38 +54,49 @@ const queryStringMaker = params =>
     .map(key => key + '=' + params[key])
     .join('&');
 window.addEventListener('DOMContentLoaded', async () => {
-  await liff.init({ liffId: '1653518966-bDJ7MRwO' });
-  await init();
-  const lineDetail = await liff.getProfile();
-  const doc = await DB_REF.doc(lineDetail.userId).get();
-
-  if (doc.exists) {
-    const data = doc.data();
-    const { verified } = data;
-    if (verified) {
-      const queryString = queryStringMaker(data);
-      console.log(queryString);
-      return window.location.replace(
-        `https://liff.line.me/1653518966-m50e4GyQ?${queryString}`
-      );
-    }
-  }
-  // I want to confirm on chain as well below this just in case
-
-  const hash = await userContract.getHash(lineDetail.userId);
-  const isVerifiedOnChain = await userContract.isVerified(hash);
-  if (isVerifiedOnChain) {
-    return window.location.replace(
-      `https://liff.line.me/1653518966-m50e4GyQ?getDataOnChain=true`
-    );
-  }
-
   const node = document.createElement('p');
-  const _textNode = document.createTextNode(
-    `lineDetail.userId: ${lineDetail.userId}}`
-  );
-  node.appendChild(_textNode);
-  document.getElementById('container').appendChild(node);
+  console.log('hi');
+  try {
+    await liff.init({ liffId: '1653518966-bDJ7MRwO' });
+    await init();
+    const UserContractInstance = await userContract.deployed();
+    const lineDetail = await liff.getProfile();
+    const doc = await DB_REF.doc(lineDetail.userId).get();
+
+    if (doc.exists) {
+      const data = doc.data();
+      const { verified } = data;
+      if (verified) {
+        const queryString = queryStringMaker(data);
+
+        return liff.openWindow({
+          url: 'https://liff.line.me/1653518966-m50e4GyQ'
+        });
+      }
+    }
+    // I want to confirm on chain as well below this just in case
+
+    const hash = await UserContractInstance.getHash(lineDetail.userId);
+    const isVerifiedOnChain = await UserContractInstance.isVerified(hash);
+    if (isVerifiedOnChain) {
+      liff.openWindow({
+        url: 'https://liff.line.me/1653518966-m50e4GyQ',
+        external: true
+      });
+      return liff.closeWindow();
+    }
+
+    const _textNode = document.createTextNode(
+      `lineDetail.userId: ${lineDetail.userId}}`
+    );
+    node.appendChild(_textNode);
+    document.getElementById('container').appendChild(node);
+  } catch (err) {
+    console.error(err);
+    const _textNode3 = document.createTextNode(err);
+    node.appendChild(_textNode3);
+    document.getElementById('container').appendChild(node);
+  }
 });
 
 document
