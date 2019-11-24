@@ -116,16 +116,21 @@ table {
   border-radius: 13px;
   border-spacing: 0;
   width: 100%;
+  padding: 15px;
 }
 
 th {
-  color: #0e7c86;
+  color: #102a43;
+}
+
+td {
+  color: #334e68;
 }
 
 th,
 td {
   border-bottom: 4px solid #bcccdc;
-  padding: 20px 10px;
+  padding: 10px 10px;
 }
 
 tr:last-child > td {
@@ -136,4 +141,21 @@ tr:last-child > td {
   font-size: 0.75rem;
   width: 180px;
   border-radius: 5%;
+}
+
+.more-info-button {
+  border-radius: 70%;
+  width: 38px;
+  height: 38px;
+  background-color: #0e7c86;
+  margin: 20px 10px;
+}
+
+.more-info-icon {
+  background: url('../images/glasses.svg') no-repeat top left;
+  background-size: contain;
+  cursor: pointer;
+  display: inline-block;
+  height: 22px;
+  width: 22px;
 }

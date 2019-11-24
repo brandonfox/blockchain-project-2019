@@ -24,6 +24,9 @@ const initApp = async () => {
   const searchParams = new URLSearchParams(window.location.search);
   const userId = await _userContract.getHash(searchParams.get('userId'));
   const testCarPlate = 'NA34 87';
+  const dealerInfo = await _userContract.getDealerInfo(dealerId);
+  const userInfo = await _userContract.getUserInfo(userId);
+  const { firstName, lastName } = userInfo;
   // TODO check if dealer is verified
   const verified = await _userContract.isVerified(dealerId);
   if (!verified)
@@ -45,6 +48,9 @@ const initApp = async () => {
         .doc(searchParams.get('userId'))
         .set({
           recordInternal: {
+            dealerName: dealerInfo.dealerName,
+            userName: `${firstName} ${lastName}`,
+            testCarPlate,
             services,
             subServices,
             comment,
