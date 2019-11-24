@@ -3,6 +3,7 @@ import 'firebase/firebase-firestore';
 import { web3, userContract, init } from './userContract';
 
 const db = firebase.firestore();
+const DB_REF = db.collection('Applications');
 
 const initApp = async () => {
   const buttonElement = document.getElementById('button-submit');
@@ -43,18 +44,29 @@ const initApp = async () => {
   );
 
   if (result.receipt.status) {
-    await db
-      .collection('Applications')
-      .doc(lineDetail.userId)
-      .set({ ...dealerInfo, verified: false });
+    await DB_REF.doc(lineDetail.userId).set({ ...dealerInfo, verified: false });
     alert('ขอบคุณสำหรับการลงทะเบียน');
     liff.closeWindow();
   }
 };
-
+const queryStringMaker = params =>
+  Object.keys(params)
+    .map(key => key + '=' + params[key])
+    .join('&');
 window.addEventListener('DOMContentLoaded', async () => {
   await liff.init({ liffId: '1653518966-bDJ7MRwO' });
   const lineDetail = await liff.getProfile();
+  const doc = await DB_REF.doc(lineDetail.userId).get();
+  const data = doc.data();
+  const { verified } = data;
+  if (verified) {
+    const queryString = queryStringMaker(data);
+    console.log(queryString);
+    return window.location.replace(
+      `https://liff.line.me/1653518966-m50e4GyQ?${queryString}`
+    );
+  }
+
   const node = document.createElement('p');
   const _textNode = document.createTextNode(
     `lineDetail.userId: ${lineDetail.userId}}`

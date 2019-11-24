@@ -1,4 +1,4 @@
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -8,7 +8,7 @@ const firebaseConfig = {
   projectId: 'user-oranoss-chjtic',
   storageBucket: 'user-oranoss-chjtic.appspot.com',
   messagingSenderId: '1065029003332',
-  appId: '1:1065029003332:web:c56ee0f0627e97d4543411',
+  appId: '1:1065029003332:web:c56ee0f0627e97d4543411'
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
