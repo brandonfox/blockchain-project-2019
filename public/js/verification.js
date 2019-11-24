@@ -13,38 +13,22 @@ const initContract = async () => {
   accounts = await web3.eth.getAccounts();
 };
 const verifyOnBlockchain = async id => {
-  // console.log(accounts);
-  // console.log(userContractInstance);
   const application = await userContractInstance.getAllDealerApplications({
     from: accounts[0]
   });
-  // console.log(application);
+
   const hash = await userContractInstance.getHash(id);
-  // console.log(hash);
+
   const result = await userContractInstance.approveApplication(hash, {
     from: accounts[0]
   });
 
   if (result.receipt.status) {
-    //delete it from data store change status to verify
     DB_REF.doc(id).set({ verified: true }, { merge: true });
   }
 };
 
-// const selector = document.getElementById('debug-form');
-// selector.addEventListener('submit', async e => {
-//   e.preventDefault();
-//   const company = e.target[0].value;
-//   const firstName = e.target[1].value;
-//   const lastName = e.target[2].value;
-//   const tel = e.target[3].value;
-
-//   await DB_REF.add({ companyName: company, firstName, lastName, phoneNo: tel });
-//   console.log('done');
-// });
-
 const renderTable = (dealerInfo, id) => {
-  // console.log(dealerInfo, id);
   const TR = document.createElement('tr');
   const companyNameTD = document.createElement('td');
   const firstNameTD = document.createElement('td');
@@ -72,7 +56,7 @@ const renderTable = (dealerInfo, id) => {
 const verifyClicked = async e => {
   e.stopPropagation();
   const id = e.target.getAttribute('data-id');
-  // console.log(id);
+
   verifyOnBlockchain(id);
 
   // do verification Process.
