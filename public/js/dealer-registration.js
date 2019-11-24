@@ -53,7 +53,14 @@ const initApp = async () => {
 };
 
 window.addEventListener('DOMContentLoaded', async () => {
-  await liff.init({ liffId: '1653520229-EMmQJJQe' });
+  await liff.init({ liffId: '1653518966-bDJ7MRwO' });
+  const lineDetail = await liff.getProfile();
+  const node = document.createElement('p');
+  const _textNode = document.createTextNode(
+    `lineDetail.userId: ${lineDetail.userId}}`
+  );
+  node.appendChild(_textNode);
+  document.getElementById('container').appendChild(node);
 });
 
 document
