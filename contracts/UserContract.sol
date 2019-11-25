@@ -9,6 +9,7 @@ contract UserContract is ServiceHandler {
         string[] services;
         string[] subservices;
         string comment;
+        uint timeStamp;
     }
     struct UserInfo {
         string firstName;
@@ -25,7 +26,7 @@ contract UserContract is ServiceHandler {
 
     //------------------------------------------------------------_Records_---------------------------------------------
 
-    mapping(bytes32 => RecordInternal[]) private userRecords;
+    mapping(string => RecordInternal[]) private records;
     mapping(bytes32 => UserInfo) private userInfoRecords;
     mapping(bytes32 => string[]) private userCars;
     mapping(string => CarInfo) private carDetails;
@@ -65,16 +66,19 @@ contract UserContract is ServiceHandler {
     }
 
     function insertRecord(bytes32 dealerId, bytes32 id, string memory noPlate,
-     string[] memory services, string[] memory subservices, string memory comment)
+     string[] memory services, string[] memory subservices, string memory comment, uint timeStamp)
         public verified(dealerId) {
         require(subservices.length <= services.length,"Number of subservices does not match service length");
-        userRecords[id].push(RecordInternal(services,subservices,comment));
+        if(getCarIndex(id,noPlate) < 0){
+            userCars[id].push(noPlate);
+        }
+        records[noPlate].push(RecordInternal(services,subservices,comment,timeStamp));
     }
 
     //TODO Change records to be car specific and not user specific
 
-    function getRecords(bytes32 id, string memory noPlate) public view returns (RecordInternal[] memory) {
-        return userRecords[id];
+    function getRecords(string memory noPlate) public view returns (RecordInternal[] memory) {
+        return records[noPlate];
     }
 
 }
