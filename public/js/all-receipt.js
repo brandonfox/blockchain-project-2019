@@ -18,12 +18,20 @@ const initApp = async () => {
   }
   res.forEach((record, index) => {
     const modal = document.createElement('div');
-    modal.id = `ex${index}`;
+    modal.id = `modal-${index}`;
     modal.className = 'modal';
-    const modalP = document.createElement('p');
-    const modalPText = document.createTextNode(
-      `บริการอื่นๆ ที่ทางร้านทำ: ${record.comment}`
-    );
+    const modalBackground = document.createElement('div');
+    modalBackground.classList.add('modal-background');
+    modal.appendChild(modalBackground);
+    const modalContent = document.createElement('div');
+    modalContent.classList.add('modal-card');
+    const section = document.createElement('section');
+    section.classList.add('modal-card-body');
+    modalContent.appendChild(section);
+    const button = document.createElement('button');
+    button.classList = 'modal-close is-large';
+    modal.appendChild(button);
+
     record.services.forEach((service, _index) => {
       const modalP0 = document.createElement('p');
       modalP0.className = 'modal-text';
@@ -31,11 +39,18 @@ const initApp = async () => {
         `${service}: ${record.subServices[_index]}`
       );
       modalP0.appendChild(modalPText0);
-      modal.appendChild(modalP0);
+      section.appendChild(modalP0);
     });
+    const modalP = document.createElement('p');
+    const modalPText = document.createTextNode(
+      `บริการอื่นๆ ที่ทางร้านทำ: ${record.comment}`
+    );
+
     modalP.appendChild(modalPText);
-    modal.appendChild(modalP);
+    section.appendChild(modalP);
+    modal.appendChild(modalContent);
     document.body.appendChild(modal);
+
     const tr = document.createElement('tr');
     const td0 = document.createElement('td');
     const text0 = document.createTextNode(record.dealerName);
@@ -43,24 +58,32 @@ const initApp = async () => {
     const text1 = document.createTextNode(record.userName);
     const td2 = document.createElement('td');
     const text2 = document.createTextNode(record.carPlate);
-    const td3 = document.createElement('button');
+    const td3 = document.createElement('td');
     const a = document.createElement('a');
-    a.setAttribute('href', `#ex${index}`);
-    a.setAttribute('rel', 'modal:open');
-    td3.className = 'more-info-button';
-    const span = document.createElement('span');
-    span.className = 'more-info-icon';
-    td3.setAttribute('data-micromodal-trigger', 'modal-1');
+    a.addEventListener('click', event => {
+      event.preventDefault();
+      modal.classList.add('is-active');
+
+      modal.querySelector('.modal-background').addEventListener('click', e => {
+        e.preventDefault();
+        modal.classList.remove('is-active');
+      });
+      modal.querySelector('.modal-close').addEventListener('click', e => {
+        e.preventDefault();
+        modal.classList.remove('is-active');
+      });
+    });
+    const text3 = document.createTextNode('กดเลย');
     td0.appendChild(text0);
     td1.appendChild(text1);
     td2.appendChild(text2);
-    a.appendChild(span);
+    a.appendChild(text3);
     td3.appendChild(a);
     tr.appendChild(td0);
     tr.appendChild(td1);
     tr.appendChild(td2);
     tr.appendChild(td3);
-    document.getElementById('receipts-table').appendChild(tr);
+    document.getElementsByTagName('tbody')[0].appendChild(tr);
   });
 };
 

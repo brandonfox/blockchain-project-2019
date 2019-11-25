@@ -9,6 +9,18 @@ body {
   font-family: 'Sarabun', sans-serif;
 }
 
+.big-input-page {
+  height: 1230px;
+}
+
+.small-input-page {
+  height: 1000px;
+}
+
+.full-page {
+  height: 100vh;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -109,65 +121,14 @@ select {
   width: 90%;
 }
 
-table {
-  box-shadow: 0 5px 20px 0px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  border: 4px solid #627d98;
-  border-radius: 13px;
-  border-spacing: 0;
-  width: 100%;
-  padding: 15px;
-}
-
-th {
-  color: #102a43;
-}
-
-td {
-  color: #334e68;
-}
-
-th,
-td {
-  border-bottom: 4px solid #bcccdc;
-  padding: 10px 10px;
-}
-
-tr:last-child > td {
-  border-bottom: none;
+.receipts-table-container {
+  padding: 1.5rem;
+  border: 2px solid #f5f5f5;
+  background-color: #fff;
 }
 
 .verify-button {
   font-size: 0.75rem;
   width: 180px;
   border-radius: 5%;
-}
-
-.more-info-button {
-  border-radius: 70%;
-  width: 38px;
-  height: 38px;
-  background-color: #0e7c86;
-  margin: 20px 10px;
-}
-
-.more-info-icon {
-  background: url('../images/glasses.svg') no-repeat top left;
-  background-size: contain;
-  cursor: pointer;
-  display: inline-block;
-  height: 22px;
-  width: 22px;
-}
-
-.modal-text {
-  margin: 10px 0;
-}
-
-.modal-text:first-child {
-  margin: 0;
-}
-
-.modal-text:last-child {
-  margin: 0;
 }
