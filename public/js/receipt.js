@@ -36,6 +36,7 @@ const initApp = async () => {
       services,
       subServices,
       comment,
+      new Date(),
       { from: accounts[0] }
     );
 
@@ -51,6 +52,7 @@ const initApp = async () => {
           services,
           subServices,
           comment,
+          date: new Date(),
         });
       alert('การทำรายการสำเร็จ');
       liff.closeWindow();
