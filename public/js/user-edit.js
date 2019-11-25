@@ -66,7 +66,7 @@ const initApp = async () => {
 };
 
 window.addEventListener('DOMContentLoaded', async () => {
-  await liff.init({ liffId: '1653520229-eDJywwyq' });
+  await liff.init({ liffId: '1653518966-m50e4GyQ' });
 });
 
 document.getElementById('user-edit').addEventListener('submit', async e => {

@@ -55,7 +55,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   const node = document.createElement('p');
   console.log('hi');
   try {
-    await liff.init({ liffId: '1653520229-GRByEEyo' });
+    await liff.init({ liffId: '1653518966-bDJ7MRwO' });
     await init();
     const UserContractInstance = await userContract.deployed();
     const lineDetail = await liff.getProfile();
