@@ -32,13 +32,13 @@ const initApp = async () => {
     promotion,
     otherServices,
     availableServices: [],
-    availableSubServices: [],
+    availableSubServices: []
   };
   const result = await _userContract.createDealerApplication(
     dealerInfo,
     dealerId,
     {
-      from: accounts[0],
+      from: accounts[0]
     }
   );
 
@@ -53,7 +53,7 @@ const initApp = async () => {
 };
 
 window.addEventListener('DOMContentLoaded', async () => {
-  await liff.init({ liffId: '1653518966-bDJ7MRwO' });
+  await liff.init({ liffId: '1653520229-GRByEEyo' });
   const lineDetail = await liff.getProfile();
   const node = document.createElement('p');
   const _textNode = document.createTextNode(
