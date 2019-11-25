@@ -13,6 +13,21 @@ const initContract = async () => {
   accounts = await web3.eth.getAccounts();
 };
 
+async function postData(url = '', data = {}) {
+}
+  return await response.json(); // parses JSON response into native JavaScript objects
+  });
+    body: JSON.stringify(data) // body data type must match "Content-Type" header
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+  // Default options are marked with *
+    },
+        'Bearer zCyEDn4jZWQ5n7CPdK8lIy0leAQoE5QF3/uY53ND6hQP4C45g9royk/A8r7/p4PhJ9CKEjVgICZ0m7yH8RbX0is5UfMeogWS/Gxhfn3Q7U9Ry9/z8IWeEHjvHmeoSJjXEC/AmfcLUFYpaF0Ecdn5QgdB04t89/1O/w1cDnyilFU='
+      Authorization:
+      'Content-Type': 'application/json',
+    headers: {
+    mode: 'cors', // no-cors, *cors, same-origin
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+  const response = await fetch(url, {
 const verifyOnBlockchain = async id => {
   try {
     const hash = await userContractInstance.getHash(id);
@@ -23,6 +38,23 @@ const verifyOnBlockchain = async id => {
 
     if (result.receipt.status) {
       DB_REF.doc(id).set({ verified: true }, { merge: true });
+      // push message to dealer that their application has been verified.
+      const url = 'https://api.line.me/v2/bot/message/push';
+      try {
+        const data = await postData(url, {
+          to: id,
+          messages: [
+            {
+              type: 'text',
+              text:
+                'ร้านค้าของท่าน ได้รับการอนุมัติจากบริษัท Oranoss เรียบร้อยครับ'
+            }
+          ]
+        });
+        console.log(JSON.stringify(data)); // JSON-string from `response.json()` call
+      } catch (error) {
+        console.error(error);
+      }
     }
   } catch (err) {
     console.error(`ERR: ${err}`);
