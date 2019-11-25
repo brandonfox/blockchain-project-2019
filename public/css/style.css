@@ -27,7 +27,7 @@ body {
   align-items: center;
 }
 
-header {
+.header-logo {
   margin-top: 12px;
   margin-bottom: 24px;
 }
@@ -131,4 +131,16 @@ select {
   font-size: 0.75rem;
   width: 180px;
   border-radius: 5%;
+}
+
+.modal-text:first-child {
+  padding: 0;
+}
+
+.modal-text:last-child {
+  padding: 0;
+}
+
+.modal-text {
+  padding: 5px 0;
 }

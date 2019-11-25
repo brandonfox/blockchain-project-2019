@@ -23,14 +23,24 @@ const initApp = async () => {
     const modalBackground = document.createElement('div');
     modalBackground.classList.add('modal-background');
     modal.appendChild(modalBackground);
-    const modalContent = document.createElement('div');
-    modalContent.classList.add('modal-card');
-    const section = document.createElement('section');
-    section.classList.add('modal-card-body');
-    modalContent.appendChild(section);
-    const button = document.createElement('button');
-    button.classList = 'modal-close is-large';
-    modal.appendChild(button);
+    const modalCard = document.createElement('div');
+    modalCard.classList.add('modal-card');
+    const modalCardBody = document.createElement('section');
+    modalCardBody.classList.add('modal-card-body');
+    modalCardBody.style.borderBottomRightRadius = '6px';
+    modalCardBody.style.borderBottomLeftRadius = '6px';
+    const modalCardHeader = document.createElement('header');
+    modalCardHeader.classList.add('modal-card-head');
+    const modalCardHeaderTitle = document.createElement('p');
+    modalCardHeaderTitle.classList.add('modal-card-title');
+    const modalCardHeaderTitleText = document.createTextNode('ข้อมูลเพิ่มเติม');
+    const modalCardHeaderClose = document.createElement('button');
+    modalCardHeaderClose.classList.add('delete');
+    modalCardHeaderTitle.appendChild(modalCardHeaderTitleText);
+    modalCardHeader.appendChild(modalCardHeaderTitle);
+    modalCardHeader.appendChild(modalCardHeaderClose);
+    modalCard.appendChild(modalCardHeader);
+    modalCard.appendChild(modalCardBody);
 
     record.services.forEach((service, _index) => {
       const modalP0 = document.createElement('p');
@@ -39,7 +49,7 @@ const initApp = async () => {
         `${service}: ${record.subServices[_index]}`
       );
       modalP0.appendChild(modalPText0);
-      section.appendChild(modalP0);
+      modalCardBody.appendChild(modalP0);
     });
     const modalP = document.createElement('p');
     const modalPText = document.createTextNode(
@@ -47,8 +57,8 @@ const initApp = async () => {
     );
 
     modalP.appendChild(modalPText);
-    section.appendChild(modalP);
-    modal.appendChild(modalContent);
+    modalCardBody.appendChild(modalP);
+    modal.appendChild(modalCard);
     document.body.appendChild(modal);
 
     const tr = document.createElement('tr');
@@ -68,7 +78,7 @@ const initApp = async () => {
         e.preventDefault();
         modal.classList.remove('is-active');
       });
-      modal.querySelector('.modal-close').addEventListener('click', e => {
+      modalCardHeader.querySelector('.delete').addEventListener('click', e => {
         e.preventDefault();
         modal.classList.remove('is-active');
       });
