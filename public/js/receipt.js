@@ -27,11 +27,8 @@ const initApp = async () => {
   const dealerInfo = await _userContract.getDealerInfo(dealerId);
   const userInfo = await _userContract.getUserInfo(userId);
   const { firstName, lastName } = userInfo;
-  // TODO check if dealer is verified
   const verified = await _userContract.isVerified(dealerId);
-  if (!verified)
-    await _userContract.approveApplication(dealerId, { from: accounts[0] });
-  if (true) {
+  if (verified) {
     const result = await _userContract.insertRecord(
       dealerId,
       userId,

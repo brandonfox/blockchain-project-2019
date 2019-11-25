@@ -52,46 +52,28 @@ const initApp = async () => {
 };
 
 window.addEventListener('DOMContentLoaded', async () => {
-  const node = document.createElement('p');
-  console.log('hi');
-  try {
-    await liff.init({ liffId: '1653520229-GRByEEyo' });
-    await init();
-    const UserContractInstance = await userContract.deployed();
-    const lineDetail = await liff.getProfile();
-    const doc = await DB_REF.doc(lineDetail.userId).get();
-
-    if (doc.exists) {
-      const data = doc.data();
-      const { verified } = data;
-      if (verified) {
-        return liff.openWindow({
-          url: 'https://liff.line.me/1653518966-m50e4GyQ',
-        });
-      }
+  await liff.init({ liffId: '1653520229-GRByEEyo' });
+  const lineDetail = await liff.getProfile();
+  const doc = await DB_REF.doc(lineDetail.userId).get();
+  if (doc.exists) {
+    const data = doc.data();
+    const { verified } = data;
+    if (verified) {
+      window.location.href =
+        'https://user-oranoss-chjtic.firebaseapp.com/dealer-edit.html';
+      return;
     }
-    // I want to confirm on chain as well below this just in case
-
-    const hash = await UserContractInstance.getHash(lineDetail.userId);
-    const isVerifiedOnChain = await UserContractInstance.isVerified(hash);
-    if (isVerifiedOnChain) {
-      liff.openWindow({
-        url: 'https://liff.line.me/1653518966-m50e4GyQ',
-      });
-      return liff.closeWindow();
-    }
-
-    const _textNode = document.createTextNode(
-      `lineDetail.userId: ${lineDetail.userId}}`
-    );
-    node.appendChild(_textNode);
-    document.getElementById('container').appendChild(node);
-  } catch (err) {
-    console.error(err);
-    const _textNode3 = document.createTextNode(err);
-    node.appendChild(_textNode3);
-    document.getElementById('container').appendChild(node);
   }
+  await init();
+  const _userContract = await userContract.deployed();
+  const hash = await _userContract.getHash(lineDetail.userId);
+  const isVerifiedOnChain = await _userContract.isVerified(hash);
+  if (isVerifiedOnChain) {
+    window.location.href =
+      'https://user-oranoss-chjtic.firebaseapp.com/dealer-edit.html';
+    return;
+  }
+  document.querySelector('.pageloader').classList.remove('is-active');
 });
 
 document

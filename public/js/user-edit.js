@@ -5,29 +5,31 @@ import 'firebase/firebase-firestore';
 const db = firebase.firestore();
 const { liff } = window;
 
+const firstName = document.getElementById('first-name');
+const lastName = document.getElementById('last-name');
+const adr = document.getElementById('address');
+const phNo = document.getElementById('phone-number');
+const email = document.getElementById('email');
+const brand = document.getElementById('car-manufacture');
+const model = document.getElementById('car-model');
+
+let lineDetail;
+
 const initApp = async () => {
   const buttonElement = document.getElementById('button-submit');
   buttonElement.disabled = true;
   buttonElement.innerText = 'กำลังดำเนินการ โปรดรอซักครู่...';
-  const firstName = document.getElementById('first-name').value;
-  const lastName = document.getElementById('last-name').value;
-  const adr = document.getElementById('address').value;
-  const phNo = document.getElementById('phone-number').value;
-  const email = document.getElementById('email').value;
-  const brand = document.getElementById('car-manufacture').value;
-  const model = document.getElementById('car-model').value;
   const _userContract = await userContract.deployed();
   const accounts = await web3.eth.getAccounts();
-  const lineDetail = await liff.getProfile();
   const userId = await _userContract.getHash(lineDetail.userId);
   await _userContract.editUserInfo(
     userId,
     {
-      firstName,
-      lastName,
-      adr,
-      phNo,
-      email,
+      firstName: firstName.value,
+      lastName: lastName.value,
+      adr: adr.value,
+      phNo: phNo.value,
+      email: email.value,
     },
     { from: accounts[0] }
   );
@@ -35,8 +37,8 @@ const initApp = async () => {
     userId,
     'NA34 87',
     {
-      brand,
-      model,
+      brand: brand.value,
+      model: model.value,
       year: '1997',
     },
     { from: accounts[0] }
@@ -48,15 +50,15 @@ const initApp = async () => {
       .doc(lineDetail.userId)
       .set({
         generalProfile: {
-          firstName,
-          lastName,
-          adr,
-          phNo,
-          email,
+          firstName: firstName.value,
+          lastName: lastName.value,
+          adr: adr.value,
+          phNo: phNo.value,
+          email: email.value,
         },
         carDetail: {
-          brand,
-          model,
+          brand: brand.value,
+          model: model.value,
           year: '1997',
         },
       });
@@ -66,27 +68,26 @@ const initApp = async () => {
 };
 
 async function fetchUserData() {
-  // const firstName = document.getElementById('first-name').value;
-  // const lastName = document.getElementById('last-name').value;
-  // const adr = document.getElementById('address').value;
-  // const phNo = document.getElementById('phone-number').value;
-  // const email = document.getElementById('email').value;
-  // const brand = document.getElementById('car-manufacture').value;
-  // const model = document.getElementById('car-model').value;
-  const lineDetail = await liff.getProfile();
   const userData = await db
     .collection('UserSettings')
     .doc(lineDetail.userId)
     .get();
-    
-  // if (userData.exists) {
-  //   firstName.value = userData.data().generalProfile.firstName;
-  // }
+  if (userData.exists) {
+    firstName.value = userData.data().generalProfile.firstName;
+    lastName.value = userData.data().generalProfile.lastName;
+    adr.value = userData.data().generalProfile.adr;
+    phNo.value = userData.data().generalProfile.phNo;
+    email.value = userData.data().generalProfile.email;
+    brand.value = userData.data().carDetail.brand;
+    model.value = userData.data().carDetail.model;
+  }
 }
 
 window.addEventListener('DOMContentLoaded', async () => {
   await liff.init({ liffId: '1653518966-9P8gP0JY' });
+  lineDetail = await liff.getProfile();
   await fetchUserData();
+  document.querySelector('.pageloader').classList.remove('is-active');
 });
 
 document.getElementById('user-edit').addEventListener('submit', async e => {

@@ -8,16 +8,14 @@
       href="https://fonts.googleapis.com/css?family=Sarabun&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="css/bulma-pageloader.min.css" />
     <link rel="stylesheet" href="css/style.css" />
-    <script
-      defer
-      src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"
-    ></script>
+    <script defer src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
     <script defer src="js/dealer-edit.js"></script>
     <title>แก้ไขข้อมูลดีลเลอร์</title>
   </head>
-
-  <body class="big-input-page">
+  <div class="pageloader is-active"><span class="title">กำลังโหลด</span></div>
+  <body>
     <div id="container" class="container">
       <header class="header-logo">
         <div class="logo">
@@ -27,19 +25,19 @@
       <form id="dealer-edit">
         <div class="form-row">
           <label for="company-name">ชื่อบริษัท</label>
-          <input id="company-name" name="company-name" type="text" required />
+          <input id="company-name" name="company-name" type="text" />
         </div>
         <div class="form-row">
           <label for="first-name">ชื่อจริง</label>
-          <input id="first-name" name="first-name" type="text" required />
+          <input id="first-name" name="first-name" type="text" />
         </div>
         <div class="form-row">
           <label for="last-name">นามสกุล</label>
-          <input id="last-name" name="last-name" type="text" required />
+          <input id="last-name" name="last-name" type="text" />
         </div>
         <div class="form-row">
           <label for="address">ที่อยู่</label>
-          <input id="address" name="address" type="text" required />
+          <input id="address" name="address" type="text" />
         </div>
         <div class="form-row">
           <label for="phone-number">เบอร์โทร</label>
@@ -48,27 +46,23 @@
             name="phone-number"
             type="tel"
             pattern="0[0-9]{9}"
-            required
           />
         </div>
         <div class="form-row">
           <label for="best-seller">สินค้าขายดีประจำร้าน</label>
-          <input id="best-seller" name="best-seller" type="text" required />
+          <input id="best-seller" name="best-seller" type="text" />
         </div>
         <div class="form-row">
           <label for="promotion">โปรโมชั่นที่ทางร้านจัดเป็นประจำ</label>
-          <textarea id="promotion" name="promotion" required></textarea>
+          <textarea id="promotion" name="promotion"></textarea>
         </div>
         <div class="form-row">
           <label for="other-services">บริการอื่น ๆ ของทางร้าน</label>
-          <input
-            id="other-services"
-            name="other-services"
-            type="text"
-            required
-          />
+          <input id="other-services" name="other-services" type="text" />
         </div>
-        <div class="submit-row"><button>แก้ไขข้อมูล</button></div>
+        <div class="submit-row">
+          <button id="button-submit">แก้ไขข้อมูล</button>
+        </div>
       </form>
     </div>
   </body>
