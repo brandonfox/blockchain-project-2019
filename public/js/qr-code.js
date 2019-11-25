@@ -7,7 +7,7 @@ function generateQr(val) {
 
 function successCallback() {
   liff.getProfile().then(profile => {
-    const val = `https://user-oranoss-chjtic.firebaseapp.com/receipt.html?userId=${profile.userId}`;
+    const val = `https://liff.line.me/1653520229-vA50WW0A?userId=${profile.userId}`;
     generateQr(val);
   });
 }
