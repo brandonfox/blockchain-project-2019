@@ -121,7 +121,7 @@ select {
   width: 90%;
 }
 
-.receipts-table-container {
+.my-table-container {
   padding: 1.5rem;
   border: 2px solid #f5f5f5;
   background-color: #fff;
@@ -143,4 +143,19 @@ select {
 
 .modal-text {
   padding: 5px 0;
+}
+
+.table th:not([align]) {
+  text-align: center;
+}
+
+table td:not([align]),
+table th:not([align]) {
+  text-align: center;
+}
+
+a.disabled {
+  color: #363636;
+  pointer-events: none;
+  cursor: default;
 }

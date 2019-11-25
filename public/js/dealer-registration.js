@@ -34,13 +34,13 @@ const initApp = async () => {
     promotion,
     otherServices,
     availableServices: [],
-    availableSubServices: []
+    availableSubServices: [],
   };
   const result = await _userContract.createDealerApplication(
     dealerInfo,
     dealerId,
     {
-      from: accounts[0]
+      from: accounts[0],
     }
   );
 
@@ -50,10 +50,7 @@ const initApp = async () => {
     liff.closeWindow();
   }
 };
-const queryStringMaker = params =>
-  Object.keys(params)
-    .map(key => key + '=' + params[key])
-    .join('&');
+
 window.addEventListener('DOMContentLoaded', async () => {
   const node = document.createElement('p');
   console.log('hi');
@@ -68,10 +65,8 @@ window.addEventListener('DOMContentLoaded', async () => {
       const data = doc.data();
       const { verified } = data;
       if (verified) {
-        const queryString = queryStringMaker(data);
-
         return liff.openWindow({
-          url: 'https://liff.line.me/1653518966-m50e4GyQ'
+          url: 'https://liff.line.me/1653518966-m50e4GyQ',
         });
       }
     }
@@ -82,7 +77,6 @@ window.addEventListener('DOMContentLoaded', async () => {
     if (isVerifiedOnChain) {
       liff.openWindow({
         url: 'https://liff.line.me/1653518966-m50e4GyQ',
-        external: true
       });
       return liff.closeWindow();
     }

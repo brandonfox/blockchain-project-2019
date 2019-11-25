@@ -4,59 +4,13 @@ import 'firebase/firebase-firestore';
 
 const DB = firebase.firestore();
 const DB_REF = DB.collection('Applications');
-const TABLE = document.getElementById('dealers-table');
-var userContractInstance;
-var accounts;
-//========================================== Debugging Purpose ================================
-const checkVerifyInput = document.getElementById('result');
-const checkVerified = async hash => {
-  const isVerified = await userContractInstance.isVerified(hash);
-
-  checkVerifyInput.innerText = `${hash} is ${
-    isVerified ? 'already' : 'not yet'
-  } verified`;
-};
-
-// ============================================================================================
+const TABLE = document.getElementsByTagName('tbody')[0];
+let userContractInstance;
+let accounts;
 
 const initContract = async () => {
   userContractInstance = await userContract.deployed();
   accounts = await web3.eth.getAccounts();
-};
-
-const renderTable = (dealerInfo, id) => {
-  const { verified } = dealerInfo;
-  const TR = document.createElement('tr');
-  const companyNameTD = document.createElement('td');
-  const firstNameTD = document.createElement('td');
-  const lastNameTD = document.createElement('td');
-  const phoneTD = document.createElement('td');
-  const btnTD = document.createElement('td');
-  const btn = document.createElement('button');
-  btnRender(verified, btn, id);
-
-  companyNameTD.innerText = dealerInfo.dealerName;
-  firstNameTD.innerText = dealerInfo.firstName;
-  lastNameTD.innerText = dealerInfo.lastName;
-  phoneTD.innerText = dealerInfo.phoneNo;
-
-  TR.setAttribute('id', id);
-  btnTD.appendChild(btn);
-  const dataArray = [companyNameTD, firstNameTD, lastNameTD, phoneTD, btnTD];
-  dataArray.forEach(dataEach => TR.appendChild(dataEach));
-  TABLE.appendChild(TR);
-};
-
-const btnRender = (verified, btn, id) => {
-  btn.innerText = `${verified ? 'ยืนยันตัวตันแล้ว' : 'ยืนยันตัวตน'}`;
-  if (verified) {
-    btn.disabled = true;
-  } else {
-    btn.setAttribute('data-id', id);
-    btn.setAttribute('class', 'verify-button');
-    btn.setAttribute('type', 'button');
-    btn.addEventListener('click', verifyClicked);
-  }
 };
 
 const verifyOnBlockchain = async id => {
@@ -64,7 +18,7 @@ const verifyOnBlockchain = async id => {
     const hash = await userContractInstance.getHash(id);
 
     const result = await userContractInstance.approveApplication(hash, {
-      from: accounts[0]
+      from: accounts[0],
     });
 
     if (result.receipt.status) {
@@ -84,16 +38,48 @@ const verifyClicked = async e => {
 
   // do verification Process.
 };
-// Change the button to ยืนยันตัวตนแล้ว ปิดปุ่มไม่ให้แก้ไข
+
+const btnRender = (verified, a, id) => {
+  a.innerText = `${verified ? 'ยืนยันตัวตันแล้ว' : 'ยืนยันตัวตน'}`;
+  if (verified) {
+    a.classList.add('disabled');
+  } else {
+    a.setAttribute('data-id', id);
+    a.addEventListener('click', verifyClicked);
+  }
+};
+
+const renderTable = (dealerInfo, id) => {
+  const { verified } = dealerInfo;
+  const TR = document.createElement('tr');
+  const companyNameTD = document.createElement('td');
+  const firstNameTD = document.createElement('td');
+  const lastNameTD = document.createElement('td');
+  const phoneTD = document.createElement('td');
+  const aTD = document.createElement('td');
+  const a = document.createElement('a');
+  btnRender(verified, a, id);
+
+  companyNameTD.innerText = dealerInfo.dealerName;
+  firstNameTD.innerText = dealerInfo.firstName;
+  lastNameTD.innerText = dealerInfo.lastName;
+  phoneTD.innerText = dealerInfo.phoneNo;
+
+  TR.setAttribute('id', id);
+  aTD.appendChild(a);
+  const dataArray = [companyNameTD, firstNameTD, lastNameTD, phoneTD, aTD];
+  dataArray.forEach(dataEach => TR.appendChild(dataEach));
+  TABLE.appendChild(TR);
+};
+
 const changeStatus = (verified, id) => {
   const TR = document.getElementById(id);
-  const btn = TR.querySelector('button');
+  const a = TR.querySelector('a');
   if (verified) {
-    btn.innerText = 'ยืนยันตัวแล้ว';
-    btn.disabled = true;
+    a.innerText = 'ยืนยันตัวแล้ว';
+    a.classList.add('disabled');
   } else {
-    btn.disabled = false;
-    btn.innerText = 'ยืนยันตน';
+    a.innerText = 'ยืนยันตน';
   }
 };
 
@@ -102,13 +88,12 @@ window.addEventListener('DOMContentLoaded', async () => {
   await initContract();
 });
 
-// TODO: Change this to Applications before deploying
-let listener = DB_REF.onSnapshot(snapshot => {
+DB_REF.onSnapshot(snapshot => {
   const docsChange = snapshot.docChanges();
 
   docsChange.forEach(eachDoc => {
     const { type } = eachDoc;
-    const doc = eachDoc.doc;
+    const { doc } = eachDoc;
     const dealerInfo = doc.data();
     if (type === 'modified') {
       changeStatus(dealerInfo.verified, doc.id);

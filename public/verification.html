@@ -8,45 +8,71 @@
       href="https://fonts.googleapis.com/css?family=Sarabun&display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.css  "
+    />
     <link rel="stylesheet" href="css/style.css" />
     <script defer src="js/verification.js"></script>
     <title>Verify Dealer</title>
   </head>
-  <body>
-    <div class="container">
-      <header class="header-logo">
-        <div class="logo">
-          <img src="images/logo.svg" alt="Oranoss Logo" />
+  <body class="full-page">
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="https://bulma.io">
+          <img src="./images/logo.svg" />
+        </a>
+
+        <a
+          role="button"
+          class="navbar-burger burger"
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navbarBasicExample"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item">
+            ยืนยันดีลเลอร์
+          </a>
+
+          <a class="navbar-item" href="all-receipt.html">
+            การซื้อขายทั้งหมด
+          </a>
         </div>
-      </header>
-      <!-- <form id="debug-form">
-        <input
-          name="company-name"
-          placeholder="company-name"
-          type="text"
-          required
-        />
-        <input
-          name="first-name"
-          placeholder="first name"
-          type="text"
-          required
-        />
-        <input name="last-name" placeholder="last name" type="text" required />
-        <input name="tel" placeholder="tel" type="text" required />
-        <input type="submit" />
-      </form> -->
-      <div class="table-content">
-        <table id="dealers-table">
-          <tr>
-            <th>ชื่อบริษัท</th>
-            <th>ชื่อจริง</th>
-            <th>นามสกุล</th>
-            <th>เบอร์โทร</th>
-            <th>สถานะการยืนยันตัวตน</th>
-          </tr>
+
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button is-danger">
+                <strong>ลงชื่อออก</strong>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <section>
+      <div class="container my-table-container" style="margin: 1.5rem auto">
+        <table id="dealers-table" class="table is-fullwidth">
+          <thead>
+            <tr>
+              <th>ชื่อบริษัท</th>
+              <th>ชื่อจริง</th>
+              <th>นามสกุล</th>
+              <th>เบอร์โทร</th>
+              <th>สถานะ</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
         </table>
       </div>
-    </div>
+    </section>
   </body>
 </html>
