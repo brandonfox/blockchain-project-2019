@@ -10,14 +10,14 @@ contract('UserContract', () => {
     userId = await userContract.getHash('TestUser');
   });
   it('Should create car record', async () => {
+    const carsBefore = await userContract.getCars(userId);
     await userContract.editCarDetails(userId, testCarPlate, testCar);
-    const carDetails = await userContract.getCars(userId);
-    assert(
-      carDetails[0].brand === testCar.brand &&
-        carDetails[0].model === testCar.model &&
-        carDetails[0].year === testCar.year,
-      'Record in blockchain[0] did not match testCar'
-    );
+    const carsAfter = await userContract.getCars(userId);
+    assert(carsBefore.length < carsAfter.length,'Number of cars before adding matches number of cars after');
+    const i = carsAfter.length - carsBefore.length - 1;
+    assert(carsAfter[i].brand === testCar.brand && 
+      carsAfter[i].model === testCar.model && 
+      carsAfter[i].year === testCar.year,'Car data does not match test data')
   });
   it('Should add user details', async () => {
     await userContract.editUserInfo(userId, {
@@ -32,6 +32,10 @@ contract('UserContract', () => {
       infoReply.firstName === 'Brandon',
       'Record in the blockchain firstname did not match'
     );
+  });
+  it('User should have saved car', async() => {
+    const userCars = await userContract.getCars(userId);
+    assert(userCars.length > 0,'User has no cars recorded');
   });
   it('Should create a record', async () => {
     const dealerId = await userContract.getHash('32');
@@ -68,9 +72,10 @@ contract('UserContract', () => {
       testCarPlate,
       [],
       [],
-      'Done some test maintenance'
+      'Done some test maintenance',
+      1
     );
-    const records = await userContract.getRecords(userId, testCarPlate);
-    assert(records[0].comment === 'Done some test maintenance');
+    const records = await userContract.getRecords(testCarPlate);
+    assert(records[0].comment === 'Done some test maintenance',"Blockchain record comment does not match");
   });
 });
