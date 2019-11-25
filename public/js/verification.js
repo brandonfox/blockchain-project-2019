@@ -13,41 +13,6 @@ const initContract = async () => {
   accounts = await web3.eth.getAccounts();
 };
 
-const renderTable = (dealerInfo, id) => {
-  const { verified } = dealerInfo;
-  const TR = document.createElement('tr');
-  const companyNameTD = document.createElement('td');
-  const firstNameTD = document.createElement('td');
-  const lastNameTD = document.createElement('td');
-  const phoneTD = document.createElement('td');
-  const btnTD = document.createElement('td');
-  const btn = document.createElement('button');
-  btnRender(verified, btn, id);
-
-  companyNameTD.innerText = dealerInfo.dealerName;
-  firstNameTD.innerText = dealerInfo.firstName;
-  lastNameTD.innerText = dealerInfo.lastName;
-  phoneTD.innerText = dealerInfo.phoneNo;
-
-  TR.setAttribute('id', id);
-  btnTD.appendChild(btn);
-  const dataArray = [companyNameTD, firstNameTD, lastNameTD, phoneTD, btnTD];
-  dataArray.forEach(dataEach => TR.appendChild(dataEach));
-  TABLE.appendChild(TR);
-};
-
-const btnRender = (verified, btn, id) => {
-  btn.innerText = `${verified ? 'ยืนยันตัวตันแล้ว' : 'ยืนยันตัวตน'}`;
-  if (verified) {
-    btn.disabled = true;
-  } else {
-    btn.setAttribute('data-id', id);
-    btn.setAttribute('class', 'verify-button');
-    btn.setAttribute('type', 'button');
-    btn.addEventListener('click', verifyClicked);
-  }
-};
-
 async function postData(url = '', data = {}) {
   // Default options are marked with *
   const response = await fetch(url, {
@@ -56,12 +21,13 @@ async function postData(url = '', data = {}) {
     headers: {
       'Content-Type': 'application/json',
       Authorization:
-        'Bearer zCyEDn4jZWQ5n7CPdK8lIy0leAQoE5QF3/uY53ND6hQP4C45g9royk/A8r7/p4PhJ9CKEjVgICZ0m7yH8RbX0is5UfMeogWS/Gxhfn3Q7U9Ry9/z8IWeEHjvHmeoSJjXEC/AmfcLUFYpaF0Ecdn5QgdB04t89/1O/w1cDnyilFU='
+        'Bearer zCyEDn4jZWQ5n7CPdK8lIy0leAQoE5QF3/uY53ND6hQP4C45g9royk/A8r7/p4PhJ9CKEjVgICZ0m7yH8RbX0is5UfMeogWS/Gxhfn3Q7U9Ry9/z8IWeEHjvHmeoSJjXEC/AmfcLUFYpaF0Ecdn5QgdB04t89/1O/w1cDnyilFU=',
       // 'Content-Type': 'application/x-www-form-urlencoded',
     },
-    body: JSON.stringify(data) // body data type must match "Content-Type" header
+    body: JSON.stringify(data), // body data type must match "Content-Type" header
   });
-  return await response.json(); // parses JSON response into native JavaScript objects
+  const _data = await response.json(); // parses JSON response into native JavaScript objects
+  return _data;
 }
 
 const verifyOnBlockchain = async id => {
@@ -83,9 +49,9 @@ const verifyOnBlockchain = async id => {
             {
               type: 'text',
               text:
-                'ร้านค้าของท่าน ได้รับการอนุมัติจากบริษัท Oranoss เรียบร้อยครับ'
-            }
-          ]
+                'ร้านค้าของท่าน ได้รับการอนุมัติจากบริษัท Oranoss เรียบร้อยครับ',
+            },
+          ],
         });
         console.log(JSON.stringify(data)); // JSON-string from `response.json()` call
       } catch (error) {
