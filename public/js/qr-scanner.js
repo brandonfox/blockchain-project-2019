@@ -6,4 +6,4 @@ function successCallback() {
   });
 }
 
-liff.init({ liffId: '1653518966-5BAvg8ZX' }, successCallback);
+liff.init({ liffId: '1653520229-bK1o00od' }, successCallback);

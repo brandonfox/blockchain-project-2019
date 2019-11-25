@@ -45,7 +45,7 @@ const initApp = async () => {
 };
 
 window.addEventListener('DOMContentLoaded', async () => {
-  await liff.init({ liffId: '1653518966-bDJ7MRwO' });
+  await liff.init({ liffId: '1653520229-eDJywwyq' });
 });
 
 document.getElementById('dealer-edit').addEventListener('submit', async e => {

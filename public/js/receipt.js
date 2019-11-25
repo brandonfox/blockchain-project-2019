@@ -62,19 +62,7 @@ const initApp = async () => {
 };
 
 window.addEventListener('DOMContentLoaded', async () => {
-  await liff.init({ liffId: '1653518966-5BAvg8ZX' });
-  const lineDetail = await liff.getProfile();
-  const searchParams = new URLSearchParams(window.location.search);
-  const node = document.createElement('p');
-  const _textNode = document.createTextNode(
-    `lineDetail.userId: ${lineDetail.userId}}`
-  );
-  node.appendChild(_textNode);
-  const textNode = document.createTextNode(
-    `searchParams.get('userId'): ${searchParams.get('userId')}`
-  );
-  node.appendChild(textNode);
-  document.getElementById('container').appendChild(node);
+  await liff.init({ liffId: '1653520229-vA50WW0A' });
 });
 
 document.getElementById('receipt').addEventListener('submit', async e => {
