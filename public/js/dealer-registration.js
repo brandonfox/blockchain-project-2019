@@ -3,6 +3,7 @@ import 'firebase/firebase-firestore';
 import { web3, userContract, init } from './userContract';
 
 const db = firebase.firestore();
+const DB_REF = db.collection('Applications');
 const { liff } = window;
 
 const initApp = async () => {
@@ -33,34 +34,75 @@ const initApp = async () => {
     promotion,
     otherServices,
     availableServices: [],
-    availableSubServices: [],
+    availableSubServices: []
   };
   const result = await _userContract.createDealerApplication(
     dealerInfo,
     dealerId,
     {
-      from: accounts[0],
+      from: accounts[0]
     }
   );
 
   if (result.receipt.status) {
-    await db
-      .collection('Application')
-      .doc(lineDetail.userId)
-      .set(dealerInfo);
+    await DB_REF.doc(lineDetail.userId).set({ ...dealerInfo, verified: false });
     alert('ขอบคุณสำหรับการลงทะเบียน');
     liff.closeWindow();
   }
 };
-
+const queryStringMaker = params =>
+  Object.keys(params)
+    .map(key => key + '=' + params[key])
+    .join('&');
 window.addEventListener('DOMContentLoaded', async () => {
-  await liff.init({ liffId: '1653520229-GRByEEyo' });
+  const node = document.createElement('p');
+  console.log('hi');
+  try {
+    await liff.init({ liffId: '1653518966-bDJ7MRwO' });
+    await init();
+    const UserContractInstance = await userContract.deployed();
+    const lineDetail = await liff.getProfile();
+    const doc = await DB_REF.doc(lineDetail.userId).get();
+
+    if (doc.exists) {
+      const data = doc.data();
+      const { verified } = data;
+      if (verified) {
+        const queryString = queryStringMaker(data);
+
+        return liff.openWindow({
+          url: 'https://liff.line.me/1653518966-m50e4GyQ'
+        });
+      }
+    }
+    // I want to confirm on chain as well below this just in case
+
+    const hash = await UserContractInstance.getHash(lineDetail.userId);
+    const isVerifiedOnChain = await UserContractInstance.isVerified(hash);
+    if (isVerifiedOnChain) {
+      liff.openWindow({
+        url: 'https://liff.line.me/1653518966-m50e4GyQ',
+        external: true
+      });
+      return liff.closeWindow();
+    }
+
+    const _textNode = document.createTextNode(
+      `lineDetail.userId: ${lineDetail.userId}}`
+    );
+    node.appendChild(_textNode);
+    document.getElementById('container').appendChild(node);
+  } catch (err) {
+    console.error(err);
+    const _textNode3 = document.createTextNode(err);
+    node.appendChild(_textNode3);
+    document.getElementById('container').appendChild(node);
+  }
 });
 
 document
   .getElementById('dealer-registration')
   .addEventListener('submit', async e => {
     e.preventDefault();
-    await init();
     initApp();
   });

@@ -27,7 +27,7 @@ const initApp = async () => {
       lastName,
       adr,
       phNo,
-      email,
+      email
     },
     { from: accounts[0] }
   );
@@ -37,7 +37,7 @@ const initApp = async () => {
     {
       brand,
       model,
-      year: '1997',
+      year: '1997'
     },
     { from: accounts[0] }
   );
@@ -52,13 +52,13 @@ const initApp = async () => {
           lastName,
           adr,
           phNo,
-          email,
+          email
         },
         carDetail: {
           brand,
           model,
-          year: '1997',
-        },
+          year: '1997'
+        }
       });
     alert('การทำรายการสำเร็จ');
     liff.closeWindow();
@@ -66,7 +66,7 @@ const initApp = async () => {
 };
 
 window.addEventListener('DOMContentLoaded', async () => {
-  await liff.init({ liffId: '1653518966-9P8gP0JY' });
+  await liff.init({ liffId: '1653518966-m50e4GyQ' });
 });
 
 document.getElementById('user-edit').addEventListener('submit', async e => {
