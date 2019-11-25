@@ -27,7 +27,7 @@ const initApp = async () => {
       lastName,
       adr,
       phNo,
-      email
+      email,
     },
     { from: accounts[0] }
   );
@@ -37,7 +37,7 @@ const initApp = async () => {
     {
       brand,
       model,
-      year: '1997'
+      year: '1997',
     },
     { from: accounts[0] }
   );
@@ -52,21 +52,41 @@ const initApp = async () => {
           lastName,
           adr,
           phNo,
-          email
+          email,
         },
         carDetail: {
           brand,
           model,
-          year: '1997'
-        }
+          year: '1997',
+        },
       });
     alert('การทำรายการสำเร็จ');
     liff.closeWindow();
   }
 };
 
+async function fetchUserData() {
+  // const firstName = document.getElementById('first-name').value;
+  // const lastName = document.getElementById('last-name').value;
+  // const adr = document.getElementById('address').value;
+  // const phNo = document.getElementById('phone-number').value;
+  // const email = document.getElementById('email').value;
+  // const brand = document.getElementById('car-manufacture').value;
+  // const model = document.getElementById('car-model').value;
+  const lineDetail = await liff.getProfile();
+  const userData = await db
+    .collection('UserSettings')
+    .doc(lineDetail.userId)
+    .get();
+    
+  // if (userData.exists) {
+  //   firstName.value = userData.data().generalProfile.firstName;
+  // }
+}
+
 window.addEventListener('DOMContentLoaded', async () => {
-  await liff.init({ liffId: '1653520229-eDJywwyq' });
+  await liff.init({ liffId: '1653518966-9P8gP0JY' });
+  await fetchUserData();
 });
 
 document.getElementById('user-edit').addEventListener('submit', async e => {
