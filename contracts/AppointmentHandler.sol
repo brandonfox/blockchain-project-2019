@@ -9,12 +9,12 @@ contract AppointmentHandler is UserContract {
         bytes32 userId;
         bytes32 dealerId;
         string carPlate;
-        uint16 time; //YYYYMMDDHH format (Year/Month/Day/Hour)
+        int time; //YYYYMMDDHH format (Year/Month/Day/Hour)
     }
 
-    mapping(bytes32 => Appointment[]) dealerAppointmentHistory;
-    mapping(bytes32 => Appointment[]) activeAppointments;
-    mapping(bytes32 => Appointment) userAppointment;
+    mapping(bytes32 => Appointment[]) private dealerAppointmentHistory;
+    mapping(bytes32 => Appointment[]) private activeAppointments;
+    mapping(bytes32 => Appointment) private userAppointment;
 
     function isSameAppointment(Appointment memory a, Appointment storage o) internal view returns (bool) {
         return a.userId == o.userId && a.dealerId == o.dealerId && encode(a.carPlate) == encode(o.carPlate) && a.time == o.time;
@@ -38,6 +38,7 @@ contract AppointmentHandler is UserContract {
         else{
             activeAppointments[appointment.dealerId].push(appointment);
         }
+        userAppointment[userId] = appointment;
     }
 
     function completeAppointment(Appointment memory appointment) public verified(appointment.dealerId) {
@@ -51,8 +52,15 @@ contract AppointmentHandler is UserContract {
     function cancelAppointment(Appointment memory appointment) public verified(appointment.dealerId) {
         uint aIndex = getIndexOfAppointment(appointment);
         require(aIndex < uint(-1),"That appointment does not exist");
-        delete activeAppointments[appointment.dealerId][aIndex];
-        delete userAppointment[appointment.userId];
+        removeAppointment(appointment.dealerId,aIndex);
+        userAppointment[appointment.userId] = Appointment(0,0,"",0);
+    }
+
+    function removeAppointment(bytes32 dealerId, uint index) internal verified(dealerId) {
+        for(uint i = index + 1; i < activeAppointments[dealerId].length; i++){
+            activeAppointments[dealerId][i-1] = activeAppointments[dealerId][i];
+        }
+        activeAppointments[dealerId].length--;
     }
 
     function getAppointmentHistory(bytes32 dealerId) public view verified(dealerId) returns (Appointment[] memory){
