@@ -9103,12 +9103,12 @@
         }
       },
       "links": {},
-      "address": "0x0aa7E04772B57577d0bD5954A207d969d9ff700e",
-      "transactionHash": "0x15d5c57d05da38be9fe7dc97469d214329cc64b74d89a7b79fd24b6ddc63233b"
+      "address": "0x99DDCF6Df74BCCB0278044609b8911D7306FF6AF",
+      "transactionHash": "0x42d56126c9cec434daab0c592c475a8295dd96bbe483120da2af7b148288fe38"
     }
   },
   "schemaVersion": "3.0.19",
-  "updatedAt": "2019-11-25T16:30:09.164Z",
+  "updatedAt": "2019-11-26T09:13:39.124Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}

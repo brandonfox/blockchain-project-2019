@@ -8283,12 +8283,12 @@
         }
       },
       "links": {},
-      "address": "0xd159fFD94b791fdB6631f3F69D5482562B9006fa",
-      "transactionHash": "0x7ed3f6bb85e8ed9331699c32ca5f0c1fc9a0f8c77b5a7975f1988dc696c8a1f4"
+      "address": "0x6272551AdD634e0ce6535C6f86e7cf39caC520cC",
+      "transactionHash": "0xaa09c8314708d481d04150387b8870b988e32c096d228c32634fa4099bf3bb3b"
     }
   },
   "schemaVersion": "3.0.19",
-  "updatedAt": "2019-11-25T16:31:10.037Z",
+  "updatedAt": "2019-11-26T09:14:38.329Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}

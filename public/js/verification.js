@@ -1,7 +1,7 @@
 import { web3, userContract, init } from './userContract';
 import firebase from './firebase-init';
 import 'firebase/firebase-firestore';
-
+import request from 'request-promise-native';
 const DB = firebase.firestore();
 const DB_REF = DB.collection('Applications');
 const TABLE = document.getElementsByTagName('tbody')[0];
@@ -13,50 +13,29 @@ const initContract = async () => {
   accounts = await web3.eth.getAccounts();
 };
 
-async function postData(url = '', data = {}) {
-  // Default options are marked with *
-  const response = await fetch(url, {
-    method: 'POST', // *GET, POST, PUT, DELETE, etc.
-    mode: 'cors', // no-cors, *cors, same-origin
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization:
-        'Bearer zCyEDn4jZWQ5n7CPdK8lIy0leAQoE5QF3/uY53ND6hQP4C45g9royk/A8r7/p4PhJ9CKEjVgICZ0m7yH8RbX0is5UfMeogWS/Gxhfn3Q7U9Ry9/z8IWeEHjvHmeoSJjXEC/AmfcLUFYpaF0Ecdn5QgdB04t89/1O/w1cDnyilFU=',
-      // 'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: JSON.stringify(data), // body data type must match "Content-Type" header
-  });
-  const _data = await response.json(); // parses JSON response into native JavaScript objects
-  return _data;
-}
-
 const verifyOnBlockchain = async id => {
   try {
     const hash = await userContractInstance.getHash(id);
 
     const result = await userContractInstance.approveApplication(hash, {
-      from: accounts[0],
+      from: accounts[0]
     });
 
     if (result.receipt.status) {
       DB_REF.doc(id).set({ verified: true }, { merge: true });
       // push message to dealer that their application has been verified.
-      const url = 'https://api.line.me/v2/bot/message/push';
-      try {
-        const data = await postData(url, {
-          to: id,
-          messages: [
-            {
-              type: 'text',
-              text:
-                'ร้านค้าของท่าน ได้รับการอนุมัติจากบริษัท Oranoss เรียบร้อยครับ',
-            },
-          ],
-        });
-        console.log(JSON.stringify(data)); // JSON-string from `response.json()` call
-      } catch (error) {
-        console.error(error);
-      }
+      const url =
+        'https://us-central1-user-oranoss-chjtic.cloudfunctions.net/line';
+      var options = {
+        method: 'POST',
+        uri: url,
+        body: {
+          userId: id
+        },
+        json: true
+      };
+
+      await request(options);
     }
   } catch (err) {
     console.error(`ERR: ${err}`);
