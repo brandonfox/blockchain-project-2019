@@ -31,6 +31,11 @@ contract UserContract is ServiceHandler {
     mapping(bytes32 => string[]) private userCars;
     mapping(string => CarInfo) private carDetails;
 
+    modifier carExists(string memory noPlate) {
+        require(bytes(carDetails[noPlate].brand).length > 0,"That car does not exist in the chain");
+        _;
+    }
+
     function editUserInfo(bytes32 userId, UserInfo memory info) public {
         userInfoRecords[userId] = info;
     }
