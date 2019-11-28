@@ -1,9 +1,13 @@
+import { web3, userContract, init } from './userContract';
 import firebase from './firebase-init';
 import 'firebase/firebase-firestore';
 
 const db = firebase.firestore();
 
 const initApp = async () => {
+  const userContractInstance = await userContract.deployed();
+  const accounts = await web3.eth.getAccounts();
+
   const res = [];
   const recordsRef = await db.collection('Records').get();
   for (const record of recordsRef.docs) {
@@ -16,6 +20,7 @@ const initApp = async () => {
       res.push(entry.data());
     }
   }
+
   res.forEach((record, index) => {
     const modal = document.createElement('div');
     modal.id = `modal-${index}`;
@@ -63,9 +68,15 @@ const initApp = async () => {
 
     const tr = document.createElement('tr');
     const td0 = document.createElement('td');
-    const text0 = document.createTextNode(record.dealerName);
+    const dealerInfo = userContractInstance.getDealerInfo(record.dealerId, {
+      from: accounts[0],
+    });
+    const text0 = document.createTextNode(dealerInfo.dealerName);
     const td1 = document.createElement('td');
-    const text1 = document.createTextNode(record.userName);
+    const userInfo = userContractInstance.getUserInfo(record.userId, {
+      from: accounts[0],
+    });
+    const text1 = document.createTextNode(userInfo.firstName);
     const td2 = document.createElement('td');
     const text2 = document.createTextNode(record.carPlate);
     const td3 = document.createElement('td');
@@ -98,5 +109,6 @@ const initApp = async () => {
 };
 
 window.addEventListener('DOMContentLoaded', async () => {
+  await init();
   initApp();
 });

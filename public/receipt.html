@@ -8,6 +8,7 @@
       href="https://fonts.googleapis.com/css?family=Kanit&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="css/bulma-pageloader.min.css" />
     <link rel="stylesheet" href="css/style.css" />
     <script
       defer
@@ -16,8 +17,8 @@
     <script defer src="js/receipt.js"></script>
     <title>การซื้อขาย</title>
   </head>
-
   <body>
+    <div class="pageloader is-active"><span class="title">กำลังโหลด</span></div>
     <div id="container" class="container">
       <div id="debug"></div>
       <header class="header-logo">
@@ -28,11 +29,16 @@
       <form id="receipt">
         <div class="form-row">
           <label for="car-plate">ทะเบียนรถ</label>
-          <input id="car-plate" name="car-plate" type="text" list="carPlates" required />
-          <datalist id="carPlates">
-          </datalist>
+          <input
+            id="car-plate"
+            name="car-plate"
+            type="text"
+            list="carPlates"
+            required
+          />
+          <datalist id="carPlates"> </datalist>
         </div>
-        <div id='carDataArea'></div>
+        <div id="carDataArea"></div>
         <div class="form-row">
           <label for="tire">ยาง</label>
           <select class="select" id="tire" name="ยาง">
