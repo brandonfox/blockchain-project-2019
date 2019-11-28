@@ -44,7 +44,9 @@ contract AppointmentHandler is UserContract {
         bytes32 userId = appointment.userId;
         if(userAppointment[userId].userId != 0){
             uint aIndex = getIndexOfUserAppointment(appointment.userId);
-            activeAppointments[appointment.dealerId][aIndex] = appointment;
+            Appointment memory currentAp = userAppointment[appointment.userId];
+            delete activeAppointments[currentAp.dealerId][aIndex];
+            activeAppointments[appointment.dealerId].push(appointment);
         }
         else{
             activeAppointments[appointment.dealerId].push(appointment);
