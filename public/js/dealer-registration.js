@@ -3,7 +3,7 @@ import 'firebase/firebase-firestore';
 import { web3, userContract, init } from './userContract';
 
 const db = firebase.firestore();
-const DB_REF = db.collection('Applications');
+const APPLICATION_REF = db.collection('Applications');
 const { liff } = window;
 
 const initApp = async () => {
@@ -45,22 +45,72 @@ const initApp = async () => {
   );
 
   if (result.receipt.status) {
-    await DB_REF.doc(lineDetail.userId).set({ ...dealerInfo, verified: false });
+    await APPLICATION_REF.doc(lineDetail.userId).set({
+      ...dealerInfo,
+      verified: false,
+    });
     alert('ขอบคุณสำหรับการลงทะเบียน');
     liff.closeWindow();
   }
 };
 
+async function fetchApplicationData() {
+  const companyName = document.getElementById('company-name');
+  const firstName = document.getElementById('first-name');
+  const lastName = document.getElementById('last-name');
+  const address = document.getElementById('address');
+  const phoneNumber = document.getElementById('phone-number');
+  const bestSeller = document.getElementById('best-seller');
+  const promotion = document.getElementById('promotion');
+  const otherServices = document.getElementById('other-services');
+  const lineDetail = await liff.getProfile();
+  const dealerInfo = await APPLICATION_REF.doc(lineDetail.userId).get();
+  if (dealerInfo.exists) {
+    companyName.value = dealerInfo.data().dealerName;
+    firstName.value = dealerInfo.data().firstName;
+    lastName.value = dealerInfo.data().lastName;
+    address.value = dealerInfo.data().addr;
+    phoneNumber.value = dealerInfo.data().phoneNo;
+    bestSeller.value = dealerInfo.data().bestSeller;
+    promotion.value = dealerInfo.data().promotion;
+    otherServices.value = dealerInfo.data().otherServices;
+  }
+}
+
+document.body.addEventListener(
+  'focus',
+  event => {
+    const { target } = event;
+    switch (target.tagName) {
+      case 'INPUT':
+      case 'TEXTAREA':
+      case 'SELECT':
+        document.body.classList.add('keyboard');
+        break;
+      default:
+    }
+  },
+  true
+);
+document.body.addEventListener(
+  'blur',
+  () => {
+    document.body.classList.remove('keyboard');
+  },
+  true
+);
+
 window.addEventListener('DOMContentLoaded', async () => {
   await liff.init({ liffId: '1653520229-GRByEEyo' });
   const lineDetail = await liff.getProfile();
-  const doc = await DB_REF.doc(lineDetail.userId).get();
+  const doc = await APPLICATION_REF.doc(lineDetail.userId).get();
   if (doc.exists) {
     const data = doc.data();
     const { verified } = data;
     if (verified) {
-      window.location.href =
-        'https://user-oranoss-chjtic.firebaseapp.com/dealer-edit.html';
+      liff.openWindow({
+        url: 'https://liff.line.me/1653520229-eDJywwyq',
+      });
       return;
     }
   }
@@ -69,10 +119,12 @@ window.addEventListener('DOMContentLoaded', async () => {
   const hash = await _userContract.getHash(lineDetail.userId);
   const isVerifiedOnChain = await _userContract.isVerified(hash);
   if (isVerifiedOnChain) {
-    window.location.href =
-      'https://user-oranoss-chjtic.firebaseapp.com/dealer-edit.html';
+    liff.openWindow({
+      url: 'https://liff.line.me/1653520229-eDJywwyq',
+    });
     return;
   }
+  await fetchApplicationData();
   document.querySelector('.pageloader').classList.remove('is-active');
 });
 
