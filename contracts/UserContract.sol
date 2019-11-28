@@ -62,6 +62,10 @@ contract UserContract is ServiceHandler {
         return -1;
     }
 
+    function getCarPlates(bytes32 userId) public view returns (string[] memory) {
+        return userCars[userId];
+    }
+
     function getCars(bytes32 userId) public view returns(CarInfo[] memory){
         CarInfo[] memory cars = new CarInfo[](userCars[userId].length);
         for(uint i = 0; i < userCars[userId].length;i++) {
@@ -79,9 +83,7 @@ contract UserContract is ServiceHandler {
         }
         records[noPlate].push(RecordInternal(services,subservices,comment,timeStamp));
     }
-
-    //TODO Change records to be car specific and not user specific
-
+    
     function getRecords(string memory noPlate) public view returns (RecordInternal[] memory) {
         return records[noPlate];
     }

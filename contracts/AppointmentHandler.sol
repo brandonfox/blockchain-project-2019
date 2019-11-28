@@ -9,7 +9,7 @@ contract AppointmentHandler is UserContract {
         bytes32 userId;
         bytes32 dealerId;
         string carPlate;
-        int time; //YYYYMMDDHH format (Year/Month/Day/Hour)
+        int time; //Milliseconds
     }
 
     mapping(bytes32 => Appointment[]) private dealerAppointmentHistory;
@@ -29,7 +29,7 @@ contract AppointmentHandler is UserContract {
         return uint(-1);
     }
 
-    function createAppointment(Appointment memory appointment) public carExists(appointment.carPlate) verified(appointment.dealerId) {
+    function createAppointment(Appointment memory appointment) public verified(appointment.dealerId) {
         bytes32 userId = appointment.userId;
         if(userAppointment[userId].userId != 0){
             uint aIndex = getIndexOfAppointment(appointment);

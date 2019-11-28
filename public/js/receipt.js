@@ -4,8 +4,10 @@ import 'firebase/firebase-firestore';
 
 const db = firebase.firestore();
 const { liff } = window;
-var userIdFromQrCode;
 var dealerId; // The QR opener
+var userIdFromQrCode;
+var _userContract;
+var _userId;
 const initApp = async () => {
   try {
     const carPlate = document.getElementById('car-plate').value;
@@ -20,21 +22,18 @@ const initApp = async () => {
       .filter(el => el.value !== '')
       .map(el => el.value);
     const comment = document.getElementById('other-services').value;
-    const _userContract = await userContract.deployed();
     const accounts = await web3.eth.getAccounts();
+    await _userContract.deployed();
 
-    const dealerHashId = await _userContract.getHash(dealerId);
-    const userHashId = await _userContract.getHash(userIdFromQrCode);
-
-    const dealerInfo = await _userContract.getDealerInfo(dealerHashId);
-    const userInfo = await _userContract.getUserInfo(userHashId);
+    const dealerInfo = await _userContract.getDealerInfo(dealerId);
+    const userInfo = await _userContract.getUserInfo(_userId);
 
     const { firstName, lastName } = userInfo;
-    const verified = await _userContract.isVerified(dealerHashId);
+    const verified = await _userContract.isVerified(dealerId);
     if (verified) {
       const result = await _userContract.insertRecord(
-        dealerHashId,
-        userHashId,
+        dealerId,
+        _userId,
         carPlate,
         services,
         subServices,
@@ -75,10 +74,19 @@ window.addEventListener('DOMContentLoaded', async () => {
     ''
   );
   const params = new URLSearchParams(queryString);
-
   userIdFromQrCode = params.get('userId');
-  const _userId = await liff.getProfile();
-  dealerId = _userId.userId;
+  const dealerLiffId = await liff.getProfile();
+  await init();
+  dealerId = await userContract.getHash(dealerLiffId.userId);
+  _userContract = await userContract.deployed();
+  _userId = await _userContract.getHash(userIdFromQrCode);
+  _userContract.getCarPlates(_userId).then(result => {
+    var cars = "";
+    for(var i = 0; i < result.length; i++){
+      cars += '<option value="' + result[i] + '"></option>';
+    }
+    document.getElementById("carPlates").innerHTML = cars;
+  })
   // ========================DEBUG PURPOSE ====================================
   try {
     const debug = document.getElementById('debug');
