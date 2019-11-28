@@ -19,6 +19,7 @@
     "bulma": "^0.8.0",
     "bulma-extensions": "^6.2.7",
     "firebase": "^7.5.0",
+    "firebase-tools": "^7.8.1",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.8",
     "truffle-contract": "^4.0.31",
