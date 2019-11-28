@@ -1,9 +1,11 @@
+import request from 'request-promise-native';
 import { web3, userContract, init } from './userContract';
 import firebase from './firebase-init';
 import 'firebase/firebase-firestore';
-import request from 'request-promise-native';
+
 const DB = firebase.firestore();
-const DB_REF = DB.collection('Applications');
+const APPLICATION_REF = DB.collection('Applications');
+const DEALER_REF = DB.collection('Dealers');
 const TABLE = document.getElementsByTagName('tbody')[0];
 let userContractInstance;
 let accounts;
@@ -13,28 +15,44 @@ const initContract = async () => {
   accounts = await web3.eth.getAccounts();
 };
 
+const changeStatus = (verified, id) => {
+  const TR = document.getElementById(id);
+  const a = TR.querySelector('a');
+  if (verified) {
+    a.innerText = 'ยืนยันตัวแล้ว';
+    a.classList.add('disabled');
+  } else {
+    a.innerText = 'ยืนยันตน';
+  }
+};
+
 const verifyOnBlockchain = async id => {
   try {
     const hash = await userContractInstance.getHash(id);
 
     const result = await userContractInstance.approveApplication(hash, {
-      from: accounts[0]
+      from: accounts[0],
     });
 
     if (result.receipt.status) {
-      DB_REF.doc(id).set({ verified: true }, { merge: true });
+      changeStatus(true, id);
+      const dealerApplication = await APPLICATION_REF.doc(id).get();
+      DEALER_REF.doc(id).set(
+        { ...dealerApplication.data(), verified: true },
+        { merge: true }
+      );
+      await APPLICATION_REF.doc(id).delete();
       // push message to dealer that their application has been verified.
       const url =
         'https://us-central1-user-oranoss-chjtic.cloudfunctions.net/line';
-      var options = {
+      const options = {
         method: 'POST',
         uri: url,
         body: {
-          userId: id
+          userId: id,
         },
-        json: true
+        json: true,
       };
-
       await request(options);
     }
   } catch (err) {
@@ -45,11 +63,12 @@ const verifyOnBlockchain = async id => {
 
 const verifyClicked = async e => {
   e.stopPropagation();
-  const id = e.target.getAttribute('data-id');
-
-  verifyOnBlockchain(id);
-
-  // do verification Process.
+  // eslint-disable-next-line no-restricted-globals
+  if (confirm('ยืนยันดีลเลอร์คนนี้')) {
+    const id = e.target.getAttribute('data-id');
+    verifyOnBlockchain(id);
+    // do the verfication process
+  }
 };
 
 const btnRender = (verified, a, id) => {
@@ -85,23 +104,12 @@ const renderTable = (dealerInfo, id) => {
   TABLE.appendChild(TR);
 };
 
-const changeStatus = (verified, id) => {
-  const TR = document.getElementById(id);
-  const a = TR.querySelector('a');
-  if (verified) {
-    a.innerText = 'ยืนยันตัวแล้ว';
-    a.classList.add('disabled');
-  } else {
-    a.innerText = 'ยืนยันตน';
-  }
-};
-
 window.addEventListener('DOMContentLoaded', async () => {
   await init();
   await initContract();
 });
 
-DB_REF.onSnapshot(snapshot => {
+APPLICATION_REF.onSnapshot(snapshot => {
   const docsChange = snapshot.docChanges();
 
   docsChange.forEach(eachDoc => {
@@ -109,7 +117,12 @@ DB_REF.onSnapshot(snapshot => {
     const { doc } = eachDoc;
     const dealerInfo = doc.data();
     if (type === 'modified') {
-      changeStatus(dealerInfo.verified, doc.id);
+      const dealerInfoElement = document.querySelectorAll(`#${doc.id}`);
+      const { children } = dealerInfoElement[0];
+      children[0].innerText = dealerInfo.dealerName;
+      children[1].innerHTML = dealerInfo.firstName;
+      children[2].innerHTML = dealerInfo.lastName;
+      children[3].innerHTML = dealerInfo.phoneNo;
     } else if (type === 'added') {
       renderTable(dealerInfo, doc.id);
     }

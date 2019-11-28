@@ -4,6 +4,7 @@ import 'firebase/firebase-firestore';
 
 const db = firebase.firestore();
 const { liff } = window;
+
 var dealerId; // The QR opener
 var userIdFromQrCode;
 var _userContract;
@@ -11,7 +12,9 @@ var _userId;
 var carPlates;
 var userCarDetails;
 var newCar = false;
+
 const initApp = async () => {
+  const debug = document.getElementById('debug');
   try {
     const carPlate = document.getElementById('car-plate').value;
     const buttonElement = document.getElementById('button-submit');
@@ -70,6 +73,29 @@ const initApp = async () => {
   }
 };
 
+document.body.addEventListener(
+  'focus',
+  event => {
+    const { target } = event;
+    switch (target.tagName) {
+      case 'INPUT':
+      case 'TEXTAREA':
+      case 'SELECT':
+        document.body.classList.add('keyboard');
+        break;
+      default:
+    }
+  },
+  true
+);
+document.body.addEventListener(
+  'blur',
+  () => {
+    document.body.classList.remove('keyboard');
+  },
+  true
+);
+
 window.addEventListener('DOMContentLoaded', async () => {
   //TODO Display page after this function has completed ONLY
   await liff.init({ liffId: '1653520229-vA50WW0A' });
@@ -102,8 +128,8 @@ window.addEventListener('DOMContentLoaded', async () => {
     userCarDetails = result;
   });
   // ========================DEBUG PURPOSE ====================================
+  const debug = document.getElementById('debug');
   try {
-    const debug = document.getElementById('debug');
     const P = document.createElement('p');
     const P2 = document.createElement('p');
     P.innerText = userIdFromQrCode;
