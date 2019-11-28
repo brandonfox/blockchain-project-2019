@@ -26,7 +26,7 @@ const initContract = async () => {
 
 const initWeb3 = async () => {
   const provider = new HDWalletProvider(
-    'device kid mountain library glimpse night coast agree coral exercise tuna coach',
+    'problem staff race deposit screen turn mansion off chest black zone castle',
     'https://rinkeby.infura.io/v3/6866ab47e3904ee18ddc89b3dee5cb0d'
   );
   web3 = new Web3(provider);
