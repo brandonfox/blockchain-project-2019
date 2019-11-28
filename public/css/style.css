@@ -7,7 +7,7 @@
 body {
   background-color: #00d1b2;
   font-family: 'Kanit', sans-serif;
-  /* padding-bottom: 2000px; */
+  height: 100vh;
 }
 
 .container {
@@ -19,6 +19,10 @@ body {
 .header-logo {
   margin-top: 12px;
   margin-bottom: 24px;
+}
+
+.navbar {
+  box-shadow: 0 4px 10px #00927c;
 }
 
 .form-row {
@@ -50,20 +54,21 @@ button {
   background-color: #102a43;
   width: 260px;
   height: 50px;
-  color: #f0f4f8;
+  color: #00d1b2;
   font-size: 16px;
-  box-shadow: 0 4px 6px hsla(0, 0%, 0%, 0.2);
+  box-shadow: 0 4px 6px #00927c;
   border-radius: 8px;
+  font-family: 'Kanit', sans-serif;
 }
 
 button:disabled {
   border: 0;
-  background-color: #fbffbb;
+  background-color: #102a43;
   width: 260px;
   height: 50px;
-  color: black;
+  color: #00d1b2;
   font-size: 16px;
-  box-shadow: 0 4px 6px hsla(0, 0%, 0%, 0.2);
+  box-shadow: 0 4px 6px #00927c;
 }
 
 textarea {
@@ -91,7 +96,7 @@ textarea::placeholder {
   margin-bottom: 12px;
 }
 
-/* select {
+select {
   margin-top: 6px;
   height: 35px;
   width: 260px;
@@ -105,27 +110,6 @@ textarea::placeholder {
   appearance: none;
   background: url(../images/arrow_drop_down.svg) no-repeat right white;
   padding-left: 8px;
-} */
-
-.select-style {
-  border: 1px solid #ccc;
-  width: 120px;
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.select-style select {
-  padding: 5px 8px;
-  width: 130%;
-  border: none;
-  box-shadow: none;
-  background: transparent;
-  background-image: none;
-  -webkit-appearance: none;
-}
-
-.select-style select:focus {
-  outline: none;
 }
 
 .qr-container {
@@ -135,14 +119,30 @@ textarea::placeholder {
   align-items: center;
 }
 
+.table {
+  background-color: transparent;
+}
+
 .table-content {
   width: 90%;
 }
 
 .my-table-container {
   padding: 1.5rem;
-  border: 2px solid #f5f5f5;
-  background-color: #fff;
+  border: 2px solid #00927c;
+  background-color: #ebfffc;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #00927c;
+}
+
+.table thead td,
+.table thead th {
+  color: #00927c;
+}
+
+.table td,
+.table th {
+  border: 1px solid #00927c;
 }
 
 .verify-button {
@@ -265,7 +265,3 @@ a.disabled {
   }
 }
 /* Loading icon done */
-
-.keyboard {
-  height: calc(100vh + 600px);
-}
