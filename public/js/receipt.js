@@ -77,8 +77,8 @@ window.addEventListener('DOMContentLoaded', async () => {
   userIdFromQrCode = params.get('userId');
   const dealerLiffId = await liff.getProfile();
   await init();
-  dealerId = await userContract.getHash(dealerLiffId.userId);
   _userContract = await userContract.deployed();
+  dealerId = await userContract.getHash(dealerLiffId.userId);
   _userId = await _userContract.getHash(userIdFromQrCode);
   _userContract.getCarPlates(_userId).then(result => {
     var cars = "";
