@@ -18,6 +18,7 @@ const initApp = async () => {
   const bestSeller = document.getElementById('best-seller').value;
   const promotion = document.getElementById('promotion').value;
   const otherServices = document.getElementById('other-services').value;
+  const location = getCurrentCoordinates();
 
   const _userContract = await userContract.deployed();
   const accounts = await web3.eth.getAccounts();
@@ -28,7 +29,7 @@ const initApp = async () => {
     firstName,
     lastName,
     addr: address,
-    location: '192',
+    location: [ location.lat(), location.lng() ],
     phoneNo: phoneNumber,
     bestSeller,
     promotion,
@@ -53,7 +54,6 @@ const initApp = async () => {
     liff.closeWindow();
   }
 };
-
 async function fetchApplicationData() {
   const companyName = document.getElementById('company-name');
   const firstName = document.getElementById('first-name');
@@ -74,6 +74,7 @@ async function fetchApplicationData() {
     bestSeller.value = dealerInfo.data().bestSeller;
     promotion.value = dealerInfo.data().promotion;
     otherServices.value = dealerInfo.data().otherServices;
+    setLocation(dealerInfo.data().location);
   }
 }
 
@@ -116,6 +117,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   }
   await init();
   const _userContract = await userContract.deployed();
+  // const hash = await _userContract.getHash("test")
   const hash = await _userContract.getHash(lineDetail.userId);
   const isVerifiedOnChain = await _userContract.isVerified(hash);
   if (isVerifiedOnChain) {
