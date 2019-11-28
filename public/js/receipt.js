@@ -124,9 +124,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
     document.getElementById('carPlates').innerHTML = cars;
   });
-  _userContract.getCars(_userId).then(result => {
-    userCarDetails = result;
-  });
+  userCarDetails = await _userContract.getCars(_userId);
   // ========================DEBUG PURPOSE ====================================
   const debug = document.getElementById('debug');
   try {

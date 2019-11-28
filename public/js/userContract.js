@@ -1,7 +1,7 @@
 /* eslint-disable import/no-mutable-exports */
 import HDWalletProvider from '@truffle/hdwallet-provider';
 import Web3 from 'web3';
-import UserContract from '../../build/contracts/UserContract.json';
+import AppointmentHandler from '../../build/contracts/AppointmentHandler.json';
 
 const line = require('@line/bot-sdk');
 const contract = require('truffle-contract');
@@ -20,7 +20,7 @@ export const UserClient = new line.Client({
 });
 
 const initContract = async () => {
-  userContract = contract(UserContract);
+  userContract = contract(AppointmentHandler);
 };
 
 const initWeb3 = async () => {

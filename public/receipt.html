@@ -14,13 +14,13 @@
       defer
       src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"
     ></script>
+    <script src="./js/verification.js"></script>
     <script defer src="js/receipt.js"></script>
     <title>การซื้อขาย</title>
   </head>
   <body>
     <div class="pageloader is-active"><span class="title">กำลังโหลด</span></div>
     <div id="container" class="container">
-      <div id="debug"></div>
       <header class="header-logo">
         <div class="logo">
           <img src="images/logo.svg" alt="Oranoss Logo" />
@@ -34,6 +34,7 @@
             name="car-plate"
             type="text"
             list="carPlates"
+            autocomplete="off"
             required
           />
           <datalist id="carPlates"> </datalist>
