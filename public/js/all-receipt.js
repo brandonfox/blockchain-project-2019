@@ -10,7 +10,6 @@ const initApp = async () => {
 
   const res = [];
   const recordsRef = await db.collection('Records').get();
-  console.log('recordsRed',recordsRef)
   for (const record of recordsRef.docs) {
     const entriesRef = await db
       .collection('Records')
