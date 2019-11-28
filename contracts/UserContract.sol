@@ -83,7 +83,7 @@ contract UserContract is ServiceHandler {
         }
         records[noPlate].push(RecordInternal(services,subservices,comment,timeStamp));
     }
-    
+
     function getRecords(string memory noPlate) public view returns (RecordInternal[] memory) {
         return records[noPlate];
     }
