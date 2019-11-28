@@ -49,6 +49,7 @@ const initApp = async () => {
         model: document.getElementById('carModel').value,
         year: document.getElementById('carYear').value,
       };
+      console.log(carDetails);
       _userContract.editCarDetails(_userId, carPlate, carDetails);
     }
     if (result.receipt.status) {
@@ -98,22 +99,22 @@ document.body.addEventListener(
 
 window.addEventListener('DOMContentLoaded', async () => {
   // TODO Display page after this function has completed ONLY
-  await liff.init({ liffId: '1653520229-vA50WW0A' });
+  // await liff.init({ liffId: '1653520229-vA50WW0A' });
 
-  // ==========================REMOVE THIS YOU DEAD LOL JUST JOKING===============
-  const queryString = decodeURIComponent(window.location.search).replace(
-    '?liff.state=',
-    ''
-  );
-  const params = new URLSearchParams(queryString);
-  userIdFromQrCode = params.get('userId');
-  const dealerLiffId = await liff.getProfile();
+  // // ==========================REMOVE THIS YOU DEAD LOL JUST JOKING===============
+  // const queryString = decodeURIComponent(window.location.search).replace(
+  //   '?liff.state=',
+  //   ''
+  // );
+  // const params = new URLSearchParams(queryString);
+  // userIdFromQrCode = params.get('userId');
+  // const dealerLiffId = await liff.getProfile();
   await init();
   _userContract = await userContract.deployed();
-  dealerId = await _userContract.getHash(dealerLiffId.userId);
-  _userId = await _userContract.getHash(userIdFromQrCode);
-  // _userId = await _userContract.getHash('Yes');
-  // dealerId = _userId;
+  // dealerId = await _userContract.getHash(dealerLiffId.userId);
+  // _userId = await _userContract.getHash(userIdFromQrCode);
+  _userId = await _userContract.getHash('Yes');
+  dealerId = _userId;
   console.log(_userId);
   _userContract.getCarPlates(_userId).then(result => {
     // console.log("got car details");
@@ -125,19 +126,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('carPlates').innerHTML = cars;
   });
   userCarDetails = await _userContract.getCars(_userId);
-  // ========================DEBUG PURPOSE ====================================
-  const debug = document.getElementById('debug');
-  try {
-    const P = document.createElement('p');
-    const P2 = document.createElement('p');
-    P.innerText = userIdFromQrCode;
-    P2.innerText = dealerId;
-    debug.append(P);
-    debug.append(P2);
-  } catch (err) {
-    debug.innerText = err;
-  }
-  // =============================================================================
+  console.log(userCarDetails);
   document.querySelector('.pageloader').classList.remove('is-active');
 });
 
