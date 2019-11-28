@@ -83,6 +83,29 @@ async function fetchUserData() {
   }
 }
 
+document.body.addEventListener(
+  'focus',
+  event => {
+    const { target } = event;
+    switch (target.tagName) {
+      case 'INPUT':
+      case 'TEXTAREA':
+      case 'SELECT':
+        document.body.classList.add('keyboard');
+        break;
+      default:
+    }
+  },
+  true
+);
+document.body.addEventListener(
+  'blur',
+  () => {
+    document.body.classList.remove('keyboard');
+  },
+  true
+);
+
 window.addEventListener('DOMContentLoaded', async () => {
   await liff.init({ liffId: '1653518966-9P8gP0JY' });
   lineDetail = await liff.getProfile();
