@@ -270,6 +270,7 @@ let retrievedSubs = 0;
 
 function getSubservices(){
   subservices = [services.length]
+  retrievedSubs = 0;
   for(let i = 0; i < services.length; i++){
     _userContract.getSubServices(services[i]).then(result => {
       setSubService(result,i);
