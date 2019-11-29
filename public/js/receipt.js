@@ -1,7 +1,6 @@
 import { web3, userContract, init } from './userContract';
 import firebase from './firebase-init';
 import 'firebase/firebase-firestore';
-import { log } from 'util';
 
 const db = firebase.firestore();
 const { liff } = window;
@@ -128,10 +127,9 @@ window.addEventListener('DOMContentLoaded', async () => {
   console.log('userIdFromQrCode', userIdFromQrCode);
   const dealerLiffId = await liff.getProfile();
   await init();
-  dealRealId = dealerLiff.userId;
   _userContract = await userContract.deployed();
   dealerId = await _userContract.getHash(dealerLiffId.userId);
-   userId = await _userContract.getHash(userIdFromQrCode);
+  userId = await _userContract.getHash(userIdFromQrCode);
   // // //FOR WEB DEBUG-------------------------------------------------------------
   // userIdFromQrCode = 'Yes';
   // userId = await _userContract.getHash('Yes');
@@ -153,26 +151,26 @@ window.addEventListener('DOMContentLoaded', async () => {
   checkLoadStatus();
 });
 
-function checkLoadStatus(){
-  if(retrievedSubs == services.length){
+function checkLoadStatus() {
+  if (retrievedSubs == services.length) {
     setupForm();
     document.querySelector('.pageloader').classList.remove('is-active');
   }
 }
 
-function setupForm(){
+function setupForm() {
   const content = document.getElementById('servicesContent');
   var h = '';
-  for(let i = 0; i < services.length; i++){
-    h += `<div class="form-row">`
-    h += `<label for="service-${services[i]}">${services[i]}</label>`
-    h += `<select class="select" id="service-${services[i]}" name="${services[i]}">`
-    h += `<option selected value=""></option>`
-    for(let x = 0; x < subservices[i].length;x++){
-      h += `<option value="${subservices[i][x]}">${subservices[i][x]}</option>`
+  for (let i = 0; i < services.length; i++) {
+    h += `<div class="form-row">`;
+    h += `<label for="service-${services[i]}">${services[i]}</label>`;
+    h += `<select class="select" id="service-${services[i]}" name="${services[i]}">`;
+    h += `<option selected value=""></option>`;
+    for (let x = 0; x < subservices[i].length; x++) {
+      h += `<option value="${subservices[i][x]}">${subservices[i][x]}</option>`;
     }
-    h += '</select>'
-    h += '</div>'
+    h += '</select>';
+    h += '</div>';
   }
   content.innerHTML = h;
 }
@@ -268,17 +266,17 @@ let services;
 let subservices;
 let retrievedSubs = 0;
 
-function getSubservices(){
-  subservices = [services.length]
+function getSubservices() {
+  subservices = [services.length];
   retrievedSubs = 0;
-  for(let i = 0; i < services.length; i++){
+  for (let i = 0; i < services.length; i++) {
     _userContract.getSubServices(services[i]).then(result => {
-      setSubService(result,i);
-    })
+      setSubService(result, i);
+    });
   }
 }
 
-function setSubService(data, index){
+function setSubService(data, index) {
   subservices[index] = data;
   retrievedSubs++;
   checkLoadStatus();
