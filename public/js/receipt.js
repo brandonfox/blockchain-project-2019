@@ -115,41 +115,43 @@ document.body.addEventListener(
 );
 
 window.addEventListener('DOMContentLoaded', async () => {
-  await liff.init({ liffId: '1653520229-vA50WW0A' });
-  console.log('window.location.search', window.location.search);
-  const queryString = decodeURIComponent(window.location.search).replace(
-    '?liff.state=',
-    ''
-  );
-  console.log('queryString', queryString);
-  const params = new URLSearchParams(queryString);
-  userIdFromQrCode = params.get('userId');
-  console.log('userIdFromQrCode', userIdFromQrCode);
-  const dealerLiffId = await liff.getProfile();
+  // await liff.init({ liffId: '1653520229-vA50WW0A' });
+  // console.log('window.location.search', window.location.search);
+  // const queryString = decodeURIComponent(window.location.search).replace(
+  //   '?liff.state=',
+  //   ''
+  // );
+  // console.log('queryString', queryString);
+  // const params = new URLSearchParams(queryString);
+  // userIdFromQrCode = params.get('userId');
+  // console.log('userIdFromQrCode', userIdFromQrCode);
+  // const dealerLiffId = await liff.getProfile();
   await init();
   _userContract = await userContract.deployed();
-  dealRealId = dealerLiffId.userId;
-  dealerId = await _userContract.getHash(dealRealId);
-  userId = await _userContract.getHash(userIdFromQrCode);
-  // // //FOR WEB DEBUG-------------------------------------------------------------
-  // userIdFromQrCode = 'Yes';
-  // userId = await _userContract.getHash('Yes');
-  // dealerId = userId;
+  // dealRealId = dealerLiffId.userId;
+  // dealerId = await _userContract.getHash(dealRealId);
+  // userId = await _userContract.getHash(userIdFromQrCode);
+  // //FOR WEB DEBUG-------------------------------------------------------------
+  userIdFromQrCode = 'Yes';
+  userId = await _userContract.getHash('Yes');
+  dealerId = userId;
 
-  // // //END WEB DEBUG--------------------------------------------------------------
+  // //END WEB DEBUG--------------------------------------------------------------
   console.log(userId);
   if (!(await _userContract.isVerified(dealerId))) {
-    liff.close;
+    document.getElementById('pageloader-title').innerText = 'You are not a verified dealer'
   }
-  const carPlates = await _userContract.getCarPlates(userId);
-  let cars = '';
-  for (let i = 0; i < carPlates.length; i++) {
-    cars += `<option value="${carPlates[i]}"></option>`;
+  else{
+    const carPlates = await _userContract.getCarPlates(userId);
+    let cars = '';
+    for (let i = 0; i < carPlates.length; i++) {
+      cars += `<option value="${carPlates[i]}"></option>`;
+    }
+    services = await _userContract.getServices();
+    getSubservices();
+    document.getElementById('carPlates').innerHTML = cars;
+    checkLoadStatus();
   }
-  services = await _userContract.getServices();
-  getSubservices();
-  document.getElementById('carPlates').innerHTML = cars;
-  checkLoadStatus();
 });
 
 function checkLoadStatus() {
