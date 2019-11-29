@@ -44,13 +44,10 @@ function displayData(){
     let h = '';
     for(let i = 0; i < services.length; i++){
         let timePeriod = getTimePeriod(notificationTimes[i]);
-        h += '<div class="seperator">-----------------------</div>'
-        h += '<div class="notificaion-container">'
-        h += `<form id="notification-form-${services[i]}">`
-        h += `<label for="notification-time-${services[i]}">${services[i]}</label>`
-        h += `<div class="notify-prompt">Notify user every: (0 for never)</div>`
-        h += `<input type="number" id="notification-time-${services[i]}" placeholder="${notificationTimes[i]}" value="${timePeriod.time}"/>`
-        h += `<select class="select" id="notification-period-${services[i]}" name="period">`
+        h += '<tr class="notificaion-container">'
+        h += `<td><div for="notification-time-${services[i]}" class="company-noti">${services[i]}</div></td>`
+        h += `<td><input type="number" id="notification-time-${services[i]}" value="${timePeriod.time}"/></td>`
+        h += `<td><select class="select" id="notification-period-${services[i]}" name="period">`
         for(let x = 0; x < periods.length; x++){
             h += '<option ';
             if(timePeriod.period == x){
@@ -58,10 +55,10 @@ function displayData(){
             }
             h += `value="${periods[x]}">${periods[x]}</option>`
         }
-        h += '</select>'
-        h += `<button id="notification-${services[i]}-button">Set</button>`
-        h += '</form>'
-        h += '</div>'
+        h += '</select></td>'
+        h += `<td><button id="notification-${services[i]}-button" name="period">ยื่นยัน</button></td>`
+        // h += '</form>'
+        h += '</td>'
     }
     content.innerHTML = h;
     for(let i = 0; i < services.length; i++){

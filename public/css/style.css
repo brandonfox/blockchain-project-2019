@@ -48,17 +48,18 @@ label {
 
 input[type='text'],
 input[type='tel'],
-input[type='email'] {
+input[type='email'],
+input[type='number'] {
   border: 0;
   margin-top: 6px;
   display: block;
   width: 260px;
   height: 35px;
-  background-color: #f0f4f8;
+  background-color: white;
   font-size: 16px;
   padding-left: 8px;
   border-radius: 8px;
-  box-shadow: 0 0 10px #00927c;
+  box-shadow: 0 0 6px #00927c;
 }
 
 button {
@@ -80,7 +81,7 @@ button:disabled {
   height: 50px;
   color: #00d1b2;
   font-size: 16px;
-  box-shadow: 0 4px 6px #00927c;
+  box-shadow: 0 0px 6px #00927c;
 }
 
 .location {
@@ -109,7 +110,7 @@ textarea {
   resize: none;
   font-family: inherit;
   border-radius: 8px;
-  box-shadow: 0 0 10px #00927c;
+  box-shadow: 0 0 6px #00927c;
 }
 
 textarea::placeholder {
@@ -129,7 +130,7 @@ select,
   width: 260px;
   border: none;
   border-radius: 8px;
-  box-shadow: 0 0 10px #00927c;
+  box-shadow: 0 0 6px #00927c;
   font-size: 16px;
   display: block;
   -moz-appearance: none;
@@ -148,6 +149,7 @@ select,
 
 .table {
   background-color: transparent;
+  table-layout: fixed;
 }
 
 .table-content {
@@ -159,7 +161,7 @@ select,
   border: 2px solid #00927c;
   background-color: #ebfffc;
   border-radius: 8px;
-  box-shadow: 0 0 10px #00927c;
+  box-shadow: 0 0 6px #00927c;
 }
 
 .verify-button {
@@ -282,6 +284,17 @@ input::-webkit-calendar-picker-indicator {
   display: block;
 }
 
+select[name='period'],
+input[type='number'],
+button[name='period'] {
+  display: inline-block;
+  width: 80%;
+  box-shadow: 0 0 6px #00927c;
+  height: 35px;
+  padding: 6px;
+  margin-top: 6px;
+}
+
 .receipt-modal-body:first-child {
   padding: 0;
 }
@@ -297,4 +310,10 @@ input::-webkit-calendar-picker-indicator {
 .table-header {
   text-align: center;
   margin-top: 2rem;
+}
+
+.company-noti {
+  margin-top: 6px;
+  height: 35px;
+  padding: 5px;
 }
