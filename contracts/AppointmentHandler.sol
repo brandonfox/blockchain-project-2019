@@ -29,11 +29,24 @@ contract AppointmentHandler is UserContract {
         return uint(-1);
     }
 
+    function getIndexOfUserAppointment(bytes32 userId) internal view returns(uint) {
+        require(userAppointment[userId].userId != 0,"User does not have an appointment");
+        Appointment storage currentAp = userAppointment[userId];
+        for(uint i = 0; i < activeAppointments[currentAp.dealerId].length; i++){
+            if(activeAppointments[currentAp.dealerId][i].userId == userId){
+                return i;
+            }
+        }
+        return uint(-1);
+    }
+
     function createAppointment(Appointment memory appointment) public verified(appointment.dealerId) {
         bytes32 userId = appointment.userId;
         if(userAppointment[userId].userId != 0){
-            uint aIndex = getIndexOfAppointment(appointment);
-            activeAppointments[appointment.dealerId][aIndex] = appointment;
+            uint aIndex = getIndexOfUserAppointment(appointment.userId);
+            Appointment memory currentAp = userAppointment[appointment.userId];
+            delete activeAppointments[currentAp.dealerId][aIndex];
+            activeAppointments[appointment.dealerId].push(appointment);
         }
         else{
             activeAppointments[appointment.dealerId].push(appointment);

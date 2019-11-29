@@ -48,6 +48,7 @@ const initApp = async () => {
         model: document.getElementById('carModel').value,
         year: document.getElementById('carYear').value,
       };
+      console.log(carDetails);
       _userContract.editCarDetails(_userId, carPlate, carDetails);
     }
     if (result.receipt.status) {

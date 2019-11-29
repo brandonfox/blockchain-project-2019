@@ -13,7 +13,7 @@ contract DealerContract is Ownable {
         string firstName;
         string lastName;
         string addr;
-        string location;
+        string[2] location; //Lat & Long
         string phoneNo;
         string bestSeller;
         string promotion;

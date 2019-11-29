@@ -75,6 +75,19 @@ button:disabled {
   box-shadow: 0 4px 6px #00927c;
 }
 
+.location {
+  display: flex;
+  margin-bottom: 18px;
+}
+
+.centerMapButton {
+  background-color: transparent;
+  position: absolute;
+  margin-top: 6px;
+  margin-left: 220px;
+  box-shadow: 0 0px 0px #00927c;
+}
+
 textarea {
   padding: 8px;
   border: 0;
