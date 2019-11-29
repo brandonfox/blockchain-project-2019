@@ -231,3 +231,7 @@ a:hover {
 input.dealer-location-input {
   width: 230px;
 }
+
+input::-webkit-calendar-picker-indicator {
+  display: none;
+}
