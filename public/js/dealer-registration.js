@@ -26,6 +26,10 @@ const initApp = async () => {
   console.log('location', location);
   const lineDetail = await liff.getProfile();
   const dealerId = await _userContract.getHash(lineDetail.userId);
+  const locationFromForm = {
+    _latitude: location.lat(),
+    _longitude: location.long()
+  };
   const dealerInfo = {
     dealerName: companyName,
     firstName,
@@ -135,6 +139,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     return;
   }
   await fetchApplicationData();
+  console.log('done');
   document.querySelector('.pageloader').classList.remove('is-active');
 });
 

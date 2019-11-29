@@ -1,14 +1,16 @@
 import { web3, userContract, init } from './userContract';
 import firebase from './firebase-init';
 import 'firebase/firebase-firestore';
+import { log } from 'util';
 
 const db = firebase.firestore();
 const { liff } = window;
 
 let dealerId; // The QR opener
+let userId;
 let userIdFromQrCode;
+let dealRealId;
 let _userContract;
-let _userId;
 let carPlates;
 let userCarDetails;
 let carRecords;
@@ -29,12 +31,11 @@ const initApp = async () => {
       .map(el => el.value);
     const comment = document.getElementById('other-services').value;
     const accounts = await web3.eth.getAccounts();
-    console.log('Got accounts');
 
     console.log('Inserting record');
     const result = await _userContract.insertRecord(
       dealerId,
-      _userId,
+      userId,
       carPlate,
       services,
       subServices,
@@ -73,8 +74,8 @@ const initApp = async () => {
         .doc(userIdFromQrCode)
         .collection('Entries')
         .add({
-          dealerId,
-          userId: _userId,
+          dealerId: dealRealId,
+          userId,
           carPlate,
           services,
           subServices,
@@ -126,11 +127,12 @@ window.addEventListener('DOMContentLoaded', async () => {
   console.log('userIdFromQrCode', userIdFromQrCode);
   const dealerLiffId = await liff.getProfile();
   await init();
+  dealRealId = dealerLiff.userId;
   _userContract = await userContract.deployed();
-  // dealerId = await _userContract.getHash(dealerLiffId.userId);
-  // _userId = await _userContract.getHash(userIdFromQrCode);
-  _userId = await _userContract.getHash('Yes');
-  dealerId = _userId;
+  dealerId = await _userContract.getHash(dealerLiffId.userId);
+   _userId = await _userContract.getHash(userIdFromQrCode);
+//   _userId = await _userContract.getHash('Yes');
+  //dealerId = _userId;
   console.log(_userId);
   const carPlates = await _userContract.getCarPlates(_userId);
   let cars = '';
