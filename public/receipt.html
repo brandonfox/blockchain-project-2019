@@ -13,26 +13,36 @@
       href="https://fonts.googleapis.com/css?family=Kanit&display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.css"
+    />
     <link rel="stylesheet" href="css/modal.css" />
     <link rel="stylesheet" href="css/bulma-pageloader.min.css" />
     <link rel="stylesheet" href="css/style.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vConsole/3.3.4/vconsole.min.js"></script>
-    <script>
-      var vConsole = new VConsole();
-      console.log('Hello world');
-    </script>
     <script
       defer
       src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"
     ></script>
-    <script src="js/modals.js"></script>
+    <script defer src="js/modals.js"></script>
     <script defer src="js/receipt.js"></script>
     <title>การซื้อขาย</title>
   </head>
   <body>
     <div class="pageloader is-active"><span class="title">กำลังโหลด</span></div>
     <div class="modal" id="modal">
-      <div id="recordBody" class="modal-content"></div>
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">ประวัติรถ</p>
+          <button class="delete" aria-label="close"></button>
+        </header>
+        <section
+          id="recordBody"
+          class="modal-card-body"
+          style="border-bottom-left-radius: 6px; border-bottom-right-radius: 6px;"
+        ></section>
+      </div>
     </div>
     <div id="container" class="container">
       <div id="debug"></div>

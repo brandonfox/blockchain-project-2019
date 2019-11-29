@@ -7,7 +7,7 @@
 body {
   background-color: #00d1b2;
   font-family: 'Kanit', sans-serif;
-  height: 100vh;
+  height: 100%;
 }
 
 .full-page {
@@ -234,4 +234,24 @@ input.dealer-location-input {
 
 input::-webkit-calendar-picker-indicator {
   display: none;
+}
+
+.select:not(.is-multiple) {
+  height: 35px;
+}
+
+.select {
+  display: block;
+}
+
+.receipt-modal-body:first-child {
+  padding: 0;
+}
+
+.receipt-modal-body {
+  padding: 12px 0;
+}
+
+.receipt-modal-body:last-child {
+  padding: 0;
 }

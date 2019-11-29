@@ -1,33 +1,30 @@
 window.openModal = function() {
   var modal = document.getElementById('modal');
-  modal.style.display = 'block';
+  modal.classList.add('is-active');
+  modal.querySelector('.modal-background').addEventListener('click', e => {
+    e.preventDefault();
+    modal.classList.remove('is-active');
+  });
 };
 
 window.populateModal = function(data) {
   modalData = '';
   modalContent = document.getElementById('recordBody');
   for (let i = 0; i < data.length; i++) {
-    modalData += '<div>';
-    modalData += '<div>Services Performed:</div>';
+    modalData += '<div class="receipt-modal-body">';
+    modalData += '<p>Services Performed:</p>';
     for (let x = 0; x < data[i].services.length; x++) {
-      modalData += `<div class="serviceDisplay">${data[i].services[x]}:</div>`;
-      modalData += `<div class="subserviceDisplay">${data[i].subservices[x]}</div>`;
+      modalData += `<p class="serviceDisplay">${data[i].services[x]}:</p>`;
+      modalData += `<p class="subserviceDisplay">${data[i].subservices[x]}</p>`;
     }
-    modalData += '<div class="seperator">---------------------</div>';
-    modalData += `<div class="comment">${data[i].comment}</div>`;
-    modalData += '<div class="timestampLabel">Time:</div>';
-    modalData += `<div class="timestamp">${data[i].timeStamp}</div>`;
-    modalData += '<div class="seperator">---------------------</div>';
-    modalData += '<div class="seperator">---------------------</div>';
-    modalData += '<div class="seperator">---------------------</div>';
+    modalData += `<p class="comment">Comment: ${data[i].comment}</p>`;
+    modalData += `<p class="timestampLabel">Time: ${data[i].timeStamp}</p>`;
     modalData += '</div>';
   }
   modalContent.innerHTML = modalData;
 };
 
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = 'none';
-  }
-};
+document.querySelector('.delete').addEventListener('click', e => {
+  e.preventDefault();
+  modal.classList.remove('is-active');
+});
