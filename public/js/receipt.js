@@ -130,14 +130,14 @@ window.addEventListener('DOMContentLoaded', async () => {
   dealRealId = dealerLiff.userId;
   _userContract = await userContract.deployed();
   dealerId = await _userContract.getHash(dealerLiffId.userId);
-   _userId = await _userContract.getHash(userIdFromQrCode);
-//   _userId = await _userContract.getHash('Yes');
-  //dealerId = _userId;
-  console.log(_userId);
+   userId = await _userContract.getHash(userIdFromQrCode);
+  // userId = await _userContract.getHash('Yes');
+  // dealerId = userId;
+  console.log(userId);
   if(!await _userContract.isVerified(dealerId)){
     liff.close
   }
-  const carPlates = await _userContract.getCarPlates(_userId);
+  const carPlates = await _userContract.getCarPlates(userId);
   let cars = '';
   for (let i = 0; i < carPlates.length; i++) {
     cars += `<option value="${carPlates[i]}"></option>`;
