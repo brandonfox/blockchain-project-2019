@@ -3,7 +3,6 @@ import HDWalletProvider from '@truffle/hdwallet-provider';
 import Web3 from 'web3';
 import NotificationHandler from '../../build/contracts/NotificationHandler.json';
 
-const line = require('@line/bot-sdk');
 const contract = require('truffle-contract');
 
 export let web3;

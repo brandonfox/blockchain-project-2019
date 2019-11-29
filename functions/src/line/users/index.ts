@@ -13,9 +13,12 @@ declare type ResultFirestore = {
   id: string;
   data: FirebaseFirestore.DocumentData;
 };
-web3Utils.initWeb3().then(deployed => {
-  instance = deployed;
-});
+web3Utils
+  .initWeb3()
+  .then(deployed => {
+    instance = deployed;
+  })
+  .catch(console.error);
 
 const DB_REF = db.collection('Dealers');
 const dialogflowWebhook =
