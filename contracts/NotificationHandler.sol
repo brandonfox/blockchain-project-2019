@@ -6,7 +6,7 @@ import "./AppointmentHandler.sol";
 contract NotificationHandler is AppointmentHandler {
 
     mapping(string => uint) public notificationTimes;
-    mapping(bytes32 => uint[]) private userNotificationTime;
+    mapping(bytes32 => uint[255]) private userNotificationTime;
 
     function insertRecord(bytes32 dealerId, bytes32 id, string memory noPlate,
      string[] memory services, string[] memory subservices, string memory comment, uint timeStamp)
