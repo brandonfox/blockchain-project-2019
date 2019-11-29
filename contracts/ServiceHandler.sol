@@ -60,7 +60,9 @@ contract ServiceHandler is DealerContract {
     }
 
     function deleteService(string memory serviceName) public ownerOnly serviceExists(serviceName) {
-        services[getIndexOfService(serviceName)] = "";
+        uint8 serviceIndex = getIndexOfService(serviceName);
+        services[serviceIndex] = "";
+        delete subServices[serviceName];
         noOfServices--;
     }
 
@@ -119,8 +121,10 @@ contract ServiceHandler is DealerContract {
 
     function deleteSubService(string memory serviceName, string memory subServiceName)
      public ownerOnly subServiceExists(serviceName,subServiceName) {
-        //TODO Shift elements manually
-        delete subServices[serviceName][getIndexOfSubService(serviceName,subServiceName)];
+        uint index = getIndexOfSubService(serviceName,subServiceName);
+        uint lastIndex = subServices[serviceName].length - 1;
+        subServices[serviceName][index] = subServices[serviceName][lastIndex];
+        delete subServices[serviceName][lastIndex];
     }
 
     function getSubServices(string memory serviceName) public view returns (string[] memory) {
