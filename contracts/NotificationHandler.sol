@@ -18,6 +18,10 @@ contract NotificationHandler is AppointmentHandler {
         }
     }
 
+    function getLastServiceTimes(bytes32 userId) public view returns(uint[255] memory) {
+        return userNotificationTime[userId];
+    }
+
     function setServiceNotificationTime(string memory serviceName, uint time) public ownerOnly {
         notificationTimes[serviceName] = time;
     }
