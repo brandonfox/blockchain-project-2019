@@ -74,6 +74,10 @@ contract UserContract is ServiceHandler {
         return cars;
     }
 
+    function getCarDetails(string memory noPlate) public view returns(CarInfo memory) {
+        return carDetails[noPlate];
+    }
+
     function insertRecord(bytes32 dealerId, bytes32 id, string memory noPlate,
      string[] memory services, string[] memory subservices, string memory comment, uint timeStamp)
         public verified(dealerId) {
