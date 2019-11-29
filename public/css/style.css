@@ -254,3 +254,8 @@ input::-webkit-calendar-picker-indicator {
 .receipt-modal-body:last-child {
   padding: 0;
 }
+
+.table-header {
+  text-align: center;
+  margin-top: 2rem;
+}
