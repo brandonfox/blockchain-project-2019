@@ -15,7 +15,6 @@ let carRecords;
 let newCar = false;
 
 const initApp = async () => {
-  const debug = document.getElementById('debug');
   try {
     const carPlate = document.getElementById('car-plate').value;
     const buttonElement = document.getElementById('button-submit');
@@ -32,7 +31,7 @@ const initApp = async () => {
     const accounts = await web3.eth.getAccounts();
     console.log('Got accounts');
 
-    console.log('Dealer verified');
+    console.log('Inserting record');
     const result = await _userContract.insertRecord(
       dealerId,
       _userId,
@@ -55,6 +54,18 @@ const initApp = async () => {
       _userContract.editCarDetails(_userId, carPlate, carDetails, {from: accounts[0]});
     }
     if (result.receipt.status) {
+      const dealerRecords = await db
+        .collection('Records')
+        .doc(userIdFromQrCode)
+        .get();
+      if (!dealerRecords.exists) {
+        console.log('Dealer records do not exist');
+        await db
+          .collection('Records')
+          .doc(userIdFromQrCode)
+          .set({});
+      }
+      console.log('Adding dealer record');
       await db
         .collection('Records')
         .doc(userIdFromQrCode)
@@ -68,11 +79,12 @@ const initApp = async () => {
           comment,
           date: new Date().getTime(),
         });
+      console.log('Added dealer record');
       alert('การทำรายการสำเร็จ');
       liff.closeWindow();
     }
   } catch (err) {
-    debug.innerText = err;
+    console.log('err', err);
   }
 };
 
@@ -100,17 +112,17 @@ document.body.addEventListener(
 );
 
 window.addEventListener('DOMContentLoaded', async () => {
-  // TODO Display page after this function has completed ONLY
-  // await liff.init({ liffId: '1653520229-vA50WW0A' });
-
-  // // ==========================REMOVE THIS YOU DEAD LOL JUST JOKING===============
-  // const queryString = decodeURIComponent(window.location.search).replace(
-  //   '?liff.state=',
-  //   ''
-  // );
-  // const params = new URLSearchParams(queryString);
-  // userIdFromQrCode = params.get('userId');
-  // const dealerLiffId = await liff.getProfile();
+  await liff.init({ liffId: '1653520229-vA50WW0A' });
+  console.log('window.location.search', window.location.search);
+  const queryString = decodeURIComponent(window.location.search).replace(
+    '?liff.state=',
+    ''
+  );
+  console.log('queryString', queryString);
+  const params = new URLSearchParams(queryString);
+  userIdFromQrCode = params.get('userId');
+  console.log('userIdFromQrCode', userIdFromQrCode);
+  const dealerLiffId = await liff.getProfile();
   await init();
   _userContract = await userContract.deployed();
   // dealerId = await _userContract.getHash(dealerLiffId.userId);
