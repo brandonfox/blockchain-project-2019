@@ -46,7 +46,7 @@ function addSubservice(data){
 
 function fetchSubservices(serviceName) {
     showLoading(`service-${serviceName}-content`)
-    const button = document.getElementById(`subservice-name-${serviceName}`);
+    const button = document.getElementById(`subservice-name-${serviceName}-button`);
     button.disabled = false;
     button.innerText = 'เพิ่มบริการย่อย'
     _userContract.getSubServices(serviceName).then(result => {
@@ -61,7 +61,16 @@ function setSubservices(serviceName,subservices){
     for(let i = 0; i < subservices.length; i++){
         subservicesLocation.innerHTML += '<div class="subservice-container">'
         subservicesLocation.innerHTML += `<div class="subserviceName">${subservices[i]}</div>`
+        subservicesLocation.innerHTML += `<button type="button" style="color:red" id="subservice-delete-${subservices[i]}-button" class="service-button-delete">Delete Subservice</button>`
         subservicesLocation.innerHTML += '</div>'
+    }
+    for(let i = 0; i < subservices.length; i++){
+        document.getElementById(`subservice-delete-${subservices[i]}-button`).addEventListener('click',function() {
+            this.innerText = "Deleting..."
+            _userContract.deleteSubService(serviceName,subservices[i],{from:accounts[0]}).then(function() {
+                fetchSubservices(serviceName,subservices);
+            })
+        })
     }
 }
 
@@ -77,6 +86,7 @@ function setServices(data){
         shtml += `<input class="inline" type="text" id="subservice-name-${data[i]}" required/>`
         shtml += `<button id="subservice-name-${data[i]}-button" class="service-button">เพิ่มบริการย่อย</button>`
         shtml += `</form>`
+        shtml += `<button type="button" style="color:red" id="service-delete-${data[i]}-button" class="service-button-delete">Delete Service</button>`
         shtml += `<div id="service-${data[i]}-content" class="content"></div>`
         shtml += '</div>'
     }
@@ -99,6 +109,13 @@ function setServices(data){
               content.style.display = "block";
             }
           });
+        document.getElementById(`service-delete-${data[i]}-button`).addEventListener("click", function() {
+            const serviceName = data[i];
+            this.innerText = "Deleting...";
+            _userContract.deleteService(serviceName,{from: accounts[0]}).then(function() {
+                fetchServices();
+            })
+        })
     }
 }
 

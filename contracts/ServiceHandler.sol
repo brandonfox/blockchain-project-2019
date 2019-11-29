@@ -125,6 +125,7 @@ contract ServiceHandler is DealerContract {
         uint lastIndex = subServices[serviceName].length - 1;
         subServices[serviceName][index] = subServices[serviceName][lastIndex];
         delete subServices[serviceName][lastIndex];
+        subServices[serviceName].length--;
     }
 
     function getSubServices(string memory serviceName) public view returns (string[] memory) {
