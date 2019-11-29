@@ -8,17 +8,10 @@ import * as LineDealer from '../dealers/index';
 import { db } from '../../firebase-config';
 import * as web3Utils from '../../web3/index';
 
-var instance: any;
 declare type ResultFirestore = {
   id: string;
   data: FirebaseFirestore.DocumentData;
 };
-web3Utils
-  .initWeb3()
-  .then(deployed => {
-    instance = deployed;
-  })
-  .catch(console.error);
 
 const DB_REF = db.collection('Dealers');
 const dialogflowWebhook =
@@ -76,6 +69,7 @@ async function handlePostback(
   const dealerId = payload.id;
   const { dealerName } = payload.data; // object of payload
   // Smart contract
+  const instance = await web3Utils.initWeb3();
   const userHash = await instance.getHash(userId);
   const chosenDealerHash = await instance.getHash(dealerId);
 
@@ -180,13 +174,19 @@ async function handlePostback(
   }
 }
 
-async function getData() {
+async function getClosestInTenKmLocation(center: any) {
   const location: any = [];
   const snap = await DB_REF.get();
   snap.forEach(snapshot =>
     location.push({ id: snapshot.id, data: snapshot.data() })
   );
-  return location;
+  return location.filter((loca: any) =>
+    GeoLocation.insideCircle(
+      { lat: loca.data.location._latitude, lon: loca.data.location._longitude },
+      center,
+      10000
+    )
+  );
 }
 
 async function findBestTen(
@@ -194,16 +194,19 @@ async function findBestTen(
   replyToken: string
 ) {
   const { latitude, longitude } = location; // This gives the lat and lon
-  const allVerifiedDealers = await getData();
-  if (allVerifiedDealers.length === 0) {
+  const inRangeDealers = await getClosestInTenKmLocation({
+    lat: latitude,
+    lon: longitude
+  });
+  if (inRangeDealers.length === 0) {
     return UserClient.replyMessage(replyToken, {
       type: 'text',
-      text: 'ยังไม่มีดีลเลอร์เลย กรุณาลองใหม่ภายหลังนะครับ '
+      text: 'ไม่มี ดีลเลอร์อยู่ใกล้ท่าน'
     });
   }
   const cols: line.TemplateColumn[] = [];
 
-  allVerifiedDealers.forEach((dealer: any) => {
+  inRangeDealers.forEach((dealer: any) => {
     const { data } = dealer;
     const { _latitude, _longitude } = data.location;
     cols.push({

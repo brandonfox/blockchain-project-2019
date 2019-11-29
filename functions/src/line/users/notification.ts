@@ -4,27 +4,16 @@ import * as Web3Utils from '../../web3/index';
 // import * as UserLine from '../users/index';
 
 // const UserClient = UserLine.UserClient;
-let instance: any;
-let ownerAccount: any;
-Web3Utils.initWeb3()
-  .then(deployed => {
-    instance = deployed;
-    console.log('done initialied contract');
-    return Web3Utils.web3.eth.getAccounts();
-  })
-  .then(_accounts => {
-    console.log('dont intilised accounted');
-    ownerAccount = _accounts[0];
-  })
-  .catch(console.error);
 
 export const notify = functions.pubsub
   .schedule('every 1 mins')
   .timeZone('Asia/Bangkok')
   .onRun(async context => {
+    const instance = await Web3Utils.initWeb3();
+    const accounts = await Web3Utils.web3.eth.getAccounts();
     const listOfServices = await instance.getServices();
 
-    const allUsers = await instance.getAllUsers({ from: ownerAccount });
+    const allUsers = await instance.getAllUsers({ from: accounts[0] });
     if (allUsers.length === 0) {
       console.log('no active user found');
       return new Date();
