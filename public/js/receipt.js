@@ -128,13 +128,14 @@ window.addEventListener('DOMContentLoaded', async () => {
   const dealerLiffId = await liff.getProfile();
   await init();
   _userContract = await userContract.deployed();
-  dealerId = await _userContract.getHash(dealerLiffId.userId);
+  dealRealId = dealerLiffId.userId;
+  dealerId = await _userContract.getHash(dealRealId);
   userId = await _userContract.getHash(userIdFromQrCode);
   // // //FOR WEB DEBUG-------------------------------------------------------------
   // userIdFromQrCode = 'Yes';
   // userId = await _userContract.getHash('Yes');
   // dealerId = userId;
-  // dealRealId = dealerId;
+
   // // //END WEB DEBUG--------------------------------------------------------------
   console.log(userId);
   if (!(await _userContract.isVerified(dealerId))) {
