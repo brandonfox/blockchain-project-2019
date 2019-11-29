@@ -59,7 +59,6 @@ function setSubservices(serviceName,subservices){
     const subservicesLocation = document.getElementById(`service-${serviceName}-content`)
     subservicesLocation.innerHTML = '';
     for(let i = 0; i < subservices.length; i++){
-        subservicesLocation.innerHTML += '<div>----------This is a divider----------</div>'
         subservicesLocation.innerHTML += '<div class="subservice-container">'
         subservicesLocation.innerHTML += `<div class="subserviceName">${subservices[i]}</div>`
         subservicesLocation.innerHTML += '</div>'
