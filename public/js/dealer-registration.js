@@ -56,6 +56,7 @@ const initApp = async () => {
     if (result.receipt.status) {
       await APPLICATION_REF.doc(lineDetail.userId).set({
         ...dealerInfo,
+        location: locationFromForm,
         verified: false
       });
       alert('ขอบคุณสำหรับการลงทะเบียน');
