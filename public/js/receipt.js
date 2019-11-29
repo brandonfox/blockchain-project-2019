@@ -52,7 +52,7 @@ const initApp = async () => {
         year: document.getElementById('carYear').value
       };
       console.log(carDetails);
-      _userContract.editCarDetails(_userId, carPlate, carDetails, {
+      _userContract.editCarDetails(userId, carPlate, carDetails, {
         from: accounts[0]
       });
     }
@@ -115,28 +115,28 @@ document.body.addEventListener(
 );
 
 window.addEventListener('DOMContentLoaded', async () => {
-  await liff.init({ liffId: '1653520229-vA50WW0A' });
-  console.log('window.location.search', window.location.search);
-  const queryString = decodeURIComponent(window.location.search).replace(
-    '?liff.state=',
-    ''
-  );
-  console.log('queryString', queryString);
-  const params = new URLSearchParams(queryString);
-  userIdFromQrCode = params.get('userId');
-  console.log('userIdFromQrCode', userIdFromQrCode);
-  const dealerLiffId = await liff.getProfile();
+  // await liff.init({ liffId: '1653520229-vA50WW0A' });
+  // console.log('window.location.search', window.location.search);
+  // const queryString = decodeURIComponent(window.location.search).replace(
+  //   '?liff.state=',
+  //   ''
+  // );
+  // console.log('queryString', queryString);
+  // const params = new URLSearchParams(queryString);
+  // userIdFromQrCode = params.get('userId');
+  // console.log('userIdFromQrCode', userIdFromQrCode);
+  // const dealerLiffId = await liff.getProfile();
   await init();
-  dealRealId = dealerLiff.userId;
+  // dealRealId = dealerLiff.userId;
   _userContract = await userContract.deployed();
-  dealerId = await _userContract.getHash(dealerLiffId.userId);
-   userId = await _userContract.getHash(userIdFromQrCode);
-  // userId = await _userContract.getHash('Yes');
-  // dealerId = userId;
+  // dealerId = await _userContract.getHash(dealerLiffId.userId);
+  //  userId = await _userContract.getHash(userIdFromQrCode);
+  userId = await _userContract.getHash('Yes');
+  dealerId = userId;
   console.log(userId);
-  if(!await _userContract.isVerified(dealerId)){
-    liff.close
-  }
+  // if(!await _userContract.isVerified(dealerId)){
+  //   liff.close
+  // }
   const carPlates = await _userContract.getCarPlates(userId);
   let cars = '';
   for (let i = 0; i < carPlates.length; i++) {
