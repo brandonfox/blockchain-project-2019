@@ -22,36 +22,50 @@ const initApp = async () => {
 
   const _userContract = await userContract.deployed();
   const accounts = await web3.eth.getAccounts();
+  console.log(accounts);
   const lineDetail = await liff.getProfile();
   const dealerId = await _userContract.getHash(lineDetail.userId);
+  const locationFromForm = {
+    _latitude: location.lat(),
+    _longitude: location.long()
+  };
   const dealerInfo = {
     dealerName: companyName,
     firstName,
     lastName,
     addr: address,
-    location: [ location.lat(), location.lng() ],
+    location: [
+      locationFromForm._latitude.toString(),
+      locationFromForm._longitude.toString()
+    ],
     phoneNo: phoneNumber,
     bestSeller,
     promotion,
     otherServices,
     availableServices: [],
-    availableSubServices: [],
+    availableSubServices: []
   };
-  const result = await _userContract.createDealerApplication(
-    dealerInfo,
-    dealerId,
-    {
-      from: accounts[0],
-    }
-  );
+  console.log(dealerInfo);
+  try {
+    const result = await _userContract.createDealerApplication(
+      dealerInfo,
+      dealerId,
+      {
+        from: accounts[0]
+      }
+    );
 
-  if (result.receipt.status) {
-    await APPLICATION_REF.doc(lineDetail.userId).set({
-      ...dealerInfo,
-      verified: false,
-    });
-    alert('ขอบคุณสำหรับการลงทะเบียน');
-    liff.closeWindow();
+    if (result.receipt.status) {
+      await APPLICATION_REF.doc(lineDetail.userId).set({
+        ...dealerInfo,
+        location: locationFromForm,
+        verified: false
+      });
+      alert('ขอบคุณสำหรับการลงทะเบียน');
+      liff.closeWindow();
+    }
+  } catch (err) {
+    console.error(err);
   }
 };
 async function fetchApplicationData() {
@@ -110,7 +124,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     const { verified } = data;
     if (verified) {
       liff.openWindow({
-        url: 'https://liff.line.me/1653520229-eDJywwyq',
+        url: 'https://liff.line.me/1653520229-eDJywwyq'
       });
       return;
     }
@@ -122,11 +136,12 @@ window.addEventListener('DOMContentLoaded', async () => {
   const isVerifiedOnChain = await _userContract.isVerified(hash);
   if (isVerifiedOnChain) {
     liff.openWindow({
-      url: 'https://liff.line.me/1653520229-eDJywwyq',
+      url: 'https://liff.line.me/1653520229-eDJywwyq'
     });
     return;
   }
   await fetchApplicationData();
+  console.log('done');
   document.querySelector('.pageloader').classList.remove('is-active');
 });
 

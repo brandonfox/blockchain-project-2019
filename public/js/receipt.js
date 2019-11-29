@@ -1,14 +1,16 @@
 import { web3, userContract, init } from './userContract';
 import firebase from './firebase-init';
 import 'firebase/firebase-firestore';
+import { log } from 'util';
 
 const db = firebase.firestore();
 const { liff } = window;
 
 let dealerId; // The QR opener
+let userId;
 let userIdFromQrCode;
+let dealRealId;
 let _userContract;
-let _userId;
 let carPlates;
 let userCarDetails;
 let newCar = false;
@@ -29,12 +31,10 @@ const initApp = async () => {
       .map(el => el.value);
     const comment = document.getElementById('other-services').value;
     const accounts = await web3.eth.getAccounts();
-    console.log('Got accounts');
 
-    console.log('Dealer verified');
     const result = await _userContract.insertRecord(
       dealerId,
-      _userId,
+      userId,
       carPlate,
       services,
       subServices,
@@ -47,10 +47,10 @@ const initApp = async () => {
       const carDetails = {
         brand: document.getElementById('carBrand').value,
         model: document.getElementById('carModel').value,
-        year: document.getElementById('carYear').value,
+        year: document.getElementById('carYear').value
       };
       console.log(carDetails);
-      _userContract.editCarDetails(_userId, carPlate, carDetails);
+      _userContract.editCarDetails(userId, carPlate, carDetails);
     }
     if (result.receipt.status) {
       await db
@@ -58,19 +58,19 @@ const initApp = async () => {
         .doc(userIdFromQrCode)
         .collection('Entries')
         .add({
-          dealerId,
-          userId: _userId,
+          dealerId: dealRealId,
+          userId,
           carPlate,
           services,
           subServices,
           comment,
-          date: new Date().getTime(),
+          date: new Date().getTime()
         });
       alert('การทำรายการสำเร็จ');
       liff.closeWindow();
     }
   } catch (err) {
-    debug.innerText = err;
+    console.error(err);
   }
 };
 
@@ -99,25 +99,22 @@ document.body.addEventListener(
 
 window.addEventListener('DOMContentLoaded', async () => {
   // TODO Display page after this function has completed ONLY
-  // await liff.init({ liffId: '1653520229-vA50WW0A' });
+  await liff.init({ liffId: '1653520229-vA50WW0A' });
 
   // // ==========================REMOVE THIS YOU DEAD LOL JUST JOKING===============
-  // const queryString = decodeURIComponent(window.location.search).replace(
-  //   '?liff.state=',
-  //   ''
-  // );
-  // const params = new URLSearchParams(queryString);
-  // userIdFromQrCode = params.get('userId');
-  // const dealerLiffId = await liff.getProfile();
+  const queryString = decodeURIComponent(window.location.search).replace(
+    '?liff.state=',
+    ''
+  );
+  const params = new URLSearchParams(queryString);
+  userIdFromQrCode = params.get('userId');
+  const dealerLiff = await liff.getProfile();
   await init();
+  dealRealId = dealerLiff.userId;
   _userContract = await userContract.deployed();
-  // dealerId = await _userContract.getHash(dealerLiffId.userId);
-  // _userId = await _userContract.getHash(userIdFromQrCode);
-  _userId = await _userContract.getHash('Yes');
-  dealerId = _userId;
-  console.log(_userId);
-  _userContract.getCarPlates(_userId).then(result => {
-    // console.log("got car details");
+  dealerId = await _userContract.getHash(dealRealId);
+  userId = await _userContract.getHash(userIdFromQrCode);
+  _userContract.getCarPlates(userId).then(result => {
     carPlates = result;
     let cars = '';
     for (let i = 0; i < result.length; i++) {
@@ -125,8 +122,12 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
     document.getElementById('carPlates').innerHTML = cars;
   });
-  userCarDetails = await _userContract.getCars(_userId);
-  console.log(userCarDetails);
+  userCarDetails = await _userContract.getCars(userId);
+  // document.querySelector('.pageloader').classList.remove('is-active');
+  console.log('userId', userIdFromQrCode);
+  console.log('userIdHashed', userId);
+  console.log('dealerID', dealRealId);
+  console.log('dealerIDHashed', dealerId);
   document.querySelector('.pageloader').classList.remove('is-active');
 });
 

@@ -4,15 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vConsole/3.3.4/vconsole.min.js"></script>
     <link
       href="https://fonts.googleapis.com/css?family=Kanit&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/bulma-pageloader.min.css" />
     <link rel="stylesheet" href="css/style.css" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
     <script src="./js/googlemap-integration.js"></script>
     <script
       defer
@@ -22,25 +24,26 @@
     <title>สมัครเป็นดีลเลอร์</title>
   </head>
   <style>
-  /* Always set the map height explicitly to define the size of the div
+    /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
-       #map {
-        height: 400px;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-      .centerMapButton {
-        height: 35px;
-        width: 35px;
-        display:inline-block;
-        text-align: center;
-        line-height: 50%;
-      }
-    </style>
+    #map {
+      height: 400px;
+    }
+    /* Optional: Makes the sample page fill the window. */
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    .centerMapButton {
+      height: 35px;
+      width: 35px;
+      display: inline-block;
+      text-align: center;
+      line-height: 50%;
+    }
+  </style>
   <body>
     <div class="pageloader is-active"><span class="title">กำลังโหลด</span></div>
     <div id="container" class="container">
@@ -94,16 +97,30 @@
         <div class="form-row" style="display: block;">
           <label for="dealerLocation">Dealer location</label>
           <div class="location">
-          <input id="dealerLocation" name="dealerLocation" type="text" onblur="updateFocusLocation()"/>
-          <button class="centerMapButton" id="centerLocation" type="button" onclick="getCenterLocation()"><i class="material-icons">
-              gps_fixed
-              </i></button>
+            <input
+              id="dealerLocation"
+              name="dealerLocation"
+              type="text"
+              onblur="updateFocusLocation()"
+            />
+            <button
+              class="centerMapButton"
+              id="centerLocation"
+              type="button"
+              onclick="getCenterLocation()"
+            >
+              <i class="material-icons">
+                gps_fixed
+              </i>
+            </button>
           </div>
           <div id="warningMessage"></div>
         </div>
         <div id="map">
-          <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBaZQgp7e7cEXCWwo_d4-iWyc4kCzwXoMU&callback=initMap"
-          async></script>
+          <script
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBaZQgp7e7cEXCWwo_d4-iWyc4kCzwXoMU&callback=initMap"
+            async
+          ></script>
         </div>
         <div class="submit-row">
           <button id="button-submit">ลงทะเบียน</button>
