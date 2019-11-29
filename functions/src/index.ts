@@ -1,4 +1,4 @@
-import * as Line from "./line/index";
+import * as Line from './line/index';
 
 // Real names of functions decleared here
 
