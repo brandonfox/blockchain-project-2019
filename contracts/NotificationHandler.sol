@@ -6,7 +6,7 @@ import "./AppointmentHandler.sol";
 contract NotificationHandler is AppointmentHandler {
 
     mapping(string => uint) public notificationTimes;
-    mapping(bytes32 => uint[]) private userNotificationTime;
+    mapping(bytes32 => uint[255]) private userNotificationTime;
 
     function insertRecord(bytes32 dealerId, bytes32 id, string memory noPlate,
      string[] memory services, string[] memory subservices, string memory comment, uint timeStamp)
@@ -16,6 +16,10 @@ contract NotificationHandler is AppointmentHandler {
             uint8 serviceIndex = getIndexOfService(services[i]);
             userNotificationTime[id][serviceIndex] = timeStamp;
         }
+    }
+
+    function getLastServiceTimes(bytes32 userId) public view returns(uint[255] memory) {
+        return userNotificationTime[userId];
     }
 
     function setServiceNotificationTime(string memory serviceName, uint time) public ownerOnly {

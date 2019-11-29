@@ -23,22 +23,23 @@ const initApp = async () => {
     buttonElement.disabled = true;
     buttonElement.innerText = 'กำลังดำเนินการ โปรดรอซักครู่...';
     const select = document.getElementsByClassName('select');
-    const services = Array.from(select)
+    const bservices = Array.from(select)
       .filter(el => el.value !== '')
       .map(el => el.name);
-    const subServices = Array.from(select)
+    const bsubServices = Array.from(select)
       .filter(el => el.value !== '')
       .map(el => el.value);
     const comment = document.getElementById('other-services').value;
     const accounts = await web3.eth.getAccounts();
-
+    console.log(bservices);
+    console.log(bsubServices);
     console.log('Inserting record');
     const result = await _userContract.insertRecord(
       dealerId,
       userId,
       carPlate,
-      services,
-      subServices,
+      bservices,
+      bsubServices,
       comment,
       new Date().getTime(),
       { from: accounts[0] }
@@ -77,8 +78,8 @@ const initApp = async () => {
           dealerId: dealRealId,
           userId,
           carPlate,
-          services,
-          subServices,
+          bservices,
+          bsubServices,
           comment,
           date: new Date().getTime()
         });
@@ -87,6 +88,7 @@ const initApp = async () => {
       liff.closeWindow();
     }
   } catch (err) {
+    document.getElementById('debug').innerText = err;
     console.log('err', err);
   }
 };
@@ -115,28 +117,28 @@ document.body.addEventListener(
 );
 
 window.addEventListener('DOMContentLoaded', async () => {
-  // await liff.init({ liffId: '1653520229-vA50WW0A' });
-  // console.log('window.location.search', window.location.search);
-  // const queryString = decodeURIComponent(window.location.search).replace(
-  //   '?liff.state=',
-  //   ''
-  // );
-  // console.log('queryString', queryString);
-  // const params = new URLSearchParams(queryString);
-  // userIdFromQrCode = params.get('userId');
-  // console.log('userIdFromQrCode', userIdFromQrCode);
-  // const dealerLiffId = await liff.getProfile();
+  await liff.init({ liffId: '1653520229-vA50WW0A' });
+  console.log('window.location.search', window.location.search);
+  const queryString = decodeURIComponent(window.location.search).replace(
+    '?liff.state=',
+    ''
+  );
+  console.log('queryString', queryString);
+  const params = new URLSearchParams(queryString);
+  userIdFromQrCode = params.get('userId');
+  console.log('userIdFromQrCode', userIdFromQrCode);
+  const dealerLiffId = await liff.getProfile();
   await init();
-  // dealRealId = dealerLiff.userId;
+  dealRealId = dealerLiff.userId;
   _userContract = await userContract.deployed();
-  // dealerId = await _userContract.getHash(dealerLiffId.userId);
-  //  userId = await _userContract.getHash(userIdFromQrCode);
-  // //FOR WEB DEBUG-------------------------------------------------------------
-  userIdFromQrCode = 'Yes';
-  userId = await _userContract.getHash('Yes');
-  dealerId = userId;
-  dealRealId = dealerId;
-  // //END WEB DEBUG--------------------------------------------------------------
+  dealerId = await _userContract.getHash(dealerLiffId.userId);
+   userId = await _userContract.getHash(userIdFromQrCode);
+  // // //FOR WEB DEBUG-------------------------------------------------------------
+  // userIdFromQrCode = 'Yes';
+  // userId = await _userContract.getHash('Yes');
+  // dealerId = userId;
+  // dealRealId = dealerId;
+  // // //END WEB DEBUG--------------------------------------------------------------
   console.log(userId);
   if (!(await _userContract.isVerified(dealerId))) {
     liff.close;
@@ -146,9 +148,35 @@ window.addEventListener('DOMContentLoaded', async () => {
   for (let i = 0; i < carPlates.length; i++) {
     cars += `<option value="${carPlates[i]}"></option>`;
   }
+  services = await _userContract.getServices();
+  getSubservices();
   document.getElementById('carPlates').innerHTML = cars;
-  document.querySelector('.pageloader').classList.remove('is-active');
+  checkLoadStatus();
 });
+
+function checkLoadStatus(){
+  if(retrievedSubs == services.length){
+    setupForm();
+    document.querySelector('.pageloader').classList.remove('is-active');
+  }
+}
+
+function setupForm(){
+  const content = document.getElementById('servicesContent');
+  var h = '';
+  for(let i = 0; i < services.length; i++){
+    h += `<div class="form-row">`
+    h += `<label for="service-${services[i]}">${services[i]}</label>`
+    h += `<select class="select" id="service-${services[i]}" name="${services[i]}">`
+    h += `<option selected value=""></option>`
+    for(let x = 0; x < subservices[i].length;x++){
+      h += `<option value="${subservices[i][x]}">${subservices[i][x]}</option>`
+    }
+    h += '</select>'
+    h += '</div>'
+  }
+  content.innerHTML = h;
+}
 
 document.getElementById('receipt').addEventListener('submit', async e => {
   e.preventDefault();
@@ -236,3 +264,22 @@ document.getElementById('car-plate').addEventListener('change', function() {
     gotDetails(v, result);
   });
 });
+
+let services;
+let subservices;
+let retrievedSubs = 0;
+
+function getSubservices(){
+  subservices = [services.length]
+  for(let i = 0; i < services.length; i++){
+    _userContract.getSubServices(services[i]).then(result => {
+      setSubService(result,i);
+    })
+  }
+}
+
+function setSubService(data, index){
+  subservices[index] = data;
+  retrievedSubs++;
+  checkLoadStatus();
+}

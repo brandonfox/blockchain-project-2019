@@ -9,7 +9,7 @@
     "dev": "rm -rf dist/ && parcel public/*.html",
     "build": "rm -rf dist/ && parcel build public/*.html",
     "deploy-hosting": "yarn build && firebase deploy --only hosting",
-    "deploy-function": "firebase deploy --only functions",
+    "deploy-function": "yarn build && firebase deploy --only functions",
     "deploy-all": "firebase deploy"
   },
   "devDependencies": {

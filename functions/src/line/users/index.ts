@@ -1,33 +1,30 @@
-import * as functions from "firebase-functions";
-import * as line from "@line/bot-sdk";
-import * as request from "request-promise-native";
-import { locationTemplate } from "./design";
-import * as GeoLocation from "geolocation-utils";
-import * as ThaiTime from "./datetimeUtils";
-import * as LineDealer from "../dealers/index";
-import { db } from "../../firebase-config";
-
-import * as web3Utils from "../../web3/index";
-
-// Import db before using
+import * as functions from 'firebase-functions';
+import * as line from '@line/bot-sdk';
+import * as request from 'request-promise-native';
+import { locationTemplate } from './design';
+import * as GeoLocation from 'geolocation-utils';
+import * as ThaiTime from './datetimeUtils';
+import * as LineDealer from '../dealers/index';
+import { db } from '../../firebase-config';
+import * as web3Utils from '../../web3/index';
 
 declare type ResultFirestore = {
   id: string;
   data: FirebaseFirestore.DocumentData;
 };
-const DB_REF = db.collection("Dealers");
+const DB_REF = db.collection('Dealers');
 const dialogflowWebhook =
-  "https://bots.dialogflow.com/line/623fc13c-919c-4ae8-8404-6077291b3856/webhook";
+  'https://bots.dialogflow.com/line/623fc13c-919c-4ae8-8404-6077291b3856/webhook';
 const UserClient = new line.Client({
   channelAccessToken:
-    "hwM3ymw21vj2lhcWZhjvxWtN3XizPUctMfdh1tx8RrY5yhL5AYZMLR3dfNBa2RyFIEWmyxToyGXoOoEUwEcaNBjZZvD2eemiFYIcLCRCmRb9ERVhAWa1Olpydc4PGXstmwYBRYUSOOaroHX8VpTTVAdB04t89/1O/w1cDnyilFU="
+    'hwM3ymw21vj2lhcWZhjvxWtN3XizPUctMfdh1tx8RrY5yhL5AYZMLR3dfNBa2RyFIEWmyxToyGXoOoEUwEcaNBjZZvD2eemiFYIcLCRCmRb9ERVhAWa1Olpydc4PGXstmwYBRYUSOOaroHX8VpTTVAdB04t89/1O/w1cDnyilFU='
 });
 
 // ================= Variable needed ==================================
 
 function replyLocation(replyToken: string, payload: any) {
   const locationMessage: line.LocationMessage = {
-    type: "location",
+    type: 'location',
     address: `${payload.addr}`,
     title: `${payload.dealerName}`,
     latitude: payload.location._latitude,
@@ -37,9 +34,9 @@ function replyLocation(replyToken: string, payload: any) {
 }
 
 function processDateTime(datetime: string): number {
-  const [date, time] = datetime.split("T"); // 2019-11-27T22:19 => ['2019-11-27', '22:19']
-  const [year, month, day] = date.split("-");
-  const [hour] = time.split(":");
+  const [date, time] = datetime.split('T'); // 2019-11-27T22:19 => ['2019-11-27', '22:19']
+  const [year, month, day] = date.split('-');
+  const [hour] = time.split(':');
   return parseInt(`${year + month + day + hour}`);
 }
 
@@ -50,8 +47,8 @@ async function handlePostback(
   postback: any
 ) {
   const { data } = postback;
-  const parameter = data.split("&");
-  const action = parameter[0].split("=")[1]; // this will give you the action = 'make_appointment' , 'send_location
+  const parameter = data.split('&');
+  const action = parameter[0].split('=')[1]; // this will give you the action = 'make_appointment' , 'send_location
 
   // PARAMETER[1] DATA FROM FIRESTORE
   const payload: { id: string; data: any } = JSON.parse(parameter[1]); //
@@ -76,7 +73,7 @@ async function handlePostback(
   const chosenDealerHash = await instance.getHash(dealerId);
 
   switch (action) {
-    case "choose_car_plate":
+    case 'choose_car_plate':
       const car_plates = await instance.getCarPlates(userHash);
       const car_owned = car_plates.length;
 
@@ -85,12 +82,12 @@ async function handlePostback(
       } else if (car_owned > 0) {
         const firstThree = car_plates.slice(0, 3);
         return UserClient.replyMessage(replyToken, {
-          type: "template",
-          altText: "เลิือกรถที่ท้านต้องการเข้ารับบริการ",
+          type: 'template',
+          altText: 'เลิือกรถที่ท้านต้องการเข้ารับบริการ',
           template: {
-            type: "buttons",
+            type: 'buttons',
             actions: firstThree.map((carPlate: string) => ({
-              type: "postback",
+              type: 'postback',
               label: `${carPlate}`,
               data: `action=confirm_appointment&${parameter[1]}&${parameter[2]}&${carPlate}`
             })),
@@ -99,12 +96,12 @@ async function handlePostback(
         });
       }
 
-    case "confirm_appointment":
+    case 'confirm_appointment':
       const formattedTime = processDateTime(date_time_from_param); // YYYYMMDDHH
       const appointmentTemplate = {
         userId: userHash,
         dealerId: chosenDealerHash,
-        carPlate: `${car_plate_chosen ? car_plate_chosen : ""}`,
+        carPlate: `${car_plate_chosen ? car_plate_chosen : ''}`,
         time: formattedTime
       };
 
@@ -116,59 +113,59 @@ async function handlePostback(
         if (result.receipt.status) {
           // notify the dealer that they have a new coming appointment.
           return UserClient.replyMessage(replyToken, {
-            type: "text",
+            type: 'text',
             text: `นัดหมายกับ ${dealerName} เรียบร้อย`
           }).then(() =>
             LineDealer.notifyDealerAppointment(dealerId, appointmentTemplate)
           );
         } else {
           return UserClient.replyMessage(replyToken, {
-            type: "text",
+            type: 'text',
             text:
-              "การนัดหมายไม่สำเร็จ กรุณาลองใหม่อีกครั้ง หรือติดต่อ ดีลเลอร์โดยตรง"
+              'การนัดหมายไม่สำเร็จ กรุณาลองใหม่อีกครั้ง หรือติดต่อ ดีลเลอร์โดยตรง'
           });
         }
       } catch (err) {
         console.log(err);
         return UserClient.replyMessage(replyToken, {
-          type: "text",
-          text: "ดีลเลอร์ที่คุณเลือกยังไม่ได้รับการยืนยัน"
+          type: 'text',
+          text: 'ดีลเลอร์ที่คุณเลือกยังไม่ได้รับการยืนยัน'
         });
         // Unverified dealer should not even be in this list.
       }
 
     // return promise
-    case "send_phone":
+    case 'send_phone':
       return UserClient.replyMessage(replyToken, {
-        type: "text",
+        type: 'text',
         text: `${payload.data.phoneNo}`
       });
 
-    case "make_appointment":
+    case 'make_appointment':
       // wait_for_confirm
       const { datetime } = postback.params;
       const { day, month, time } = ThaiTime.convertToThai(datetime);
       return UserClient.replyMessage(replyToken, {
-        type: "template",
+        type: 'template',
         altText: `ยืนการการนัดหมาย กับ ${dealerName} `,
         template: {
-          type: "confirm",
+          type: 'confirm',
           actions: [
             {
-              type: "postback",
-              label: "ใช่",
+              type: 'postback',
+              label: 'ใช่',
               data: `action=choose_car_plate&${parameter[1]}&${datetime}`
             },
             {
-              type: "message",
-              label: "ไม่",
-              text: "ยกเลิกนัดหมาย"
+              type: 'message',
+              label: 'ไม่',
+              text: 'ยกเลิกนัดหมาย'
             }
           ],
           text: `ยืนยันการนัดหมาย กับ ${dealerName} วันที่ ${day} ${month} เวลา ${time}`
         }
       });
-    case "send_location":
+    case 'send_location':
       return replyLocation(replyToken, payload.data);
 
     default:
@@ -193,8 +190,8 @@ async function findBestTen(
   const allVerifiedDealers = await getData();
   if (allVerifiedDealers.length === 0) {
     return UserClient.replyMessage(replyToken, {
-      type: "text",
-      text: "ยังไม่มีดีลเลอร์เลย กรุณาลองใหม่ภายหลังนะครับ "
+      type: 'text',
+      text: 'ยังไม่มีดีลเลอร์เลย กรุณาลองใหม่ภายหลังนะครับ '
     });
   }
   const cols: line.TemplateColumn[] = [];
@@ -215,8 +212,8 @@ async function findBestTen(
       )} km`,
       actions: [
         {
-          type: "datetimepicker",
-          label: "นัดหมาย",
+          type: 'datetimepicker',
+          label: 'นัดหมาย',
           data: `action=make_appointment&${JSON.stringify({
             ...dealer,
             data: {
@@ -226,12 +223,12 @@ async function findBestTen(
               addr: dealer.data.addr
             }
           })}`,
-          mode: "datetime"
+          mode: 'datetime'
         },
         {
-          type: "postback",
-          label: "สถานที่ตั้ง",
-          displayText: "กรุณารอสักครู่...",
+          type: 'postback',
+          label: 'สถานที่ตั้ง',
+          displayText: 'กรุณารอสักครู่...',
           data: `action=send_location&${JSON.stringify({
             ...dealer,
             data: {
@@ -242,9 +239,9 @@ async function findBestTen(
           })}`
         },
         {
-          type: "postback",
-          label: "โทร",
-          displayText: "กรุณารอสักครู่...",
+          type: 'postback',
+          label: 'โทร',
+          displayText: 'กรุณารอสักครู่...',
           data: `action=send_phone&${JSON.stringify({
             ...dealer,
             data: {
@@ -257,7 +254,7 @@ async function findBestTen(
   });
 
   const templateCarousel: line.TemplateCarousel = {
-    type: "carousel",
+    type: 'carousel',
     columns: []
   };
   const cloneTemplate = { ...locationTemplate };
@@ -268,7 +265,7 @@ async function findBestTen(
 }
 
 export const getAllDoc = functions
-  .region("asia-east2")
+  .region('asia-east2')
   .https.onRequest(async (req, res) => {
     try {
       // find best possible location given latitude and longtitude
@@ -290,7 +287,7 @@ const replyText = (token: string, texts: any) => {
   const texts2 = Array.isArray(texts) ? texts : [texts];
   return UserClient.replyMessage(
     token,
-    texts2.map((text: string) => ({ type: "text", text }))
+    texts2.map((text: string) => ({ type: 'text', text }))
   );
 };
 
@@ -309,12 +306,12 @@ const handleText = (
   req: functions.Request
 ) => {
   switch (message.text) {
-    case "ยกเลิกนัดหมาย":
+    case 'ยกเลิกนัดหมาย':
       return UserClient.replyMessage(replyToken, {
-        type: "text",
-        text: "ยกเลิกการนัดหมายแล้วครับ"
+        type: 'text',
+        text: 'ยกเลิกการนัดหมายแล้วครับ'
       });
-    case "profile":
+    case 'profile':
       if (source.userId) {
         return UserClient.getProfile(source.userId).then(profile =>
           replyText(replyToken, [
@@ -343,27 +340,27 @@ const handleText = (
 
 const handleEvent = (event: any, req: functions.Request) => {
   if (event.replyToken && event.replyToken.match(/^(.)\1*$/)) {
-    console.log("Test hook recieved: " + JSON.stringify(event.message));
+    console.log('Test hook recieved: ' + JSON.stringify(event.message));
     return;
   }
 
   switch (event.type) {
-    case "message":
+    case 'message':
       const message = event.message;
       switch (message.type) {
-        case "text":
-          req.headers.host = "bots.dialogflow.com";
+        case 'text':
+          req.headers.host = 'bots.dialogflow.com';
           return handleText(message, event.replyToken, event.source, req);
-        case "location":
+        case 'location':
           return handleLocation(message, event.replyToken);
         default:
           throw new Error(`Unknown message: ${JSON.stringify(message)}`);
       }
-    case "postback":
+    case 'postback':
       const { userId } = event.source;
       const { postback } = event;
       return handlePostback(event.replyToken, userId, postback);
-    case "follow":
+    case 'follow':
       return replyText(
         event.replyToken,
         `สวัสดีครับ Oranoss Bot ยินดีต้อนรับครับ`
@@ -375,10 +372,10 @@ const handleEvent = (event: any, req: functions.Request) => {
 };
 
 export const userWebhook = functions
-  .region("asia-east2")
+  .region('asia-east2')
   .https.onRequest((req, res) => {
     if (req.body.destination) {
-      console.log("Destination User ID: " + req.body.destination);
+      console.log('Destination User ID: ' + req.body.destination);
     }
 
     // req.body.events should be an array of events
