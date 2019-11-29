@@ -8,6 +8,7 @@ import * as LineDealer from '../dealers/index';
 import { db } from '../../firebase-config';
 import * as web3Utils from '../../web3/index';
 
+var instance: any;
 declare type ResultFirestore = {
   id: string;
   data: FirebaseFirestore.DocumentData;
@@ -15,7 +16,7 @@ declare type ResultFirestore = {
 const DB_REF = db.collection('Dealers');
 const dialogflowWebhook =
   'https://bots.dialogflow.com/line/623fc13c-919c-4ae8-8404-6077291b3856/webhook';
-const UserClient = new line.Client({
+export const UserClient = new line.Client({
   channelAccessToken:
     'hwM3ymw21vj2lhcWZhjvxWtN3XizPUctMfdh1tx8RrY5yhL5AYZMLR3dfNBa2RyFIEWmyxToyGXoOoEUwEcaNBjZZvD2eemiFYIcLCRCmRb9ERVhAWa1Olpydc4PGXstmwYBRYUSOOaroHX8VpTTVAdB04t89/1O/w1cDnyilFU='
 });
@@ -68,7 +69,6 @@ async function handlePostback(
   const dealerId = payload.id;
   const { dealerName } = payload.data; // object of payload
   // Smart contract
-  const instance = await web3Utils.initWeb3();
   const userHash = await instance.getHash(userId);
   const chosenDealerHash = await instance.getHash(dealerId);
 
@@ -357,9 +357,13 @@ const handleEvent = (event: any, req: functions.Request) => {
           throw new Error(`Unknown message: ${JSON.stringify(message)}`);
       }
     case 'postback':
-      const { userId } = event.source;
-      const { postback } = event;
-      return handlePostback(event.replyToken, userId, postback);
+      return web3Utils.initWeb3().then(deployed => {
+        instance = deployed;
+        const { userId } = event.source;
+        const { postback } = event;
+        return handlePostback(event.replyToken, userId, postback);
+      });
+
     case 'follow':
       return replyText(
         event.replyToken,
