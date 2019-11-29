@@ -32,6 +32,21 @@ contract UserContract is ServiceHandler {
     mapping(bytes32 => string[]) private userCars;
     mapping(string => CarInfo) private carDetails;
 
+    bytes32[] activeUsers;
+
+    function getAllUsers() public view ownerOnly returns(bytes32[] memory){
+        return activeUsers;
+    }
+
+    function getIndexOfUser(bytes32 user) internal view returns(uint){
+        for(uint i = 0; i < activeUsers.length; i++){
+            if(activeUsers[i] == user){
+                return i;
+            }
+        }
+        return uint(-1);
+    }
+
     modifier carExists(string memory noPlate) {
         require(bytes(carDetails[noPlate].brand).length > 0,"That car does not exist in the chain");
         _;
@@ -87,6 +102,9 @@ contract UserContract is ServiceHandler {
             userCars[id].push(noPlate);
         }
         records[noPlate].push(RecordInternal(dealerId,services,subservices,comment,timeStamp));
+        if(getIndexOfUser(id) == uint(-1)){
+            activeUsers.push(id);
+        }
     }
 
     function getRecords(string memory noPlate) public view returns (RecordInternal[] memory) {

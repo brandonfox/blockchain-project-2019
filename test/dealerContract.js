@@ -23,7 +23,7 @@ contract('DealerContract', () => {
       firstName: 'test',
       lastName: 'test',
       addr: 'mahidol',
-      location: '192.12312,24.12',
+      location: ["a","b"],
       phoneNo: '081+++++++',
       bestSeller: 'test',
       promotion: 'test',

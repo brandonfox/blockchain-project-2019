@@ -18,7 +18,7 @@ module.exports = {
       network_id: 4,
       gas: 8000000
     },
-    test: {
+    q: {
       provider: new HDWalletProvider(
         'rule fiction tissue submit clump turn depth chef desk cycle click parent',
         'http://127.0.0.1:7545'

@@ -33,7 +33,7 @@ contract('AppointmentHandler',() => {
     firstName: 'test',
     lastName: 'test',
     addr: 'mahidol',
-    location: '192.12312,24.12',
+    location: ['192.12312,24.12',"here"],
     phoneNo: '081+++++++',
     bestSeller: 'test',
     promotion: 'test',
