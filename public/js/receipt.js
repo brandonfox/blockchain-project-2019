@@ -52,7 +52,7 @@ const initApp = async () => {
         year: document.getElementById('carYear').value
       };
       console.log(carDetails);
-      _userContract.editCarDetails(_userId, carPlate, carDetails, {
+      _userContract.editCarDetails(userId, carPlate, carDetails, {
         from: accounts[0]
       });
     }
