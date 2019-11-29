@@ -13,6 +13,10 @@ declare type ResultFirestore = {
   id: string;
   data: FirebaseFirestore.DocumentData;
 };
+web3Utils.initWeb3().then(deployed => {
+  instance = deployed;
+});
+
 const DB_REF = db.collection('Dealers');
 const dialogflowWebhook =
   'https://bots.dialogflow.com/line/623fc13c-919c-4ae8-8404-6077291b3856/webhook';
@@ -357,12 +361,9 @@ const handleEvent = (event: any, req: functions.Request) => {
           throw new Error(`Unknown message: ${JSON.stringify(message)}`);
       }
     case 'postback':
-      return web3Utils.initWeb3().then(deployed => {
-        instance = deployed;
-        const { userId } = event.source;
-        const { postback } = event;
-        return handlePostback(event.replyToken, userId, postback);
-      });
+      const { userId } = event.source;
+      const { postback } = event;
+      return handlePostback(event.replyToken, userId, postback);
 
     case 'follow':
       return replyText(
