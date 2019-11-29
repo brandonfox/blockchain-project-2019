@@ -44,7 +44,7 @@ contract('UserContract', () => {
       firstName: 'test',
       lastName: 'test',
       addr: 'mahidol',
-      location: '192.12312,24.12',
+      location: ['192.12312,24.12',"b"],
       phoneNo: '081+++++++',
       bestSeller: 'test',
       promotion: 'test',
@@ -77,5 +77,7 @@ contract('UserContract', () => {
     );
     const records = await userContract.getRecords(testCarPlate);
     assert(records[0].comment === 'Done some test maintenance',"Blockchain record comment does not match");
+    const activeUsers = await userContract.getAllUsers();
+    assert(activeUsers.length > 0,"No users were recorded");
   });
 });
