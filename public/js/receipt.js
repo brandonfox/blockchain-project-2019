@@ -134,6 +134,9 @@ window.addEventListener('DOMContentLoaded', async () => {
 //   _userId = await _userContract.getHash('Yes');
   //dealerId = _userId;
   console.log(_userId);
+  if(!await _userContract.isVerified(dealerId)){
+    liff.close
+  }
   const carPlates = await _userContract.getCarPlates(_userId);
   let cars = '';
   for (let i = 0; i < carPlates.length; i++) {

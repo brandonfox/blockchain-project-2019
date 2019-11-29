@@ -6,6 +6,7 @@ import "./ServiceHandler.sol";
 contract UserContract is ServiceHandler {
 
     struct RecordInternal {
+        bytes32 dealerId;
         string[] services;
         string[] subservices;
         string comment;
@@ -85,7 +86,7 @@ contract UserContract is ServiceHandler {
         if(getCarIndex(id,noPlate) < 0){
             userCars[id].push(noPlate);
         }
-        records[noPlate].push(RecordInternal(services,subservices,comment,timeStamp));
+        records[noPlate].push(RecordInternal(dealerId,services,subservices,comment,timeStamp));
     }
 
     function getRecords(string memory noPlate) public view returns (RecordInternal[] memory) {
