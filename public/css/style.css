@@ -5,9 +5,9 @@
 }
 
 body {
-  background-color: #00d1b2;
   font-family: 'Kanit', sans-serif;
-  height: 100vh;
+  background-color: #00d1b2;
+  height: 100vmin;
 }
 
 input.inline {
