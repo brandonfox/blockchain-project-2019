@@ -55,7 +55,8 @@ window.initMap = function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: bangkok,
     zoom: 15,
-    disableDefaultUI: true
+    disableDefaultUI: true,
+    gestureHandling: 'greedy'
   })
   marker = new google.maps.Marker({
     position: bangkok,
@@ -64,7 +65,7 @@ window.initMap = function initMap() {
   map.addListener('center_changed',function(){
     marker.setPosition(map.getCenter());
   })
-  map.addListener('mouseout',function(){
+  map.addListener('dragend',function(){
     geocodeCoords();
   })
   geocoder = new google.maps.Geocoder();
