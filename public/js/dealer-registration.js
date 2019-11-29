@@ -22,6 +22,8 @@ const initApp = async () => {
 
   const _userContract = await userContract.deployed();
   const accounts = await web3.eth.getAccounts();
+  console.log('accounts', accounts);
+  console.log('location', location);
   const lineDetail = await liff.getProfile();
   const dealerId = await _userContract.getHash(lineDetail.userId);
   const dealerInfo = {
@@ -29,29 +31,34 @@ const initApp = async () => {
     firstName,
     lastName,
     addr: address,
-    location: [ location.lat(), location.lng() ],
+    location: [String(location.lat()), String(location.lng())],
     phoneNo: phoneNumber,
     bestSeller,
     promotion,
     otherServices,
     availableServices: [],
-    availableSubServices: [],
+    availableSubServices: []
   };
-  const result = await _userContract.createDealerApplication(
-    dealerInfo,
-    dealerId,
-    {
-      from: accounts[0],
+  console.log('Creating dealer application');
+  try {
+    const result = await _userContract.createDealerApplication(
+      dealerInfo,
+      dealerId,
+      {
+        from: accounts[0]
+      }
+    );
+    console.log('Created dealer application');
+    if (result.receipt.status) {
+      await APPLICATION_REF.doc(lineDetail.userId).set({
+        ...dealerInfo,
+        verified: false
+      });
+      alert('ขอบคุณสำหรับการลงทะเบียน');
+      liff.closeWindow();
     }
-  );
-
-  if (result.receipt.status) {
-    await APPLICATION_REF.doc(lineDetail.userId).set({
-      ...dealerInfo,
-      verified: false,
-    });
-    alert('ขอบคุณสำหรับการลงทะเบียน');
-    liff.closeWindow();
+  } catch (error) {
+    console.log('error', error);
   }
 };
 async function fetchApplicationData() {
@@ -81,6 +88,7 @@ async function fetchApplicationData() {
 document.body.addEventListener(
   'focus',
   event => {
+    console.log('focus');
     const { target } = event;
     switch (target.tagName) {
       case 'INPUT':
@@ -110,7 +118,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     const { verified } = data;
     if (verified) {
       liff.openWindow({
-        url: 'https://liff.line.me/1653520229-eDJywwyq',
+        url: 'https://liff.line.me/1653520229-eDJywwyq'
       });
       return;
     }
@@ -122,7 +130,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   const isVerifiedOnChain = await _userContract.isVerified(hash);
   if (isVerifiedOnChain) {
     liff.openWindow({
-      url: 'https://liff.line.me/1653520229-eDJywwyq',
+      url: 'https://liff.line.me/1653520229-eDJywwyq'
     });
     return;
   }

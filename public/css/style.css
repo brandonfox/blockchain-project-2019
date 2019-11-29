@@ -34,7 +34,6 @@ body {
 }
 
 label {
-  margin-left: 12px;
   margin-bottom: 6px;
 }
 
@@ -84,8 +83,9 @@ button:disabled {
   background-color: transparent;
   position: absolute;
   margin-top: 6px;
-  margin-left: 220px;
+  margin-left: 235px;
   box-shadow: 0 0px 0px #00927c;
+  color: white;
 }
 
 textarea {
@@ -197,18 +197,16 @@ a.disabled {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .keyboard {
   height: calc(100vh + 600px);
-}
-
-.table-header {
-  padding-left: 1.5rem;
-  margin-left: 1.5rem;
-  margin-top: 1.5rem;
 }
 
 a.navbar-item:focus,
@@ -228,4 +226,8 @@ a {
 
 a:hover {
   color: #00d1b2;
+}
+
+input.dealer-location-input {
+  width: 230px;
 }
