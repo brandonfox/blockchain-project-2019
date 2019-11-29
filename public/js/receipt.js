@@ -146,7 +146,7 @@ document.getElementById('car-plate').addEventListener('change', function() {
   console.log('Value changed');
   const v = document.getElementById('car-plate').value;
   let carDetails = '';
-  for (let i = 0; i < carPlates.length; i++) {
+  for (let i = 0; i < carPlates.length; i += 1) {
     if (v === carPlates[i]) {
       carDetails +=
         '<div class="form-row"><label for="carBrand">Car Brand</label>';
