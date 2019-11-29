@@ -8,7 +8,9 @@
   "scripts": {
     "dev": "parcel public/*.html",
     "build": "rm -rf dist/ && parcel build public/*.html",
-    "deploy": "yarn build && firebase deploy"
+    "deploy-hosting": "yarn build && firebase deploy --only hosting",
+    "deploy-function": "firebase deploy --only functions",
+    "deploy-all": "firebase deploy"
   },
   "devDependencies": {
     "parcel-bundler": "^1.12.4"
