@@ -34,6 +34,19 @@ const rejectOnBlockchain = async id => {
   });
   if (result.receipt.status) {
     await APPLICATION_REF.doc(id).delete();
+
+    const url =
+      'https://asia-east2-user-oranoss-chjtic.cloudfunctions.net/d_sendMsg';
+    const options = {
+      method: 'POST',
+      uri: url,
+      body: {
+        userId: id,
+        message: 'ท่านถูกปฎิเสธการเป็นดีลเลอร์'
+      },
+      json: true
+    };
+    await request(options);
   }
 };
 
@@ -55,12 +68,13 @@ const verifyOnBlockchain = async id => {
       await APPLICATION_REF.doc(id).delete();
       // push message to dealer that their application has been verified.
       const url =
-        'https://asia-east2-user-oranoss-chjtic.cloudfunctions.net/d_confirm';
+        'https://asia-east2-user-oranoss-chjtic.cloudfunctions.net/d_sendMsg';
       const options = {
         method: 'POST',
         uri: url,
         body: {
-          userId: id
+          userId: id,
+          message: 'ท่านได้รับการยืนยันเป็นดีลเลอร์แล้ว'
         },
         json: true
       };
