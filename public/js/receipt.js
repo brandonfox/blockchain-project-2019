@@ -88,7 +88,6 @@ const initApp = async () => {
       liff.closeWindow();
     }
   } catch (err) {
-    document.getElementById('debug').innerText = err;
     console.log('err', err);
   }
 };
