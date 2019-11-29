@@ -26,6 +26,17 @@ const changeStatus = (verified, id) => {
   }
 };
 
+const rejectOnBlockchain = async id => {
+  const hash = await userContractInstance.getHash(id);
+
+  const result = await userContractInstance.rejectApplication(hash, {
+    from: accounts[0]
+  });
+  if (result.receipt.status) {
+    await APPLICATION_REF.doc(id).delete();
+  }
+};
+
 const verifyOnBlockchain = async id => {
   try {
     const hash = await userContractInstance.getHash(id);
@@ -61,23 +72,39 @@ const verifyOnBlockchain = async id => {
   // checkVerified(hash);
 };
 
-const verifyClicked = async e => {
+const verifyClicked = e => {
   e.stopPropagation();
   // eslint-disable-next-line no-restricted-globals
   if (confirm('ยืนยันดีลเลอร์คนนี้')) {
     const id = e.target.getAttribute('data-id');
     verifyOnBlockchain(id);
-    // do the verfication process
   }
 };
 
-const btnRender = (verified, a, id) => {
-  a.innerText = `${verified ? 'ยืนยันตัวตันแล้ว' : 'ยืนยันตัวตน'}`;
-  if (verified) {
-    a.classList.add('disabled');
-  } else {
-    a.setAttribute('data-id', id);
-    a.addEventListener('click', verifyClicked);
+const rejectClicked = e => {
+  e.stopPropagation();
+  if (confirm('ปฎิเสธดีลเลอร์ ?')) {
+    const id = e.target.getAttribute('data-idr');
+    rejectOnBlockchain(id);
+  }
+};
+
+const btnRender = (verified, a, id, code) => {
+  switch (code) {
+    case 'V':
+      a.innerText = `${verified ? 'ยืนยันตัวตันแล้ว' : 'ยืนยันตัวตน'}`;
+      if (verified) {
+        a.classList.add('disabled');
+      } else {
+        a.setAttribute('data-id', id);
+        a.addEventListener('click', verifyClicked);
+      }
+      break;
+    case 'R':
+      a.innerText = 'ปฎิเสธ';
+      a.setAttribute('style', 'color: red');
+      a.setAttribute('data-idr', id);
+      a.addEventListener('click', rejectClicked);
   }
 };
 
@@ -89,8 +116,11 @@ const renderTable = (dealerInfo, id) => {
   const lastNameTD = document.createElement('td');
   const phoneTD = document.createElement('td');
   const aTD = document.createElement('td');
+  aTD.setAttribute('style', 'display: flex; justify-content: space-evenly;');
   const a = document.createElement('a');
-  btnRender(verified, a, id);
+  const a2 = document.createElement('a');
+  btnRender(verified, a, id, 'V');
+  btnRender(verified, a2, id, 'R');
 
   companyNameTD.innerText = dealerInfo.dealerName;
   firstNameTD.innerText = dealerInfo.firstName;
@@ -99,6 +129,7 @@ const renderTable = (dealerInfo, id) => {
 
   TR.setAttribute('id', id);
   aTD.appendChild(a);
+  aTD.appendChild(a2);
   const dataArray = [companyNameTD, firstNameTD, lastNameTD, phoneTD, aTD];
   dataArray.forEach(dataEach => TR.appendChild(dataEach));
   TABLE.appendChild(TR);
