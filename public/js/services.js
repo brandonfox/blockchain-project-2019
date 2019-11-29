@@ -60,13 +60,17 @@ function setSubservices(serviceName,subservices){
     subservicesLocation.innerHTML = '';
     for(let i = 0; i < subservices.length; i++){
         subservicesLocation.innerHTML += '<div class="subservice-container">'
-        subservicesLocation.innerHTML += `<div class="subserviceName">${subservices[i]}</div>`
-        subservicesLocation.innerHTML += `<button type="button" style="color:red" id="subservice-delete-${subservices[i]}-button" class="service-button-delete">Delete Subservice</button>`
+        subservicesLocation.innerHTML += `<div style="display: flex;"><div class="subserviceName" style="padding-top: 10px; width: 284px;">${subservices[i]}</div><button type="button" style="color:red;
+    background-color: transparent;
+    box-shadow: 0 0px 0px #00927c;
+    border: 1px solid;
+    width: 100px;" id="subservice-delete-${subservices[i]}-button" class="service-button-delete">ลบบริการย่อย</button></div>`
+        // subservicesLocation.innerHTML += ``
         subservicesLocation.innerHTML += '</div>'
     }
     for(let i = 0; i < subservices.length; i++){
         document.getElementById(`subservice-delete-${subservices[i]}-button`).addEventListener('click',function() {
-            this.innerText = "Deleting..."
+            this.innerText = "กำลังลบ..."
             _userContract.deleteSubService(serviceName,subservices[i],{from:accounts[0]}).then(function() {
                 fetchSubservices(serviceName,subservices);
             })
@@ -81,12 +85,17 @@ function setServices(data){
     for(let i = 0; i < data.length; i++){
         shtml += '<div class="service-container">'
         shtml += `<button type="button" id="subservice-${data[i]}-master" class="service-${data[i]} collapsible">ชื่อบริการหลัก: ${data[i]}</div>`
-        shtml += `<div class="service-title inline" >ชื่อบริการย่อย:</div>`
+        shtml += `<div class="service-title inline" style="width: 420px">ชื่อบริการย่อย:</div>`
         shtml += `<form class="inline" id="add-subservice-${data[i]}">`
         shtml += `<input class="inline" type="text" id="subservice-name-${data[i]}" required/>`
         shtml += `<button id="subservice-name-${data[i]}-button" class="service-button">เพิ่มบริการย่อย</button>`
         shtml += `</form>`
-        shtml += `<button type="button" style="color:red" id="service-delete-${data[i]}-button" class="service-button-delete">Delete Service</button>`
+        shtml += `<button type="button" style="
+    color: red;
+    background-color: transparent;
+    box-shadow: 0 0px 0px #00927c;
+    border: 1px solid;
+    width: 420px;" id="service-delete-${data[i]}-button" class="service-button-delete">ลบบริการหลัก</button>`
         shtml += `<div id="service-${data[i]}-content" class="content"></div>`
         shtml += '</div>'
     }
@@ -111,7 +120,7 @@ function setServices(data){
           });
         document.getElementById(`service-delete-${data[i]}-button`).addEventListener("click", function() {
             const serviceName = data[i];
-            this.innerText = "Deleting...";
+            this.innerText = "กำลังลบ...";
             _userContract.deleteService(serviceName,{from: accounts[0]}).then(function() {
                 fetchServices();
             })
