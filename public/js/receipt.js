@@ -11,6 +11,7 @@ let _userContract;
 let _userId;
 let carPlates;
 let userCarDetails;
+let carRecords;
 let newCar = false;
 
 const initApp = async () => {
@@ -43,6 +44,7 @@ const initApp = async () => {
       { from: accounts[0] }
     );
     console.log('Inserted record');
+
     if (newCar) {
       const carDetails = {
         brand: document.getElementById('carBrand').value,
@@ -50,7 +52,7 @@ const initApp = async () => {
         year: document.getElementById('carYear').value,
       };
       console.log(carDetails);
-      _userContract.editCarDetails(_userId, carPlate, carDetails);
+      _userContract.editCarDetails(_userId, carPlate, carDetails, {from: accounts[0]});
     }
     if (result.receipt.status) {
       await db
@@ -116,17 +118,12 @@ window.addEventListener('DOMContentLoaded', async () => {
   _userId = await _userContract.getHash('Yes');
   dealerId = _userId;
   console.log(_userId);
-  _userContract.getCarPlates(_userId).then(result => {
-    // console.log("got car details");
-    carPlates = result;
-    let cars = '';
-    for (let i = 0; i < result.length; i++) {
-      cars += `<option value="${result[i]}"></option>`;
-    }
-    document.getElementById('carPlates').innerHTML = cars;
-  });
-  userCarDetails = await _userContract.getCars(_userId);
-  console.log(userCarDetails);
+  const carPlates = await _userContract.getCarPlates(_userId)
+  let cars = '';
+  for (let i = 0; i < carPlates.length; i++) {
+    cars += `<option value="${carPlates[i]}"></option>`;
+  }
+  document.getElementById('carPlates').innerHTML = cars;
   document.querySelector('.pageloader').classList.remove('is-active');
 });
 
@@ -135,41 +132,77 @@ document.getElementById('receipt').addEventListener('submit', async e => {
   initApp();
 });
 
+let gotDetailsBool = false;
+let gotRecordsBool = false;
+
+function gotDetails(callerPlate, data){
+  const v = document.getElementById('car-plate').value;
+  if(v === callerPlate){
+    userCarDetails = data;
+    let carDetails = "";
+    if(data.brand !== ""){
+      carDetails += '<div class="form-row"><label for="carBrand">Car Brand</label>';
+      carDetails += `<input id="carBrand" name="carBrand" type="text" value="${userCarDetails.brand}" readonly disabled/>`;
+      carDetails += '</div>';
+      carDetails += '<div class="form-row"><label for="carModel">Car Model</label>';
+      carDetails += `<input id="carModel" name="carModel" type="text" value="${userCarDetails.model}" readonly disabled/>`;
+      carDetails += '</div>';
+      carDetails += '<div class="form-row"><label for="carYear">Car Year</label>';
+      carDetails += `<input id="carYear" name="carYear" type="text" value="${userCarDetails.year}" readonly disabled/>`;
+      carDetails += '</div>';
+      carDetails += '<div class="form-row"><button style="width: 100%; height: 40px;" type="button" onclick="openModal()">View record</button></div>'
+      document.getElementById('carDataArea').innerHTML += carDetails;
+      newCar = false;
+    }
+    else{
+      carDetails += '<div class="form-row"><label for="carBrand">Car Brand</label>';
+      carDetails +=
+        '<input id="carBrand" name="carBrand" type="text" value="" required/>';
+      carDetails += '</div>';
+      carDetails += '<div class="form-row"><label for="carModel">Car Model</label>';
+      carDetails +=
+        '<input id="carModel" name="carModel" type="text" value="" required/>';
+      carDetails += '</div>';
+      carDetails += '<div class="form-row"><label for="carYear">Car Year</label>';
+      carDetails +=
+        '<input id="carYear" name="carYear" type="text" value="" required/>';
+      carDetails += '</div>';
+      carDetails += '<div class="form-row"><button style="width: 100%; height: 40px;" type="button" onclick="openModal()">View record</button></div>'
+      document.getElementById('carDataArea').innerHTML += carDetails;
+      newCar = true;
+    }
+    gotDetailsBool = true;
+    checkStatus();
+  }
+}
+
+function checkStatus(){
+  if(gotDetailsBool && gotRecordsBool){
+    document.getElementById('retrieveDetailLoader').remove();
+  }
+}
+
+function gotRecords(callerPlate, data){
+  const v = document.getElementById('car-plate').value;
+  if(v === callerPlate){
+    carRecords = data;
+    populateModal(data);
+    gotRecordsBool = true;
+    checkStatus();
+  }
+}
+
 document.getElementById('car-plate').addEventListener('change', function() {
   console.log('value changed');
+  gotRecordsBool = false;
+  gotDetailsBool = false;
+  const el = document.getElementById('carDataArea');
   const v = document.getElementById('car-plate').value;
-  let carDetails = '';
-  for (let i = 0; i < carPlates.length; i++) {
-    if (v === carPlates[i]) {
-      carDetails +=
-        '<div class="form-row"><label for="carBrand">Car Brand</label>';
-      carDetails += `<input id="carBrand" name="carBrand" type="text" value="${userCarDetails[i].brand}" readonly disabled/>`;
-      carDetails += '</div>';
-      carDetails +=
-        '<div class="form-row"><label for="carModel">Car Model</label>';
-      carDetails += `<input id="carModel" name="carModel" type="text" value="${userCarDetails[i].model}" readonly disabled/>`;
-      carDetails += '</div>';
-      carDetails +=
-        '<div class="form-row"><label for="carYear">Car Year</label>';
-      carDetails += `<input id="carYear" name="carYear" type="text" value="${userCarDetails[i].year}" readonly disabled/>`;
-      carDetails += '</div>';
-      document.getElementById('carDataArea').innerHTML = carDetails;
-      newCar = false;
-      return;
-    }
-  }
-  carDetails += '<div class="form-row"><label for="carBrand">Car Brand</label>';
-  carDetails +=
-    '<input id="carBrand" name="carBrand" type="text" value="" required/>';
-  carDetails += '</div>';
-  carDetails += '<div class="form-row"><label for="carModel">Car Model</label>';
-  carDetails +=
-    '<input id="carModel" name="carModel" type="text" value="" required/>';
-  carDetails += '</div>';
-  carDetails += '<div class="form-row"><label for="carYear">Car Year</label>';
-  carDetails +=
-    '<input id="carYear" name="carYear" type="text" value="" required/>';
-  carDetails += '</div>';
-  document.getElementById('carDataArea').innerHTML = carDetails;
-  newCar = true;
+  el.innerHTML = '<div id="retrieveDetailLoader" class="loader"></div>'
+  _userContract.getRecords(v).then(result => {
+    gotRecords(v,result);
+  })
+  _userContract.getCarDetails(v).then(result => {
+    gotDetails(v,result);
+  })
 });
