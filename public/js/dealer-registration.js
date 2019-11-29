@@ -22,14 +22,15 @@ const initApp = async () => {
 
   const _userContract = await userContract.deployed();
   const accounts = await web3.eth.getAccounts();
-  console.log('accounts', accounts);
-  console.log('location', location);
+  // console.log('accounts', accounts);
+  // console.log('location', location);
   const lineDetail = await liff.getProfile();
   const dealerId = await _userContract.getHash(lineDetail.userId);
   const locationFromForm = {
     _latitude: location.lat(),
-    _longitude: location.long()
+    _longitude: location.lng()
   };
+  console.log('locationFrom', locationFromForm);
   const dealerInfo = {
     dealerName: companyName,
     firstName,

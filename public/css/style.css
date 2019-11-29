@@ -7,14 +7,20 @@
 body {
   background-color: #00d1b2;
   font-family: 'Kanit', sans-serif;
-}
-
-.full-page {
   height: 100vh;
 }
 
-.inline {
-  display:inline !important;
+input.inline {
+  display: inline-flex !important;
+  margin-bottom: 1rem;
+  box-shadow: 0 0 6px #00927c !important;
+  margin-right: 18px;
+}
+
+.service-button,
+button.service-button:disabled {
+  width: 150px;
+  box-shadow: 0 0px 6px #00927c;
 }
 
 .container {
@@ -62,7 +68,7 @@ button {
   height: 50px;
   color: #00d1b2;
   font-size: 16px;
-  box-shadow: 0 4px 6px #00927c;
+  box-shadow: 0 0px 6px #00927c;
   border-radius: 8px;
   font-family: 'Kanit', sans-serif;
 }
@@ -191,7 +197,7 @@ a.disabled {
 
 .loader {
   border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #3498db; /* Blue */
+  border-top: 16px solid #00d1b2; /* Blue */
   border-radius: 50%;
   margin: auto;
   width: 40px;
@@ -237,29 +243,33 @@ input.dealer-location-input {
 
 /* Style the button that is used to open and close the collapsible content */
 .collapsible {
-  background-color: #eee;
-  color: #444;
+  background-color: white;
+  color: #102a43;
   cursor: pointer;
-  padding: 18px;
+  padding-left: 18px;
   width: 100%;
-  border: none;
   text-align: left;
-  outline: none;
-  font-size: 15px;
+  font-size: 16px;
+  margin: 1rem 0;
 }
 
 /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
-.active, .collapsible:hover {
-  background-color: #ccc;
+.active,
+.collapsible:hover {
+  background-color: #00d1b2;
 }
 
 /* Style the collapsible content. Note: hidden by default */
 .content {
-  padding: 0 18px;
+  padding: 18px;
+  margin-top: 18px;
   display: none;
   overflow: hidden;
-  background-color: #f1f1f1;
+  background-color: white;
+  box-shadow: 0 0 6px #00927c !important;
+  border-radius: 8px; /* Green */
 }
+
 input::-webkit-calendar-picker-indicator {
   display: none;
 }
