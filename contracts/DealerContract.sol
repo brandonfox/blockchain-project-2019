@@ -7,6 +7,8 @@ contract DealerContract is Ownable {
 
 
     event CreateDealerApplication(DealerInfo info, bytes32 id);
+    event ApplicationApproved(DealerInfo info, bytes32 id);
+    event ApplicationRejected(DealerInfo info, bytes32 id);
 
     struct DealerInfo{
         string dealerName;
@@ -90,6 +92,16 @@ contract DealerContract is Ownable {
         require(i >= 0,"No application exists for that id");
         verifiedDealers[adr] = true;
         delete dealerApplications[uint(i)];
+        dealerApplications.length--;
+        emit ApplicationApproved(dealerInfoMap[adr],adr);
+    }
+
+    function rejectApplication(bytes32 adr) public ownerOnly {
+        int i = getApplicationIndex(adr);
+        require(i >= 0,"No application exists for that id");
+        delete dealerApplications[uint(i)];
+        dealerApplications.length--;
+        emit ApplicationRejected(dealerInfoMap[adr],adr);
     }
 
     //Function to see if a dealer is verified or works for a dealership

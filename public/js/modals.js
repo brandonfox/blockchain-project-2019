@@ -11,6 +11,7 @@ window.populateModal = function(data) {
   modalData = '';
   modalContent = document.getElementById('recordBody');
   for (let i = 0; i < data.length; i++) {
+    var date = new Date(data[i].timeStamp);
     modalData += '<div class="receipt-modal-body">';
     modalData += '<p>Services Performed:</p>';
     for (let x = 0; x < data[i].services.length; x++) {
@@ -18,7 +19,7 @@ window.populateModal = function(data) {
       modalData += `<p class="subserviceDisplay">${data[i].subservices[x]}</p>`;
     }
     modalData += `<p class="comment">Comment: ${data[i].comment}</p>`;
-    modalData += `<p class="timestampLabel">Time: ${data[i].timeStamp}</p>`;
+    modalData += `<p class="timestampLabel">Time: ${date.toString()}</p>`;
     modalData += '</div>';
   }
   modalContent.innerHTML = modalData;
