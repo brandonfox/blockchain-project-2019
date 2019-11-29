@@ -1,25 +1,15 @@
-import { web3, userContract, init } from './userContract';
 import firebase from './firebase-init';
 import 'firebase/firebase-firestore';
 
 const db = firebase.firestore();
 
 const initApp = async () => {
-  const userContractInstance = await userContract.deployed();
-  const accounts = await web3.eth.getAccounts();
-
   const res = [];
-  const recordsRef = await db.collection('Records').get();
-  for (const record of recordsRef.docs) {
-    const entriesRef = await db
-      .collection('Records')
-      .doc(record.id)
-      .collection('Entries')
-      .get();
-    for (const entry of entriesRef.docs) {
-      res.push(entry.data());
-    }
+  const dealersRef = await db.collection('Dealers').get();
+  for (const dealers of dealersRef.docs) {
+    res.push(dealers.data());
   }
+  console.log('res', res);
 
   res.forEach((record, index) => {
     const modal = document.createElement('div');
@@ -47,38 +37,29 @@ const initApp = async () => {
     modalCard.appendChild(modalCardHeader);
     modalCard.appendChild(modalCardBody);
 
-    record.services.forEach((service, _index) => {
-      const modalP0 = document.createElement('p');
-      modalP0.className = 'modal-text';
-      const modalPText0 = document.createTextNode(
-        `${service}: ${record.subServices[_index]}`
-      );
-      modalP0.appendChild(modalPText0);
-      modalCardBody.appendChild(modalP0);
-    });
-    const modalP = document.createElement('p');
-    const modalPText = document.createTextNode(
-      `บริการอื่นๆ ที่ทางร้านทำ: ${record.comment}`
-    );
+    const address = document.createElement('p');
+    address.classList.add('modal-text');
+    address.innerText = `ที่อยู่: ${record.addr}`;
+    const lastName = document.createElement('p');
+    lastName.classList.add('modal-text');
+    lastName.innerText = `นามสกุล: ${record.lastName}`;
+    const otherServices = document.createElement('p');
+    otherServices.classList.add('modal-text');
+    otherServices.innerHTML = `บริการอื่นๆ: ${record.otherServices}`;
 
-    modalP.appendChild(modalPText);
-    modalCardBody.appendChild(modalP);
+    modalCardBody.appendChild(lastName);
+    modalCardBody.appendChild(address);
+    modalCardBody.appendChild(otherServices);
     modal.appendChild(modalCard);
     document.body.appendChild(modal);
 
     const tr = document.createElement('tr');
     const td0 = document.createElement('td');
-    const dealerInfo = userContractInstance.getDealerInfo(record.dealerId, {
-      from: accounts[0],
-    });
-    const text0 = document.createTextNode(dealerInfo.dealerName);
+    td0.innerText = `${record.dealerName}`;
     const td1 = document.createElement('td');
-    const userInfo = userContractInstance.getUserInfo(record.userId, {
-      from: accounts[0],
-    });
-    const text1 = document.createTextNode(userInfo.firstName);
+    td1.innerText = `${record.firstName}`;
     const td2 = document.createElement('td');
-    const text2 = document.createTextNode(record.carPlate);
+    td2.innerText = `${record.phoneNo}`;
     const td3 = document.createElement('td');
     const a = document.createElement('a');
     a.addEventListener('click', event => {
@@ -94,11 +75,7 @@ const initApp = async () => {
         modal.classList.remove('is-active');
       });
     });
-    const text3 = document.createTextNode('กดเลย');
-    td0.appendChild(text0);
-    td1.appendChild(text1);
-    td2.appendChild(text2);
-    a.appendChild(text3);
+    a.innerText = 'กดเลย';
     td3.appendChild(a);
     tr.appendChild(td0);
     tr.appendChild(td1);
@@ -130,6 +107,5 @@ window.addEventListener('DOMContentLoaded', async () => {
       });
     });
   }
-  await init();
   initApp();
 });
