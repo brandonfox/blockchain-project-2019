@@ -31,7 +31,7 @@ const verifyOnBlockchain = async id => {
     const hash = await userContractInstance.getHash(id);
 
     const result = await userContractInstance.approveApplication(hash, {
-      from: accounts[0],
+      from: accounts[0]
     });
 
     if (result.receipt.status) {
@@ -44,14 +44,14 @@ const verifyOnBlockchain = async id => {
       await APPLICATION_REF.doc(id).delete();
       // push message to dealer that their application has been verified.
       const url =
-        'https://us-central1-user-oranoss-chjtic.cloudfunctions.net/line';
+        'https://asia-east2-user-oranoss-chjtic.cloudfunctions.net/d_confirm';
       const options = {
         method: 'POST',
         uri: url,
         body: {
-          userId: id,
+          userId: id
         },
-        json: true,
+        json: true
       };
       await request(options);
     }
