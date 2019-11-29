@@ -8,24 +8,26 @@
       href="https://fonts.googleapis.com/css?family=Kanit&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/modal.css"/>
+    <link rel="stylesheet" href="css/modal.css" />
     <link rel="stylesheet" href="css/bulma-pageloader.min.css" />
     <link rel="stylesheet" href="css/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vConsole/3.3.4/vconsole.min.js"></script>
+    <script>
+      var vConsole = new VConsole();
+      console.log('Hello world');
+    </script>
     <script
       defer
       src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"
     ></script>
     <script src="js/modals.js"></script>
-    <script src="./js/verification.js"></script>
     <script defer src="js/receipt.js"></script>
     <title>การซื้อขาย</title>
   </head>
   <body>
     <div class="pageloader is-active"><span class="title">กำลังโหลด</span></div>
     <div class="modal" id="modal">
-      <div id="recordBody" class="modal-content">
-        
-      </div>
+      <div id="recordBody" class="modal-content"></div>
     </div>
     <div id="container" class="container">
       <div id="debug"></div>
@@ -38,15 +40,16 @@
         <div class="form-row">
           <label for="car-plate">ทะเบียนรถ</label>
           <input
+            class="datalist"
             id="car-plate"
             name="car-plate"
             type="text"
             list="carPlates"
             autocomplete="off"
-            onfocus="this.value = ''" 
+            onfocus="this.value = ''"
             required
           />
-          <datalist id="carPlates"> </datalist>
+          <datalist id="carPlates"></datalist>
         </div>
         <div id="carDataArea"></div>
         <div class="form-row">

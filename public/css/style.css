@@ -113,7 +113,8 @@ textarea::placeholder {
   margin-bottom: 12px;
 }
 
-select {
+select,
+.datalist {
   margin-top: 6px;
   height: 35px;
   width: 260px;
@@ -150,16 +151,6 @@ select {
   background-color: #ebfffc;
   border-radius: 8px;
   box-shadow: 0 0 10px #00927c;
-}
-
-.table thead td,
-.table thead th {
-  color: #00927c;
-}
-
-.table td,
-.table th {
-  border: 1px solid #00927c;
 }
 
 .verify-button {
@@ -218,4 +209,23 @@ a.disabled {
   padding-left: 1.5rem;
   margin-left: 1.5rem;
   margin-top: 1.5rem;
+}
+
+a.navbar-item:focus,
+a.navbar-item:focus-within,
+a.navbar-item:hover,
+a.navbar-item.is-active,
+.navbar-link:focus,
+.navbar-link:focus-within,
+.navbar-link:hover,
+.navbar-link.is-active {
+  color: #00d1b2;
+}
+
+a {
+  color: #00d1b2;
+}
+
+a:hover {
+  color: #00d1b2;
 }
