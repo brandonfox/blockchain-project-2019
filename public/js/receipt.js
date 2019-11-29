@@ -145,18 +145,18 @@ document.getElementById('car-plate').addEventListener('change', function() {
   console.log('Value changed');
   const v = document.getElementById('car-plate').value;
   let carDetails = '';
-  for (let i = 0; i < carPlates.length; i++) {
+  for (let i = 0; i < carPlates.length; i += 1) {
     if (v === carPlates[i]) {
       carDetails +=
-        '<div class="form-row"><label for="carBrand">Car Brand</label>';
+        '<div class="form-row"><label for="carBrand">ยี่ห้อรถ</label>';
       carDetails += `<input id="carBrand" name="carBrand" type="text" value="${userCarDetails[i].brand}" readonly disabled/>`;
       carDetails += '</div>';
       carDetails +=
-        '<div class="form-row"><label for="carModel">Car Model</label>';
+        '<div class="form-row"><label for="carModel">รุ่นของรถ</label>';
       carDetails += `<input id="carModel" name="carModel" type="text" value="${userCarDetails[i].model}" readonly disabled/>`;
       carDetails += '</div>';
       carDetails +=
-        '<div class="form-row"><label for="carYear">Car Year</label>';
+        '<div class="form-row"><label for="carYear">ปีผลิตของรถ</label>';
       carDetails += `<input id="carYear" name="carYear" type="text" value="${userCarDetails[i].year}" readonly disabled/>`;
       carDetails += '</div>';
       document.getElementById('carDataArea').innerHTML = carDetails;
@@ -164,15 +164,16 @@ document.getElementById('car-plate').addEventListener('change', function() {
       return;
     }
   }
-  carDetails += '<div class="form-row"><label for="carBrand">Car Brand</label>';
+  carDetails += '<div class="form-row"><label for="carBrand">ยี่ห้อรถ</label>';
   carDetails +=
     '<input id="carBrand" name="carBrand" type="text" value="" required/>';
   carDetails += '</div>';
-  carDetails += '<div class="form-row"><label for="carModel">Car Model</label>';
+  carDetails += '<div class="form-row"><label for="carModel">รุ่นของรถ</label>';
   carDetails +=
     '<input id="carModel" name="carModel" type="text" value="" required/>';
   carDetails += '</div>';
-  carDetails += '<div class="form-row"><label for="carYear">Car Year</label>';
+  carDetails +=
+    '<div class="form-row"><label for="carYear">ปีผลิตของรถ</label>';
   carDetails +=
     '<input id="carYear" name="carYear" type="text" value="" required/>';
   carDetails += '</div>';
