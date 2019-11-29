@@ -7,11 +7,11 @@ window.addService = function(){
     const name = document.getElementById('new-service-name');
     _userContract.addService(name.value,{from: accounts[0]}).then(() => {
         name.value = '';
-        alert('Successfully added new service');
+        alert('เพิ่มบริการใหม่สำเร็จแล้ว');
         fetchServices();
     }).catch(result => {
         console.log(result);
-        alert('Theres already a service with that name');
+        alert('มีบริการอยู่แล้ว');
         fetchServices();
     })
 }
@@ -21,7 +21,7 @@ function fetchServices(){
     showLoading('existing-services-content');
     const button = document.getElementById('new-service-button');
     button.disabled = false;
-    button.innerText = 'Add New Service'
+    button.innerText = 'เพิ่มบริการหลัก'
     _userContract.getServices().then(setServices)
 }
 
@@ -35,11 +35,11 @@ function addSubservice(data){
     const name = document.getElementById(`subservice-name-${data}`);
     _userContract.addSubService(data,name.value,{from: accounts[0]}).then(() => {
         name.value = '';
-        alert('Successfully added new service');
+        alert('เพิ่มบริการย่อยใหม่สำเร็จแล้ว');
         fetchSubservices(data);
     }).catch(result => {
         console.log(result);
-        alert('Theres already a service with that name');
+        alert('มีบริการย่อยอยู่แล้ว');
         fetchSubservices(data);
     })
 }
@@ -48,7 +48,7 @@ function fetchSubservices(serviceName) {
     showLoading(`service-${serviceName}-content`)
     const button = document.getElementById(`subservice-name-${serviceName}`);
     button.disabled = false;
-    button.innerText = 'Add New Subservice'
+    button.innerText = 'เพิ่มบริการย่อย'
     _userContract.getSubServices(serviceName).then(result => {
         setSubservices(serviceName,result)
     })
@@ -71,12 +71,12 @@ function setServices(data){
     const servicesLocation = document.getElementById('existing-services-content');
     var shtml = '';
     for(let i = 0; i < data.length; i++){
-        shtml += "<div>---------This is a divider---------</div>"
         shtml += '<div class="service-container">'
-        shtml += `<button type="button" id="subservice-${data[i]}-master" class="service-${data[i]} collapsible">${data[i]}</div>`
+        shtml += `<button type="button" id="subservice-${data[i]}-master" class="service-${data[i]} collapsible">ชื่อบริการหลัก: ${data[i]}</div>`
+        shtml += `<div class="service-title inline" >ชื่อบริการย่อย:</div>`
         shtml += `<form class="inline" id="add-subservice-${data[i]}">`
-        shtml += `<input class="inline" type="text" id="subservice-name-${data[i]}" placeholder="brand/subservice" required/>`
-        shtml += `<button id="subservice-name-${data[i]}-button">Add Subservice</button>`
+        shtml += `<input class="inline" type="text" id="subservice-name-${data[i]}" required/>`
+        shtml += `<button id="subservice-name-${data[i]}-button" class="service-button">เพิ่มบริการย่อย</button>`
         shtml += `</form>`
         shtml += `<div id="service-${data[i]}-content" class="content"></div>`
         shtml += '</div>'
@@ -87,7 +87,7 @@ function setServices(data){
             e.preventDefault();
             const button = document.getElementById(`subservice-name-${data[i]}-button`);
             button.disabled = true;
-            button.innerText = 'Adding subservice...'
+            button.innerText = 'กำลังเพิ่มบริการย่อย...'
             addSubservice(data[i]);
         })
         fetchSubservices(data[i]);
@@ -119,7 +119,7 @@ document.getElementById('add-service-form').addEventListener('submit', async e =
     e.preventDefault();
     const button = document.getElementById('new-service-button');
     button.disabled = true;
-    button.innerText = 'Adding service...'
+    button.innerText = 'กำลังเพิ่มบริการ...'
     addService();
   });
 
