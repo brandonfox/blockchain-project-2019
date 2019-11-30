@@ -45,7 +45,6 @@ function displayData(){
     for(let i = 0; i < services.length; i++){
         let timePeriod = getTimePeriod(notificationTimes[i]);
         h += '<tr class="notificaion-container">'
-        h += `<form id="notification-form-${services[i]}">`
         h += `<td><div for="notification-time-${services[i]}" class="company-noti">${services[i]}</div></td>`
         h += `<td><input type="number" id="notification-time-${services[i]}" value="${timePeriod.time}"/></td>`
         h += `<td><select class="select" id="notification-period-${services[i]}" name="period">`
@@ -57,13 +56,12 @@ function displayData(){
             h += `value="${periods[x]}">${periods[x]}</option>`
         }
         h += '</select></td>'
-        h += `<td><button id="notification-${services[i]}-button" name="period">ยื่นยัน</button></td>`
-        h += '</form>'
-        h += '</td>'
+        h += `<td><button type="button" id="notification-${services[i]}-button" name="period">ยื่นยัน</button></td>`
+        h += '</tr>'
     }
     content.innerHTML = h;
     for(let i = 0; i < services.length; i++){
-        document.getElementById(`notification-form-${services[i]}`).addEventListener('submit', async e => {
+        document.getElementById(`notification-${services[i]}-button`).addEventListener('click', async e => {
             e.preventDefault();
             const button = document.getElementById(`notification-${services[i]}-button`);
             button.disabled = true;
