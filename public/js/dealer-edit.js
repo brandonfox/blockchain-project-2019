@@ -4,7 +4,7 @@ import 'firebase/firebase-firestore';
 
 const db = firebase.firestore();
 const { liff } = window;
-let location;
+let locationGot;
 const companyName = document.getElementById('company-name');
 const firstName = document.getElementById('first-name');
 const lastName = document.getElementById('last-name');
@@ -27,7 +27,7 @@ const initApp = async () => {
     firstName: firstName.value,
     lastName: lastName.value,
     addr: address.value,
-    location: [String(location._latitude), String(location._longitude)],
+    location: [String(locationGot._latitude), String(locationGot._longitude)],
     phoneNo: phoneNumber.value,
     bestSeller: bestSeller.value,
     promotion: promotion.value,
@@ -35,32 +35,39 @@ const initApp = async () => {
     availableServices: [],
     availableSubServices: []
   };
-  const result = await _userContract.editDealerInfo(dealerInfo, dealerId, {
-    from: accounts[0]
-  });
-  if (result.receipt.status) {
-    await db
-      .collection('Dealers')
-      .doc(lineDetail.userId)
-      .set({
-        dealerName: companyName.value,
-        firstName: firstName.value,
-        lastName: lastName.value,
-        addr: address.value,
-        location: {
-          latitude: location._latitude,
-          longitude: location._longitude
-        },
-        phoneNo: phoneNumber.value,
-        bestSeller: bestSeller.value,
-        promotion: promotion.value,
-        otherServices: otherServices.value,
-        availableServices: [],
-        availableSubServices: [],
-        verified: true
-      });
-    alert('การทำรายการสำเร็จ');
-    liff.closeWindow();
+  try {
+    const result = await _userContract.editDealerInfo(dealerInfo, dealerId, {
+      from: accounts[0]
+    });
+
+    if (result.receipt.status) {
+      console.log('done edit on blockchian');
+      console.log(locationGot);
+      await db
+        .collection('Dealers')
+        .doc('Ub0dffcf8626099f3df73b279ae03ce52')
+        .set({
+          dealerName: companyName.value,
+          firstName: firstName.value,
+          lastName: lastName.value,
+          addr: address.value,
+          location: {
+            _latitude: locationGot._latitude,
+            _longitude: locationGot._longitude
+          },
+          phoneNo: phoneNumber.value,
+          bestSeller: bestSeller.value,
+          promotion: promotion.value,
+          otherServices: otherServices.value,
+          availableServices: [],
+          availableSubServices: [],
+          verified: true
+        });
+      alert('การทำรายการสำเร็จ');
+      liff.closeWindow();
+    }
+  } catch (err) {
+    console.log('err', err);
   }
 };
 
@@ -79,7 +86,7 @@ async function fetchDealerData() {
     promotion.value = dealerData.data().promotion;
     otherServices.value = dealerData.data().otherServices;
   }
-  location = dealerData.data().location;
+  locationGot = dealerData.data().location;
 }
 
 document.body.addEventListener(
