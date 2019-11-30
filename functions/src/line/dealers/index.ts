@@ -29,8 +29,11 @@ export const messageToDealer = functions
 
 export const notifyDealerAppointment = async (
   dealerId: string,
-  appointment: any
+  appointment: any,
+  ThaiTime: any
 ) => {
+  // const { carPlate } = appointment;
+
   const message: line.TextMessage = {
     type: 'text',
     text: 'คุณมีการนัดหมายใหม่'

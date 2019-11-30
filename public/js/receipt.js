@@ -74,7 +74,7 @@ const initApp = async () => {
         .doc(userIdFromQrCode)
         .collection('Entries')
         .add({
-          dealerId: dealRealId,
+          dealerId,
           userId,
           carPlate,
           bservices,
@@ -139,9 +139,9 @@ window.addEventListener('DOMContentLoaded', async () => {
   // // //END WEB DEBUG--------------------------------------------------------------
   console.log(userId);
   if (!(await _userContract.isVerified(dealerId))) {
-    document.getElementById('pageloader-title').innerText = 'You are not a verified dealer'
-  }
-  else{
+    document.getElementById('pageloader-title').innerText =
+      'You are not a verified dealer';
+  } else {
     const carPlates = await _userContract.getCarPlates(userId);
     let cars = '';
     for (let i = 0; i < carPlates.length; i++) {

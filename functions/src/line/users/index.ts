@@ -49,7 +49,7 @@ async function handlePostback(
 ) {
   const { data } = postback;
   const parameter = data.split('&');
-  const action = parameter[0].split('=')[1]; // this will give you the action = 'make_appointment' , 'send_location
+  const [, action] = parameter[0].split('='); // this will give you the action = 'make_appointment' , 'send_location
 
   // PARAMETER[1] DATA FROM FIRESTORE
   const payload: { id: string; data: any } = JSON.parse(parameter[1]); //
@@ -69,72 +69,8 @@ async function handlePostback(
   const dealerId = payload.id;
   const { dealerName } = payload.data; // object of payload
   // Smart contract
-  const instance = await web3Utils.initWeb3();
-  const userHash = await instance.getHash(userId);
-  const chosenDealerHash = await instance.getHash(dealerId);
 
   switch (action) {
-    case 'choose_car_plate':
-      const car_plates = await instance.getCarPlates(userHash);
-      const car_owned = car_plates.length;
-
-      if (car_owned === 1) {
-        car_plate_chosen = car_plates[0];
-      } else if (car_owned > 0) {
-        const firstThree = car_plates.slice(0, 3);
-        return UserClient.replyMessage(replyToken, {
-          type: 'template',
-          altText: 'เลิือกรถที่ท้านต้องการเข้ารับบริการ',
-          template: {
-            type: 'buttons',
-            actions: firstThree.map((carPlate: string) => ({
-              type: 'postback',
-              label: `${carPlate}`,
-              data: `action=confirm_appointment&${parameter[1]}&${parameter[2]}&${carPlate}`
-            })),
-            text: `เลือกรถที่ท้านต้องการเข้ารับบริการกับ ${dealerName}`
-          }
-        });
-      }
-
-    case 'confirm_appointment':
-      const formattedTime = processDateTime(date_time_from_param); // YYYYMMDDHH
-      const appointmentTemplate = {
-        userId: userHash,
-        dealerId: chosenDealerHash,
-        carPlate: `${car_plate_chosen ? car_plate_chosen : ''}`,
-        time: formattedTime
-      };
-
-      const accounts = await web3Utils.web3.eth.getAccounts();
-      try {
-        const result = await instance.createAppointment(appointmentTemplate, {
-          from: accounts[0]
-        });
-        if (result.receipt.status) {
-          // notify the dealer that they have a new coming appointment.
-          return UserClient.replyMessage(replyToken, {
-            type: 'text',
-            text: `นัดหมายกับ ${dealerName} เรียบร้อย`
-          }).then(() =>
-            LineDealer.notifyDealerAppointment(dealerId, appointmentTemplate)
-          );
-        } else {
-          return UserClient.replyMessage(replyToken, {
-            type: 'text',
-            text:
-              'การนัดหมายไม่สำเร็จ กรุณาลองใหม่อีกครั้ง หรือติดต่อ ดีลเลอร์โดยตรง'
-          });
-        }
-      } catch (err) {
-        console.log(err);
-        return UserClient.replyMessage(replyToken, {
-          type: 'text',
-          text: 'ดีลเลอร์ที่คุณเลือกยังไม่ได้รับการยืนยัน'
-        });
-        // Unverified dealer should not even be in this list.
-      }
-
     // return promise
     case 'send_phone':
       return UserClient.replyMessage(replyToken, {
@@ -155,6 +91,7 @@ async function handlePostback(
             {
               type: 'postback',
               label: 'ใช่',
+              displayText: 'กรุณารอสักครู่...',
               data: `action=choose_car_plate&${parameter[1]}&${datetime}`
             },
             {
@@ -168,6 +105,79 @@ async function handlePostback(
       });
     case 'send_location':
       return replyLocation(replyToken, payload.data);
+
+    case 'choose_car_plate':
+      const instance = await web3Utils.initWeb3();
+      const userHash = await instance.getHash(userId);
+      const car_plates = await instance.getCarPlates(userHash);
+
+      const car_owned = car_plates.length;
+      if (!car_plate_chosen) {
+        if (car_owned === 1) {
+          car_plate_chosen = car_plates[0];
+        } else if (car_owned > 0) {
+          const firstThree = car_plates.slice(0, 3);
+          return UserClient.replyMessage(replyToken, {
+            type: 'template',
+            altText: 'เลิือกรถที่ท้านต้องการเข้ารับบริการ',
+            template: {
+              type: 'buttons',
+              actions: firstThree.map((carPlate: string) => ({
+                type: 'postback',
+                label: `${carPlate}`,
+                displayText: 'กรุณารอสักครู่... ',
+                data: `action=choose_car_plate&${parameter[1]}&${parameter[2]}&${carPlate}`
+              })),
+              text: `เลือกรถที่ท้านต้องการเข้ารับบริการกับ ${dealerName}`
+            }
+          });
+        }
+      }
+
+    case 'confirm_appointment':
+      const formattedTime = processDateTime(date_time_from_param);
+      const sendToDealer = ThaiTime.convertToThai(date_time_from_param); // YYYYMMDDHH
+      const chosenDealerHash = await instance.getHash(dealerId);
+      const appointmentTemplate = {
+        userId: userHash,
+        dealerId: chosenDealerHash,
+        carPlate: `${car_plate_chosen ? car_plate_chosen : ''}`,
+        time: formattedTime
+      };
+
+      const accounts = await web3Utils.web3.eth.getAccounts();
+      try {
+        const result = await instance.createAppointment(appointmentTemplate, {
+          from: accounts[0]
+        });
+        if (result.receipt.status) {
+          // notify the dealer that they have a new coming appointment.
+          return Promise.all([
+            UserClient.replyMessage(replyToken, {
+              type: 'text',
+              text: `นัดหมายกับ ${dealerName} เรียบร้อย`
+            }),
+            LineDealer.notifyDealerAppointment(
+              dealerId,
+              appointmentTemplate,
+              sendToDealer
+            )
+          ]);
+        } else {
+          return UserClient.replyMessage(replyToken, {
+            type: 'text',
+            text:
+              'การนัดหมายไม่สำเร็จ กรุณาลองใหม่อีกครั้ง หรือติดต่อ ดีลเลอร์โดยตรง'
+          });
+        }
+      } catch (err) {
+        console.log(err);
+        return UserClient.replyMessage(replyToken, {
+          type: 'text',
+          text: 'ดีลเลอร์ที่คุณเลือกยังไม่ได้รับการยืนยัน'
+        });
+        // Unverified dealer should not even be in this list.
+      }
 
     default:
       throw new Error(`Unknown message: ${JSON.stringify(postback)}`);

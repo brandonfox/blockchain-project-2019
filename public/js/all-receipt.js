@@ -46,8 +46,9 @@ const initApp = async () => {
     modalCardHeader.appendChild(modalCardHeaderClose);
     modalCard.appendChild(modalCardHeader);
     modalCard.appendChild(modalCardBody);
+    console.log(record);
 
-    record.services.forEach((service, _index) => {
+    record.bservices.forEach((service, _index) => {
       const modalP0 = document.createElement('p');
       modalP0.className = 'modal-text';
       const modalPText0 = document.createTextNode(
@@ -65,46 +66,59 @@ const initApp = async () => {
     modalCardBody.appendChild(modalP);
     modal.appendChild(modalCard);
     document.body.appendChild(modal);
-
     const tr = document.createElement('tr');
     const td0 = document.createElement('td');
-    const dealerInfo = userContractInstance.getDealerInfo(record.dealerId, {
-      from: accounts[0],
-    });
-    const text0 = document.createTextNode(dealerInfo.dealerName);
     const td1 = document.createElement('td');
-    const userInfo = userContractInstance.getUserInfo(record.userId, {
-      from: accounts[0],
-    });
-    const text1 = document.createTextNode(userInfo.firstName);
-    const td2 = document.createElement('td');
-    const text2 = document.createTextNode(record.carPlate);
-    const td3 = document.createElement('td');
-    const a = document.createElement('a');
-    a.addEventListener('click', event => {
-      event.preventDefault();
-      modal.classList.add('is-active');
+    let text0;
+    userContractInstance
+      .getDealerInfo(record.dealerId, {
+        from: accounts[0]
+      })
+      .then(dealerInfo => {
+        text0 = document.createTextNode(dealerInfo.dealerName);
+        td0.appendChild(text0);
+        tr.appendChild(td0);
+      })
+      .then(() =>
+        userContractInstance.getUserInfo(record.userId, {
+          from: accounts[0]
+        })
+      )
+      .then(userInfo => {
+        const text1 = document.createTextNode(userInfo.firstName);
+        const td2 = document.createElement('td');
+        const text2 = document.createTextNode(record.carPlate);
+        const td3 = document.createElement('td');
+        const a = document.createElement('a');
+        a.addEventListener('click', event => {
+          event.preventDefault();
+          modal.classList.add('is-active');
 
-      modal.querySelector('.modal-background').addEventListener('click', e => {
-        e.preventDefault();
-        modal.classList.remove('is-active');
+          modal
+            .querySelector('.modal-background')
+            .addEventListener('click', e => {
+              e.preventDefault();
+              modal.classList.remove('is-active');
+            });
+          modalCardHeader
+            .querySelector('.delete')
+            .addEventListener('click', e => {
+              e.preventDefault();
+              modal.classList.remove('is-active');
+            });
+        });
+        const text3 = document.createTextNode('กดเลย');
+
+        td1.appendChild(text1);
+        td2.appendChild(text2);
+        a.appendChild(text3);
+        td3.appendChild(a);
+
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        document.getElementsByTagName('tbody')[0].appendChild(tr);
       });
-      modalCardHeader.querySelector('.delete').addEventListener('click', e => {
-        e.preventDefault();
-        modal.classList.remove('is-active');
-      });
-    });
-    const text3 = document.createTextNode('กดเลย');
-    td0.appendChild(text0);
-    td1.appendChild(text1);
-    td2.appendChild(text2);
-    a.appendChild(text3);
-    td3.appendChild(a);
-    tr.appendChild(td0);
-    tr.appendChild(td1);
-    tr.appendChild(td2);
-    tr.appendChild(td3);
-    document.getElementsByTagName('tbody')[0].appendChild(tr);
   });
 };
 
