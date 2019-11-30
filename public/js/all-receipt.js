@@ -46,12 +46,12 @@ const initApp = async () => {
     modalCardHeader.appendChild(modalCardHeaderClose);
     modalCard.appendChild(modalCardHeader);
     modalCard.appendChild(modalCardBody);
-
-    record.services.forEach((service, _index) => {
+    
+    record.bservices.forEach((service, _index) => {
       const modalP0 = document.createElement('p');
       modalP0.className = 'modal-text';
       const modalPText0 = document.createTextNode(
-        `${service}: ${record.subServices[_index]}`
+        `${service}: ${record.bsubServices[_index]}`
       );
       modalP0.appendChild(modalPText0);
       modalCardBody.appendChild(modalP0);
