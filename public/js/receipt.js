@@ -74,7 +74,7 @@ const initApp = async () => {
         .doc(userIdFromQrCode)
         .collection('Entries')
         .add({
-          dealerId: dealRealId,
+          dealerId,
           userId,
           carPlate,
           bservices,
