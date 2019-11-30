@@ -139,7 +139,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   // // //END WEB DEBUG--------------------------------------------------------------
   console.log(userId);
   if (!(await _userContract.isVerified(dealerId))) {
-    document.getElementById('pageloader-title').innerText = 'You are not a verified dealer'
+    document.getElementById('pageloader-title').innerText = 'คุณไม่ใช่ตัวแทนจำหน่ายที่ได้รับการยืนยัน'
   }
   else{
     const carPlates = await _userContract.getCarPlates(userId);
@@ -210,17 +210,17 @@ function gotDetails(callerPlate, data) {
       newCar = false;
     } else {
       carDetails +=
-        '<div class="form-row"><label for="carBrand">Car Brand</label>';
+        '<div class="form-row"><label for="carBrand">ยี่ห้อรถ:</label>';
       carDetails +=
         '<input id="carBrand" name="carBrand" type="text" value="" required/>';
       carDetails += '</div>';
       carDetails +=
-        '<div class="form-row"><label for="carModel">Car Model</label>';
+        '<div class="form-row"><label for="carModel">รุ่นของรถ:</label>';
       carDetails +=
         '<input id="carModel" name="carModel" type="text" value="" required/>';
       carDetails += '</div>';
       carDetails +=
-        '<div class="form-row"><label for="carYear">Car Year</label>';
+        '<div class="form-row"><label for="carYear">ปีที่ซื้อรถคันนี้:</label>';
       carDetails +=
         '<input id="carYear" name="carYear" type="text" value="" required/>';
       carDetails += '</div>';
