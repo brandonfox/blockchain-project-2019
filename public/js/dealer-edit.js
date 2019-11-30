@@ -4,7 +4,7 @@ import 'firebase/firebase-firestore';
 
 const db = firebase.firestore();
 const { liff } = window;
-
+let location;
 const companyName = document.getElementById('company-name');
 const firstName = document.getElementById('first-name');
 const lastName = document.getElementById('last-name');
@@ -27,16 +27,16 @@ const initApp = async () => {
     firstName: firstName.value,
     lastName: lastName.value,
     addr: address.value,
-    location: '192',
+    location: [String(location._latitude), String(location._longitude)],
     phoneNo: phoneNumber.value,
     bestSeller: bestSeller.value,
     promotion: promotion.value,
     otherServices: otherServices.value,
     availableServices: [],
-    availableSubServices: [],
+    availableSubServices: []
   };
   const result = await _userContract.editDealerInfo(dealerInfo, dealerId, {
-    from: accounts[0],
+    from: accounts[0]
   });
   if (result.receipt.status) {
     await db
@@ -47,14 +47,17 @@ const initApp = async () => {
         firstName: firstName.value,
         lastName: lastName.value,
         addr: address.value,
-        location: '192',
+        location: {
+          latitude: location._latitude,
+          longitude: location._longitude
+        },
         phoneNo: phoneNumber.value,
         bestSeller: bestSeller.value,
         promotion: promotion.value,
         otherServices: otherServices.value,
         availableServices: [],
         availableSubServices: [],
-        verified: true,
+        verified: true
       });
     alert('การทำรายการสำเร็จ');
     liff.closeWindow();
@@ -76,6 +79,7 @@ async function fetchDealerData() {
     promotion.value = dealerData.data().promotion;
     otherServices.value = dealerData.data().otherServices;
   }
+  location = dealerData.data().location;
 }
 
 document.body.addEventListener(
