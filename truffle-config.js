@@ -9,6 +9,7 @@ const secrets = JSON.parse(
 );
 
 module.exports = {
+  skipDryRun: true,
   networks: {
     rinkeby: {
       provider: new HDWalletProvider(
