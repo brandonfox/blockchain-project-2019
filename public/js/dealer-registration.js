@@ -13,7 +13,7 @@ const initApp = async () => {
   const companyName = document.getElementById('company-name').value;
   const firstName = document.getElementById('first-name').value;
   const lastName = document.getElementById('last-name').value;
-  const address = document.getElementById('address').value;
+  const address = document.getElementById('dealerLocation').value;
   const phoneNumber = document.getElementById('phone-number').value;
   const bestSeller = document.getElementById('best-seller').value;
   const promotion = document.getElementById('promotion').value;
@@ -71,7 +71,7 @@ async function fetchApplicationData() {
   const companyName = document.getElementById('company-name');
   const firstName = document.getElementById('first-name');
   const lastName = document.getElementById('last-name');
-  const address = document.getElementById('address');
+  const address = document.getElementById('dealerLocation');
   const phoneNumber = document.getElementById('phone-number');
   const bestSeller = document.getElementById('best-seller');
   const promotion = document.getElementById('promotion');
