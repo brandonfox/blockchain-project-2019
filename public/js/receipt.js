@@ -131,6 +131,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   dealRealId = dealerLiffId.userId;
   dealerId = await _userContract.getHash(dealRealId);
   userId = await _userContract.getHash(userIdFromQrCode);
+  db.collection('UsersHashToIds').doc(userId).set({user_id: userIdFromQrCode})
   // // //FOR WEB DEBUG-------------------------------------------------------------
   // userIdFromQrCode = 'Yes';
   // userId = await _userContract.getHash('Yes');

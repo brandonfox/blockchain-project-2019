@@ -45,7 +45,8 @@ function processDateTime(datetime: string): number {
 async function handlePostback(
   replyToken: string,
   userId: string,
-  postback: any
+  postback: any,
+  instance: any,
 ) {
   const { data } = postback;
   const parameter = data.split('&');
@@ -68,6 +69,8 @@ async function handlePostback(
 
   const dealerId = payload.id;
   const { dealerName } = payload.data; // object of payload
+  const accountPromised = web3Utils.web3.eth.getAccounts();
+  const init_web3 = web3Utils.initWeb3();
   // Smart contract
 
   switch (action) {
@@ -107,10 +110,14 @@ async function handlePostback(
       return replyLocation(replyToken, payload.data);
 
     case 'choose_car_plate':
-      const instance = await web3Utils.initWeb3();
-      const userHash = await instance.getHash(userId);
-      const car_plates = await instance.getCarPlates(userHash);
+      
+      
+  
+      const promisedInit = await init_web3;
+      const userHash = await promisedInit.getHash(userId)
+      const car_plates = await promisedInit.getCarPlates(userHash);
 
+      
       const car_owned = car_plates.length;
       if (!car_plate_chosen) {
         if (car_owned === 1) {
@@ -137,7 +144,7 @@ async function handlePostback(
     case 'confirm_appointment':
       const formattedTime = processDateTime(date_time_from_param);
       const sendToDealer = ThaiTime.convertToThai(date_time_from_param); // YYYYMMDDHH
-      const chosenDealerHash = await instance.getHash(dealerId);
+      const chosenDealerHash = await promisedInit.getHash(dealerId);
       const appointmentTemplate = {
         userId: userHash,
         dealerId: chosenDealerHash,
@@ -145,9 +152,9 @@ async function handlePostback(
         time: formattedTime
       };
 
-      const accounts = await web3Utils.web3.eth.getAccounts();
+      const accounts = await accountPromised;
       try {
-        const result = await instance.createAppointment(appointmentTemplate, {
+        const result = await promisedInit.createAppointment(appointmentTemplate, {
           from: accounts[0]
         });
         if (result.receipt.status) {
@@ -379,7 +386,8 @@ const handleEvent = (event: any, req: functions.Request) => {
     case 'postback':
       const { userId } = event.source;
       const { postback } = event;
-      return handlePostback(event.replyToken, userId, postback);
+      const instance = web3Utils.initWeb3();
+      return handlePostback(event.replyToken, userId, postback, instance);
 
     case 'follow':
       return replyText(

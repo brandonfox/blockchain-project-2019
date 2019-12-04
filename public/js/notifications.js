@@ -38,7 +38,7 @@ function checkNotifications(){
     }
 }
 
-const periods = ["Months","Weeks","Days"];
+const periods = ["เดือน","อาทิตย์","วัน"];
 
 function displayData(){
     let h = '';

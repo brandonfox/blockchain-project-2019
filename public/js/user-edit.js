@@ -62,6 +62,7 @@ const initApp = async () => {
           year: '1997',
         },
       });
+      await db.collection('UsersHashToIds').doc(userId).set({user_id: lineDetail.userId})
     alert('การทำรายการสำเร็จ');
     liff.closeWindow();
   }
