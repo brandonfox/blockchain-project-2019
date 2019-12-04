@@ -40,6 +40,27 @@ const initApp = async () => {
     const address = document.createElement('p');
     address.classList.add('modal-text');
     address.innerText = `ที่อยู่: ${record.addr}`;
+    const map = document.createElement('div');
+    map.style = 'height: 300px; width: 70%;'
+    map.id = 'map';
+    const mapScript = document.createElement('script');
+    mapScript.innerHTML = `
+    function initMap() {
+    var dL = {lat: ${record.location._latitude}, lng: ${record.location._longitude}}
+    var map = new google.maps.Map(document.getElementById('map'), {
+      center: dL,
+      zoom: 15,
+      gestureHandling: 'greedy'
+    })
+    marker = new google.maps.Marker({
+      position: dL,
+      map: map
+    });}`
+    const mapApi = document.createElement('script');
+    mapApi.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBaZQgp7e7cEXCWwo_d4-iWyc4kCzwXoMU&callback=initMap'
+    mapApi.async = true;
+    map.appendChild(mapScript);
+    map.appendChild(mapApi);
     const lastName = document.createElement('p');
     lastName.classList.add('modal-text');
     lastName.innerText = `นามสกุล: ${record.lastName}`;
@@ -49,6 +70,7 @@ const initApp = async () => {
 
     modalCardBody.appendChild(lastName);
     modalCardBody.appendChild(address);
+    modalCardBody.appendChild(map);
     modalCardBody.appendChild(otherServices);
     modal.appendChild(modalCard);
     document.body.appendChild(modal);
